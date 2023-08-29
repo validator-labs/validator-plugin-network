@@ -1,0 +1,6 @@
+apiVersion: validation.spectrocloud.labs/v1alpha1
+kind: NetworkValidator
+metadata:
+  name: networkvalidator-sample
+spec:
+  # TODO(user): Add fields here

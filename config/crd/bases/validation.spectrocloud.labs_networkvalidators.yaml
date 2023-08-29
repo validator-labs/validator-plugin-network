@@ -1,0 +1,162 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.12.0
+  name: networkvalidators.validation.spectrocloud.labs
+spec:
+  group: validation.spectrocloud.labs
+  names:
+    kind: NetworkValidator
+    listKind: NetworkValidatorList
+    plural: networkvalidators
+    singular: networkvalidator
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: NetworkValidator is the Schema for the networkvalidators API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: NetworkValidatorSpec defines the desired state of NetworkValidator
+            properties:
+              dnsRules:
+                description: DNSRules validate DNS name resolution of network hosts
+                items:
+                  properties:
+                    host:
+                      type: string
+                    server:
+                      type: string
+                  required:
+                  - host
+                  type: object
+                type: array
+              icmpRules:
+                description: ICMPRules validate ICMP pings to network hosts
+                items:
+                  properties:
+                    host:
+                      type: string
+                  required:
+                  - host
+                  type: object
+                type: array
+              ipRangeRules:
+                description: IPRangeRules validate that all IPs in a given CIDR range
+                  are free (unallocated)
+                items:
+                  properties:
+                    cidr:
+                      type: string
+                  required:
+                  - cidr
+                  type: object
+                type: array
+              mtuRules:
+                description: MTURules validate that the default NIC has an MTU of
+                  at least X, where X is the provided MTU
+                items:
+                  properties:
+                    host:
+                      type: string
+                    mtu:
+                      type: integer
+                  required:
+                  - host
+                  - mtu
+                  type: object
+                type: array
+              netcatRules:
+                description: NetcatRules validate arbitrary TCP & UDP connections
+                items:
+                  properties:
+                    caBase64:
+                      type: string
+                    enableTls:
+                      type: boolean
+                    host:
+                      type: string
+                    ports:
+                      items:
+                        type: integer
+                      type: array
+                    proxyAddress:
+                      type: string
+                    proxyPort:
+                      type: integer
+                    proxyProtocol:
+                      pattern: ^(4|5|connect)?$
+                      type: string
+                  required:
+                  - host
+                  - ports
+                  type: object
+                type: array
+            type: object
+          status:
+            description: NetworkValidatorStatus defines the observed state of NetworkValidator
+            properties:
+              conditions:
+                items:
+                  properties:
+                    details:
+                      description: Human-readable messages indicating additional details
+                        for the last transition.
+                      items:
+                        type: string
+                      type: array
+                    failures:
+                      description: Human-readable messages indicating additional failure
+                        details for the last transition.
+                      items:
+                        type: string
+                      type: array
+                    lastValidationTime:
+                      description: Timestamp of most recent execution of the validation
+                        rule associated with the condition.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        the last transition.
+                      type: string
+                    status:
+                      description: True if the validation rule succeeded, otherwise
+                        False
+                      type: string
+                    validationRule:
+                      description: Unique, one-word description of the validation
+                        rule associated with the condition.
+                      type: string
+                    validationType:
+                      description: Unique, one-word description of the validation
+                        type associated with the condition.
+                      type: string
+                  required:
+                  - lastValidationTime
+                  - status
+                  - validationRule
+                  - validationType
+                  type: object
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

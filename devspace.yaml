@@ -1,0 +1,49 @@
+name: valid8or-plugin-network
+version: v2beta1
+
+vars:
+  IMAGE: quay.io/spectrocloud-labs/valid8or-plugin-network
+
+images:
+  valid8or-plugin-network:
+    image: ${IMAGE}
+    tags:
+    - dev
+    createPullSecret: false
+    dockerfile: ./Dockerfile.devspace
+    rebuildStrategy: ignoreContextChanges
+    docker: {}
+
+deployments:
+  valid8or-plugin-network:
+    namespace: valid8or-plugin-network-system
+    kubectl:
+      kustomize: true
+      manifests:
+      - config/devspace
+
+dev:
+  valid8or-plugin-network:
+    imageSelector: ${IMAGE}
+    terminal:
+      enabled: true
+      disableReplace: true
+      workDir: /workspace
+      command: ./devspace-start.sh
+    ports:
+    - port: "2343"
+    sync:
+    - path: .:/workspace
+      excludePaths:
+        - '**'
+        - '!/pkg'
+        - '!/api'
+        - '!/cmd'
+        - '!/config'
+        - '!/internal'
+        - '!/devspace-start.sh'
+        - '!/hack'
+        - '!/go.mod'
+        - '!/go.sum'
+        - '!/main.go'
+        - 'Makefile'

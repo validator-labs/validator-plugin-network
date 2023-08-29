@@ -1,0 +1,6 @@
+apiVersion: v2
+name: valid8or-plugin-network
+description: Perform various network validations (DNS, ICMP, MTU, Netcat, IP-range)
+type: application
+version: 0.0.1 # x-release-please-version
+appVersion: "0.0.1" # x-release-please-version
