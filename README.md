@@ -1,39 +1,21 @@
 # valid8or-plugin-network
-The AWS [valid8or](https://github.com/spectrocloud-labs/valid8or) plugin ensures that your AWS environment matches a user-configurable expected state.
+The Network [valid8or](https://github.com/spectrocloud-labs/valid8or) plugin ensures that your network matches a user-configurable expected state.
 
 ## Description
-The AWS valid8or plugin reconciles `AwsValidator` custom resources to perform the following validations against your AWS environment:
+The Network valid8or plugin reconciles `NetworkValidator` custom resources to perform the following validations against your network:
 
-1. Compare the IAM permissions associated with an IAM user / group / role / policy against an expected permission set
-2. Compare the usage for a particular service quota against the active quota
-3. Compare the tags associated with a subnet against an expected tag set
+1. Execute DNS lookups
+2. Execute ICMP pings
+3. Validate Netcat TCP connections with optional TLS and proxy configuration
+4. Check each IP in a CIDR range to ensure that they're all free (unallocated)
+5. Check that the default NIC has an MTU of at least X, where X is the provided MTU
 
-Each `AwsValidator` CR is (re)-processed every two minutes to continuously ensure that your AWS environment matches the expected state.
+Each `NetworkValidator` CR is (re)-processed every two minutes to continuously ensure that your network matches the expected state.
 
-See the [samples](https://github.com/spectrocloud-labs/valid8or-plugin-network/tree/main/config/samples) directory for example `AwsValidator` configurations.
-
-## Supported Service Quotas by AWS Service
-EC2:
-- EC2-VPC Elastic IPs
-- Public AMIs
-
-EFS:
-- File systems per account
-
-ELB:
-- Application Load Balancers per Region
-- Classic Load Balancers per Region
-- Network Load Balancers per Region
-
-VPC:
-- Internet gateways per Region
-- Network interfaces per Region
-- VPCs per Region
-- NAT gateways per Availability Zone
-- Subnets per VPC
+See the [samples](https://github.com/spectrocloud-labs/valid8or-plugin-network/tree/main/config/samples) directory for example `NetworkValidator` configurations.
 
 ## Installation
-The AWS valid8or plugin is meant to be [installed by valid8or](https://github.com/spectrocloud-labs/valid8or/tree/gh_pages#installation) (via a Valid8orConfig), but it can also be installed directly as follows:
+The Network valid8or plugin is meant to be [installed by valid8or](https://github.com/spectrocloud-labs/valid8or/tree/gh_pages#installation) (via a Valid8orConfig), but it can also be installed directly as follows:
 
 ```bash
 helm repo add valid8or-plugin-network https://spectrocloud-labs.github.io/valid8or-plugin-network
