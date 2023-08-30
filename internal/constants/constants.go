@@ -7,5 +7,5 @@ const (
 	ValidationTypeICMP    string = "network-icmp"
 	ValidationTypeIPRange string = "network-ip-range"
 	ValidationTypeMTU     string = "network-mtu"
-	ValidationTypeNetcat  string = "network-netcat"
+	ValidationTypeTCPConn string = "network-tcp-conn"
 )

@@ -40,10 +40,13 @@ spec:
                   properties:
                     host:
                       type: string
+                    name:
+                      type: string
                     server:
                       type: string
                   required:
                   - host
+                  - name
                   type: object
                 type: array
               icmpRules:
@@ -52,8 +55,11 @@ spec:
                   properties:
                     host:
                       type: string
+                    name:
+                      type: string
                   required:
                   - host
+                  - name
                   type: object
                 type: array
               ipRangeRules:
@@ -61,10 +67,16 @@ spec:
                   are free (unallocated)
                 items:
                   properties:
-                    cidr:
+                    length:
+                      type: integer
+                    name:
+                      type: string
+                    startIp:
                       type: string
                   required:
-                  - cidr
+                  - length
+                  - name
+                  - startIp
                   type: object
                 type: array
               mtuRules:
@@ -76,20 +88,22 @@ spec:
                       type: string
                     mtu:
                       type: integer
+                    name:
+                      type: string
                   required:
                   - host
                   - mtu
+                  - name
                   type: object
                 type: array
-              netcatRules:
-                description: NetcatRules validate arbitrary TCP & UDP connections
+              tcpConnRules:
+                description: TCPConnRules validate arbitrary TCP connections, including
+                  proxied connections
                 items:
                   properties:
-                    caBase64:
-                      type: string
-                    enableTls:
-                      type: boolean
                     host:
+                      type: string
+                    name:
                       type: string
                     ports:
                       items:
@@ -104,6 +118,7 @@ spec:
                       type: string
                   required:
                   - host
+                  - name
                   - ports
                   type: object
                 type: array

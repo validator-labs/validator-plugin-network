@@ -121,9 +121,9 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		v8ores.SafeUpdateValidationResult(r.Client, nn, validationResult, failed, err, r.Log)
 	}
 
-	// Netcat rules
-	for _, rule := range validator.Spec.NetcatRules {
-		validationResult, err := networkService.ReconcileNetcatRule(nn, rule)
+	// TCP connection rules
+	for _, rule := range validator.Spec.TCPConnRules {
+		validationResult, err := networkService.ReconcileTCPConnRule(nn, rule)
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile netcat rule")
 		}

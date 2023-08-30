@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:alpine3.17 as builder
+FROM golang:alpine3.17 AS builder
 ARG TARGETOS
 ARG TARGETARCH
 
@@ -19,7 +19,12 @@ RUN go mod download
 # Copy the go source
 COPY cmd/main.go cmd/main.go
 COPY api/ api/
-COPY internal/controller/ internal/controller/
+COPY internal/ internal/
+
+# Copy net-utils binaries into /workspace
+RUN cp /usr/bin/nc . && \
+    cp /usr/bin/nslookup . && \
+    cp /bin/ping .
 
 # Build
 # the GOARCH has not a default value to allow the binary be built according to the host where the command

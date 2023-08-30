@@ -31,37 +31,62 @@ type NetworkValidatorSpec struct {
 	IPRangeRules []IPRangeRule `json:"ipRangeRules,omitempty"`
 	// MTURules validate that the default NIC has an MTU of at least X, where X is the provided MTU
 	MTURules []MTURule `json:"mtuRules,omitempty"`
-	// NetcatRules validate arbitrary TCP & UDP connections
-	NetcatRules []NetcatRule `json:"netcatRules,omitempty"`
+	// TCPConnRules validate arbitrary TCP connections, including proxied connections
+	TCPConnRules []TCPConnRule `json:"tcpConnRules,omitempty"`
 }
 
 type DNSRule struct {
-	Host   string `json:"host"`
-	Server string `json:"server,omitempty"`
+	RuleName string `json:"name"`
+	Host     string `json:"host"`
+	Server   string `json:"server,omitempty"`
+}
+
+func (r DNSRule) Name() string {
+	return r.RuleName
 }
 
 type ICMPRule struct {
-	Host string `json:"host"`
+	RuleName string `json:"name"`
+	Host     string `json:"host"`
+}
+
+func (r ICMPRule) Name() string {
+	return r.RuleName
 }
 
 type IPRangeRule struct {
-	CIDR string `json:"cidr"`
+	RuleName string `json:"name"`
+	StartIP  string `json:"startIp"`
+	Length   int    `json:"length"`
+}
+
+func (r IPRangeRule) Name() string {
+	return r.RuleName
 }
 
 type MTURule struct {
-	Host string `json:"host"`
-	MTU  int    `json:"mtu"`
+	RuleName string `json:"name"`
+	Host     string `json:"host"`
+	MTU      int    `json:"mtu"`
 }
 
-type NetcatRule struct {
-	Host      string `json:"host"`
-	Ports     []int  `json:"ports"`
-	EnableTLS bool   `json:"enableTls,omitempty"`
-	CABase64  string `json:"caBase64,omitempty"`
+func (r MTURule) Name() string {
+	return r.RuleName
+}
+
+type TCPConnRule struct {
+	RuleName string `json:"name"`
+	Host     string `json:"host"`
+	Ports    []int  `json:"ports"`
 	// +kubebuilder:validation:Pattern=`^(4|5|connect)?$`
 	ProxyProtocol string `json:"proxyProtocol,omitempty"`
 	ProxyAddress  string `json:"proxyAddress,omitempty"`
 	ProxyPort     int    `json:"proxyPort,omitempty"`
+	// TODO: use socat for proxy validation using TLS CAFile & basic auth?
+}
+
+func (r TCPConnRule) Name() string {
+	return r.RuleName
 }
 
 // NetworkValidatorStatus defines the observed state of NetworkValidator

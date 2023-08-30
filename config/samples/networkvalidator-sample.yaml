@@ -1,6 +1,46 @@
 apiVersion: validation.spectrocloud.labs/v1alpha1
 kind: NetworkValidator
 metadata:
-  name: networkvalidator-sample
+  name: network-validator-sample
 spec:
-  # TODO(user): Add fields here
+  dnsRules:
+  - name: Resolve Spectro Cloud
+    host: spectrocloud.com
+  - name: Resolve vSphere
+    host: vcenter.spectrocloud.dev
+  icmpRules:
+  - name: Ping Spectro Cloud
+    host: spectrocloud.com
+  - name: Ping jump host
+    host: "10.10.135.63"
+  ipRangeRules:
+  - name: Ensure IPs unallocated
+    startIp: "10.10.135.63"
+    length: 5
+  mtuRules:
+  - name: Ensure MTU (fail)
+    host: spectrocloud.com
+    mtu: 10000
+  - name: Ensure MTU (barely fail)
+    host: spectrocloud.com
+    mtu: 1501
+  - name: Ensure MTU (pass)
+    host: spectrocloud.com
+    mtu: 1500
+  tcpConnRules:
+  - name: Palette SaaS
+    host: console.spectrocloud.com
+    ports:
+    - 443
+    - 4222
+  - name: Palette Saas - proxied
+    host: console.spectrocloud.com
+    ports:
+    - 443
+    proxyProtocol: connect # 4, 5, or 'connect'
+    proxyAddress: "10.10.180.1"
+    proxyPort: 3128
+  - name: Invalid host
+    host: xprxkddd.fake
+    ports:
+    - 443
