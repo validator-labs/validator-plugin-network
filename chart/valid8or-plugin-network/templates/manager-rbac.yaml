@@ -8,7 +8,7 @@ rules:
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
-  - awsvalidators
+  - networkvalidators
   - validationresults
   verbs:
   - create
@@ -21,13 +21,13 @@ rules:
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
-  - awsvalidators/finalizers
+  - networkvalidators/finalizers
   verbs:
   - update
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
-  - awsvalidators/status
+  - networkvalidators/status
   - validationresults/status
   verbs:
   - get
