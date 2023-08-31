@@ -20,9 +20,9 @@ import (
 )
 
 const (
-	ping     string = "./ping"
-	nc       string = "./nc"
-	nslookup string = "./nslookup"
+	ping     string = "ping"
+	nc       string = "nc"
+	nslookup string = "nslookup"
 
 	icmpPacketSize int = 28
 )

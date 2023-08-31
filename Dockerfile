@@ -3,8 +3,6 @@ FROM golang:alpine3.17 AS builder
 ARG TARGETOS
 ARG TARGETARCH
 
-RUN apk add --no-cache bind-tools iputils netcat-openbsd
-
 WORKDIR /workspace
 # Copy the Go Modules manifests
 COPY go.mod go.mod
@@ -25,14 +23,11 @@ COPY internal/ internal/
 # by leaving it empty we can ensure that the container and binary shipped on it will have the same platform.
 RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -a -o manager cmd/main.go
 
-# Use distroless as minimal base image to package the manager binary
-# Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static:nonroot AS production
+# Use alpine as minimal base image to package the manager and network inspection binaries
+FROM alpine:latest AS production
 WORKDIR /
+RUN apk add --no-cache bind-tools iputils netcat-openbsd
 COPY --from=builder /workspace/manager .
-COPY --from=builder /usr/bin/nc .
-COPY --from=builder /usr/bin/nslookup .
-COPY --from=builder /bin/ping .
 USER 65532:65532
 
 ENTRYPOINT ["/manager"]
