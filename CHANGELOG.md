@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.0.2](https://github.com/spectrocloud-labs/valid8or-plugin-network/compare/v0.0.1...v0.0.2) (2023-09-01)
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.28.1 ([#21](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/21)) ([bf92497](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/bf92497bb01aeb674af92943154050c88b366b61))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.12.0 ([#22](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/22)) ([f327be7](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/f327be73080ee2f51597473e6b138bdb1a8f5e58))
+* **deps:** update module github.com/onsi/gomega to v1.27.10 ([#19](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/19)) ([9ab822c](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/9ab822c231aa63c538cc95369bfffeb2231a21b0))
+
+
+### Other
+
+* **deps:** update actions/checkout digest to f43a0e5 ([#13](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/13)) ([cdc8139](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/cdc81390456334988680ca43cf831255af4f71cb))
+* **deps:** update actions/setup-go digest to 93397be ([#14](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/14)) ([e5f29bd](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/e5f29bd94cd5cf93166c92161974ed42bda2303e))
+* **deps:** update docker/setup-buildx-action digest to 885d146 ([#18](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/18)) ([26be287](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/26be28723eae14ac0ff0a4a2b95c97c17c051c8e))
+
+
+### Docs
+
+* update README.md ([9cdb991](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/9cdb9919345312ca9e52d751ff41cdc102957486))
+
 ## [0.0.1](https://github.com/spectrocloud-labs/valid8or-plugin-network/compare/v0.0.1...v0.0.1) (2023-08-31)
 
 
