@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.2](https://github.com/spectrocloud-labs/valid8or-plugin-network/compare/v0.0.1...v0.0.2) (2023-09-01)
+
+
+### Other
+
+* **deps:** update actions/setup-go digest to 93397be ([#14](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/14)) ([e5f29bd](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/e5f29bd94cd5cf93166c92161974ed42bda2303e))
+
+
+### Docs
+
+* update README.md ([9cdb991](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/9cdb9919345312ca9e52d751ff41cdc102957486))
+
 ## [0.0.1](https://github.com/spectrocloud-labs/valid8or-plugin-network/compare/v0.0.1...v0.0.1) (2023-08-31)
 
 
