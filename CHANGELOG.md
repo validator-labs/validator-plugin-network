@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.3](https://github.com/spectrocloud-labs/valid8or-plugin-network/compare/v0.0.2...v0.0.3) (2023-09-06)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/spectrocloud-labs/valid8or to v0.0.7 ([#32](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/32)) ([bf9c1e9](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/bf9c1e907c1f5e25a9897a40af98fbf010826477))
+
+
+### Other
+
+* add YAML tags to Network validator spec ([1c2f57c](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/1c2f57c3b628d99e00ce5883a56c0e17e0c782fd))
+* **deps:** update actions/upload-artifact digest to a8a3f3a ([#31](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/31)) ([fdbca6c](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/fdbca6cc4ac02320f82110134c60b0bf095fbda2))
+
 ## [0.0.2](https://github.com/spectrocloud-labs/valid8or-plugin-network/compare/v0.0.1...v0.0.2) (2023-09-06)
 
 
