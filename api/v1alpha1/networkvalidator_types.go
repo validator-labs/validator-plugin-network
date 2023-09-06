@@ -24,21 +24,21 @@ import (
 // NetworkValidatorSpec defines the desired state of NetworkValidator
 type NetworkValidatorSpec struct {
 	// DNSRules validate DNS name resolution of network hosts
-	DNSRules []DNSRule `json:"dnsRules,omitempty"`
+	DNSRules []DNSRule `json:"dnsRules,omitempty" yaml:"dnsRules,omitempty"`
 	// ICMPRules validate ICMP pings to network hosts
-	ICMPRules []ICMPRule `json:"icmpRules,omitempty"`
+	ICMPRules []ICMPRule `json:"icmpRules,omitempty" yaml:"icmpRules,omitempty"`
 	// IPRangeRules validate that all IPs in a given CIDR range are free (unallocated)
-	IPRangeRules []IPRangeRule `json:"ipRangeRules,omitempty"`
+	IPRangeRules []IPRangeRule `json:"ipRangeRules,omitempty" yaml:"ipRangeRules,omitempty"`
 	// MTURules validate that the default NIC has an MTU of at least X, where X is the provided MTU
-	MTURules []MTURule `json:"mtuRules,omitempty"`
+	MTURules []MTURule `json:"mtuRules,omitempty" yaml:"mtuRules,omitempty"`
 	// TCPConnRules validate arbitrary TCP connections, including proxied connections
-	TCPConnRules []TCPConnRule `json:"tcpConnRules,omitempty"`
+	TCPConnRules []TCPConnRule `json:"tcpConnRules,omitempty" yaml:"tcpConnRules,omitempty"`
 }
 
 type DNSRule struct {
-	RuleName string `json:"name"`
-	Host     string `json:"host"`
-	Server   string `json:"server,omitempty"`
+	RuleName string `json:"name" yaml:"name"`
+	Host     string `json:"host" yaml:"host"`
+	Server   string `json:"server,omitempty" yaml:"server,omitempty"`
 }
 
 func (r DNSRule) Name() string {
@@ -46,8 +46,8 @@ func (r DNSRule) Name() string {
 }
 
 type ICMPRule struct {
-	RuleName string `json:"name"`
-	Host     string `json:"host"`
+	RuleName string `json:"name" yaml:"name"`
+	Host     string `json:"host" yaml:"host"`
 }
 
 func (r ICMPRule) Name() string {
@@ -55,9 +55,9 @@ func (r ICMPRule) Name() string {
 }
 
 type IPRangeRule struct {
-	RuleName string `json:"name"`
-	StartIP  string `json:"startIp"`
-	Length   int    `json:"length"`
+	RuleName string `json:"name" yaml:"name"`
+	StartIP  string `json:"startIp" yaml:"startIp"`
+	Length   int    `json:"length" yaml:"length"`
 }
 
 func (r IPRangeRule) Name() string {
@@ -65,9 +65,9 @@ func (r IPRangeRule) Name() string {
 }
 
 type MTURule struct {
-	RuleName string `json:"name"`
-	Host     string `json:"host"`
-	MTU      int    `json:"mtu"`
+	RuleName string `json:"name" yaml:"name"`
+	Host     string `json:"host" yaml:"host"`
+	MTU      int    `json:"mtu" yaml:"mtu"`
 }
 
 func (r MTURule) Name() string {
@@ -75,13 +75,13 @@ func (r MTURule) Name() string {
 }
 
 type TCPConnRule struct {
-	RuleName string `json:"name"`
-	Host     string `json:"host"`
-	Ports    []int  `json:"ports"`
+	RuleName string `json:"name" yaml:"name"`
+	Host     string `json:"host" yaml:"host"`
+	Ports    []int  `json:"ports" yaml:"ports"`
 	// +kubebuilder:validation:Pattern=`^(4|5|connect)?$`
-	ProxyProtocol string `json:"proxyProtocol,omitempty"`
-	ProxyAddress  string `json:"proxyAddress,omitempty"`
-	ProxyPort     int    `json:"proxyPort,omitempty"`
+	ProxyProtocol string `json:"proxyProtocol,omitempty" yaml:"proxyProtocol,omitempty"`
+	ProxyAddress  string `json:"proxyAddress,omitempty" yaml:"proxyAddress,omitempty"`
+	ProxyPort     int    `json:"proxyPort,omitempty" yaml:"proxyPort,omitempty"`
 	// TODO: use socat for proxy validation using TLS CAFile & basic auth?
 }
 
