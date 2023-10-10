@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.0.3](https://github.com/spectrocloud-labs/valid8or-plugin-network/compare/v0.0.2...v0.0.3) (2023-10-10)
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.28.2 ([#42](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/42)) ([8a4ff90](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/8a4ff905613d4e0d969718c396abe422aa9d8ef1))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.12.1 ([#43](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/43)) ([4796e94](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/4796e9437b070bdecb02033f7adecda0d0d92e52))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.13.0 ([#46](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/46)) ([6ee30d7](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/6ee30d702ed4bf673dc8173d83a5ae4f92752753))
+* **deps:** update module github.com/onsi/gomega to v1.28.0 ([#45](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/45)) ([99b204f](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/99b204f14d89980ac95ab518efde99d6c0c446c9))
+* **deps:** update module github.com/spectrocloud-labs/valid8or to v0.0.7 ([#32](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/32)) ([bf9c1e9](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/bf9c1e907c1f5e25a9897a40af98fbf010826477))
+* **deps:** update module github.com/spectrocloud-labs/valid8or to v0.0.8 ([#35](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/35)) ([6819847](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/6819847b3d8ea080639a9be314460569782342de))
+* **deps:** update module github.com/spectrocloud-labs/valid8or to v0.0.9 ([#47](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/47)) ([18fe137](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/18fe13759068cb3ec504a4d138b34a0ec0be2280))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.16.2 ([#41](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/41)) ([81bc09e](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/81bc09e128a9fc5755e7b0c9e763dd85bc42e1d2))
+
+
+### Other
+
+* add YAML tags to Network validator spec ([1c2f57c](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/1c2f57c3b628d99e00ce5883a56c0e17e0c782fd))
+* **deps:** update actions/checkout digest to 8ade135 ([#44](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/44)) ([1723b5a](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/1723b5a84b44f557958fc3271330159abbd99a19))
+* **deps:** update actions/upload-artifact digest to a8a3f3a ([#31](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/31)) ([fdbca6c](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/fdbca6cc4ac02320f82110134c60b0bf095fbda2))
+* **deps:** update docker/build-push-action action to v5 ([#38](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/38)) ([ec02adb](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/ec02adbd568f0b828a27d2ef8b59eeb22ce50fad))
+* **deps:** update docker/build-push-action digest to 0a97817 ([#36](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/36)) ([0f51409](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/0f5140971db8372e9d83f936183e3f6acf4e08ec))
+* **deps:** update docker/login-action action to v3 ([#39](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/39)) ([6d256d6](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/6d256d6c3c756f86c38cac056703563b15e6c458))
+* **deps:** update docker/setup-buildx-action action to v3 ([#40](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/40)) ([cadafc3](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/cadafc33c69671a2bc662f7dab215df1bf6b0d41))
+
 ## [0.0.2](https://github.com/spectrocloud-labs/valid8or-plugin-network/compare/v0.0.1...v0.0.2) (2023-09-06)
 
 
