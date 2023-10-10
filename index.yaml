@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   valid8or-plugin-network:
   - apiVersion: v2
+    appVersion: 0.0.3
+    created: "2023-10-10T19:17:35.499806715Z"
+    description: Perform various network validations (DNS, ICMP, MTU, Netcat, IP-range)
+    digest: b157b3a3a570c10eff6e1f45a54e78d017558df8253d7c2a0c981d3499f164a5
+    name: valid8or-plugin-network
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/valid8or-plugin-network/valid8or-plugin-network-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
     appVersion: 0.0.2
     created: "2023-09-06T16:27:31.892328884Z"
     description: Perform various network validations (DNS, ICMP, MTU, Netcat, IP-range)
@@ -21,4 +31,4 @@ entries:
     urls:
     - https://spectrocloud-labs.github.io/valid8or-plugin-network/valid8or-plugin-network-0.0.1.tgz
     version: 0.0.1
-generated: "2023-09-06T16:27:31.891629657Z"
+generated: "2023-10-10T19:17:35.498777558Z"
