@@ -142,7 +142,7 @@ CONTROLLER_GEN ?= $(LOCALBIN)/controller-gen
 ENVTEST ?= $(LOCALBIN)/setup-envtest
 
 ## Tool Versions
-CHART_VERSION=v0.0.1 # x-release-please-version
+CHART_VERSION=v0.0.1  # x-release-please-version
 CONTROLLER_TOOLS_VERSION ?= v0.12.0
 ENVTEST_K8S_VERSION = 1.27.1
 HELM_VERSION=v3.10.1
