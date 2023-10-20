@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.0.4](https://github.com/spectrocloud-labs/valid8or-plugin-network/compare/v0.0.3...v0.0.4) (2023-10-20)
+
+
+### Bug Fixes
+
+* ct lints ([7431656](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/74316561923f058f0c6013f60adf8543f97f349d))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.16.3 ([#59](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/59)) ([8e66c5c](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/8e66c5ca6a02808585b90df8eb5d1bbaa42dc15e))
+
+
+### Other
+
+* **deps:** bump golang.org/x/net from 0.16.0 to 0.17.0 ([#51](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/51)) ([24cc765](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/24cc7658ceb3d4acf9678b7eb58c246b89137d41))
+* **deps:** update actions/checkout digest to b4ffde6 ([#57](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/57)) ([f0d1197](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/f0d1197713be76b934e534d8b9efc7c4168b552a))
+* **deps:** update actions/setup-python digest to 65d7f2d ([#55](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/55)) ([dd9316b](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/dd9316baca87fe1345f567f5b992aca41bbddac8))
+* **deps:** update gcr.io/kubebuilder/kube-rbac-proxy docker tag to v0.14.4 ([#49](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/49)) ([558bc60](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/558bc60847a23ce437c3c2b9595d056511db1bb3))
+* **deps:** update google-github-actions/release-please-action digest to 4c5670f ([#56](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/56)) ([fb00c56](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/fb00c56cbe0c2028859374ef3ccc00e1b65db1dc))
+* enable renovate automerges ([5723d6e](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/5723d6e01ac7b611260bb209b0e1d70117a4ac65))
+* release 0.0.4 ([afdb2f0](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/afdb2f0ef424441ed8dd9628045ca842efdf674f))
+
+
+### Refactoring
+
+* valid8or -&gt; validator ([#60](https://github.com/spectrocloud-labs/valid8or-plugin-network/issues/60)) ([97f0c6e](https://github.com/spectrocloud-labs/valid8or-plugin-network/commit/97f0c6eae41dfe7d8760597de6c0fe79617a885c))
+
 ## [0.0.3](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.2...v0.0.3) (2023-10-10)
 
 
