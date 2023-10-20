@@ -32,7 +32,7 @@ controllerManager:
         drop:
         - ALL
     image:
-      repository: quay.io/spectrocloud-labs/valid8or-plugin-network
+      repository: quay.io/spectrocloud-labs/validator-plugin-network
       tag: v0.0.3  # x-release-please-version
     resources:
       limits:

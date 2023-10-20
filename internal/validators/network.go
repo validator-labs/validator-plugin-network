@@ -12,11 +12,11 @@ import (
 	"github.com/go-logr/logr"
 	ktypes "k8s.io/apimachinery/pkg/types"
 
-	"github.com/spectrocloud-labs/valid8or-plugin-network/api/v1alpha1"
-	"github.com/spectrocloud-labs/valid8or-plugin-network/internal/constants"
-	v8or "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
-	"github.com/spectrocloud-labs/valid8or/pkg/types"
-	"github.com/spectrocloud-labs/valid8or/pkg/util/ptr"
+	"github.com/spectrocloud-labs/validator-plugin-network/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator-plugin-network/internal/constants"
+	v8or "github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/pkg/types"
+	"github.com/spectrocloud-labs/validator/pkg/util/ptr"
 )
 
 const (
