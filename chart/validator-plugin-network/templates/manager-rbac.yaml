@@ -8,7 +8,7 @@ rules:
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
-  - awsvalidators
+  - networkvalidators
   - validationresults
   verbs:
   - create
@@ -21,13 +21,13 @@ rules:
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
-  - awsvalidators/finalizers
+  - networkvalidators/finalizers
   verbs:
   - update
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
-  - awsvalidators/status
+  - networkvalidators/status
   - validationresults/status
   verbs:
   - get
@@ -48,8 +48,8 @@ metadata:
   name: {{ include "chart.fullname" . }}-manager-rolebinding
   labels:
     app.kubernetes.io/component: rbac
-    app.kubernetes.io/created-by: valid8or-plugin-network
-    app.kubernetes.io/part-of: valid8or-plugin-network
+    app.kubernetes.io/created-by: validator-plugin-network
+    app.kubernetes.io/part-of: validator-plugin-network
   {{- include "chart.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io

@@ -1,12 +1,12 @@
 # Adds namespace to all resources.
-namespace: valid8or-plugin-network-system
+namespace: validator-plugin-network-system
 
 # Value of this field is prepended to the
 # names of all resources, e.g. a deployment named
 # "wordpress" becomes "alices-wordpress".
 # Note that it should also match with the prefix (text before '-') of the namespace
 # field above.
-namePrefix: valid8or-plugin-network-
+namePrefix: validator-plugin-network-
 
 # Labels to add to all resources and selectors.
 #labels:

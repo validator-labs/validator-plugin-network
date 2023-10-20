@@ -1,26 +1,26 @@
-# valid8or-plugin-network
-The Network [valid8or](https://github.com/spectrocloud-labs/valid8or) plugin ensures that your network matches a user-configurable expected state.
+# validator-plugin-network
+The Network [validator](https://github.com/spectrocloud-labs/validator) plugin ensures that your network matches a user-configurable expected state.
 
 ## Description
-The Network valid8or plugin reconciles `NetworkValidator` custom resources to perform the following validations against your network:
+The Network validator plugin reconciles `NetworkValidator` custom resources to perform the following validations against your network:
 
 1. Execute DNS lookups
 2. Execute ICMP pings
-3. Validate Netcat TCP connections with optional TLS and proxy configuration
-4. Check each IP in a CIDR range to ensure that they're all free (unallocated)
+3. Validate TCP connections to arbitrary host + port(s), optionally through an HTTP proxy
+4. Check each IP in a given range (starting IP + next N IPs) to ensure that they're all unallocated
 5. Check that the default NIC has an MTU of at least X, where X is the provided MTU
 
 Each `NetworkValidator` CR is (re)-processed every two minutes to continuously ensure that your network matches the expected state.
 
-See the [samples](https://github.com/spectrocloud-labs/valid8or-plugin-network/tree/main/config/samples) directory for example `NetworkValidator` configurations.
+See the [samples](https://github.com/spectrocloud-labs/validator-plugin-network/tree/main/config/samples) directory for example `NetworkValidator` configurations.
 
 ## Installation
-The Network valid8or plugin is meant to be [installed by valid8or](https://github.com/spectrocloud-labs/valid8or/tree/gh_pages#installation) (via a Valid8orConfig), but it can also be installed directly as follows:
+The Network validator plugin is meant to be [installed by validator](https://github.com/spectrocloud-labs/validator/tree/gh_pages#installation) (via a ValidatorConfig), but it can also be installed directly as follows:
 
 ```bash
-helm repo add valid8or-plugin-network https://spectrocloud-labs.github.io/valid8or-plugin-network
+helm repo add validator-plugin-network https://spectrocloud-labs.github.io/validator-plugin-network
 helm repo update
-helm install valid8or-plugin-network valid8or-plugin-network/valid8or-plugin-network -n valid8or-plugin-network --create-namespace
+helm install validator-plugin-network validator-plugin-network/validator-plugin-network -n validator-plugin-network --create-namespace
 ```
 
 ## Getting Started
@@ -37,13 +37,13 @@ kubectl apply -f config/samples/
 2. Build and push your image to the location specified by `IMG`:
 
 ```sh
-make docker-build docker-push IMG=<some-registry>/valid8or-plugin-network:tag
+make docker-build docker-push IMG=<some-registry>/validator-plugin-network:tag
 ```
 
 3. Deploy the controller to the cluster with the image specified by `IMG`:
 
 ```sh
-make deploy IMG=<some-registry>/valid8or-plugin-network:tag
+make deploy IMG=<some-registry>/validator-plugin-network:tag
 ```
 
 ### Uninstall CRDs

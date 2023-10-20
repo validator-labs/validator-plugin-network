@@ -31,11 +31,11 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	valid8orv1alpha1 "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
+	validatorv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
 
-	"github.com/spectrocloud-labs/valid8or-plugin-network/api/v1alpha1"
-	validationv1alpha1 "github.com/spectrocloud-labs/valid8or-plugin-network/api/v1alpha1"
-	"github.com/spectrocloud-labs/valid8or-plugin-network/internal/controller"
+	"github.com/spectrocloud-labs/validator-plugin-network/api/v1alpha1"
+	validationv1alpha1 "github.com/spectrocloud-labs/validator-plugin-network/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator-plugin-network/internal/controller"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -46,17 +46,15 @@ var (
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
-	utilruntime.Must(valid8orv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(validatorv1alpha1.AddToScheme(scheme))
 	utilruntime.Must(v1alpha1.AddToScheme(scheme))
 	utilruntime.Must(validationv1alpha1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 
 func main() {
-	var metricsAddr string
 	var enableLeaderElection bool
 	var probeAddr string
-	flag.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
 	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
 	flag.BoolVar(&enableLeaderElection, "leader-elect", false,
 		"Enable leader election for controller manager. "+
@@ -73,7 +71,7 @@ func main() {
 		Scheme:                 scheme,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
-		LeaderElectionID:       "1f172fb1.spectrocloud.labs",
+		LeaderElectionID:       "2f172fb1.spectrocloud.labs",
 		// LeaderElectionReleaseOnCancel defines if the leader should step down voluntarily
 		// when the Manager ends. This requires the binary to immediately end when the
 		// Manager is stopped, otherwise, this setting is unsafe. Setting this significantly

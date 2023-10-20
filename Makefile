@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= quay.io/spectrocloud-labs/valid8or-plugin-network:latest
+IMG ?= quay.io/spectrocloud-labs/validator-plugin-network:latest
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -126,7 +126,7 @@ undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/confi
 .PHONY: helmify
 helmify: manifests kustomize
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
-	$(KUSTOMIZE) build config/default > chart/valid8or-plugin-k8s.yaml
+	$(KUSTOMIZE) build config/default > chart/validator-plugin-k8s.yaml
 
 ##@ Build Dependencies
 
@@ -142,7 +142,7 @@ CONTROLLER_GEN ?= $(LOCALBIN)/controller-gen
 ENVTEST ?= $(LOCALBIN)/setup-envtest
 
 ## Tool Versions
-CHART_VERSION=v0.0.1 # x-release-please-version
+CHART_VERSION=v0.0.1  # x-release-please-version
 CONTROLLER_TOOLS_VERSION ?= v0.12.0
 ENVTEST_K8S_VERSION = 1.27.1
 HELM_VERSION=v3.10.1
@@ -191,11 +191,11 @@ helm-build: helm helmify manifests kustomize
 
 .PHONY: helm-package
 helm-package: generate manifests
-	$(HELM) package --version $(CHART_VERSION) chart/valid8or-plugin-network/
-	mkdir -p charts && mv valid8or-*.tgz charts
-	$(HELM) repo index --url https://spectrocloud-labs.github.io/valid8or-plugin-network ./chart
-	mv charts/valid8or-plugin-network/index.yaml index.yaml
+	$(HELM) package --version $(CHART_VERSION) chart/validator-plugin-network/
+	mkdir -p charts && mv validator-*.tgz charts
+	$(HELM) repo index --url https://spectrocloud-labs.github.io/validator-plugin-network ./chart
+	mv charts/validator-plugin-network/index.yaml index.yaml
 
 .PHONY: frigate
 frigate:
-	frigate gen chart/valid8or-plugin-network --no-deps -o markdown > chart/valid8or-plugin-network/README.md
+	frigate gen chart/validator-plugin-network --no-deps -o markdown > chart/validator-plugin-network/README.md

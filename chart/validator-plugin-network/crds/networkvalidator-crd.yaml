@@ -33,10 +33,94 @@ spec:
           spec:
             description: NetworkValidatorSpec defines the desired state of NetworkValidator
             properties:
-              foo:
-                description: Foo is an example field of NetworkValidator. Edit networkvalidator_types.go
-                  to remove/update
-                type: string
+              dnsRules:
+                description: DNSRules validate DNS name resolution of network hosts
+                items:
+                  properties:
+                    host:
+                      type: string
+                    name:
+                      type: string
+                    server:
+                      type: string
+                  required:
+                  - host
+                  - name
+                  type: object
+                type: array
+              icmpRules:
+                description: ICMPRules validate ICMP pings to network hosts
+                items:
+                  properties:
+                    host:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - host
+                  - name
+                  type: object
+                type: array
+              ipRangeRules:
+                description: IPRangeRules validate that all IPs in a given CIDR range
+                  are free (unallocated)
+                items:
+                  properties:
+                    length:
+                      type: integer
+                    name:
+                      type: string
+                    startIp:
+                      type: string
+                  required:
+                  - length
+                  - name
+                  - startIp
+                  type: object
+                type: array
+              mtuRules:
+                description: MTURules validate that the default NIC has an MTU of
+                  at least X, where X is the provided MTU
+                items:
+                  properties:
+                    host:
+                      type: string
+                    mtu:
+                      type: integer
+                    name:
+                      type: string
+                  required:
+                  - host
+                  - mtu
+                  - name
+                  type: object
+                type: array
+              tcpConnRules:
+                description: TCPConnRules validate arbitrary TCP connections, including
+                  proxied connections
+                items:
+                  properties:
+                    host:
+                      type: string
+                    name:
+                      type: string
+                    ports:
+                      items:
+                        type: integer
+                      type: array
+                    proxyAddress:
+                      type: string
+                    proxyPort:
+                      type: integer
+                    proxyProtocol:
+                      pattern: ^(4|5|connect)?$
+                      type: string
+                  required:
+                  - host
+                  - name
+                  - ports
+                  type: object
+                type: array
             type: object
           status:
             description: NetworkValidatorStatus defines the observed state of NetworkValidator
