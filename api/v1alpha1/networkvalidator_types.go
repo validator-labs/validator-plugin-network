@@ -17,7 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	valid8orv1alpha1 "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
+	validatorv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -94,7 +94,7 @@ type NetworkValidatorStatus struct {
 	// +optional
 	// +patchMergeKey=type
 	// +patchStrategy=merge
-	Conditions []valid8orv1alpha1.ValidationCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
+	Conditions []validatorv1alpha1.ValidationCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
 }
 
 //+kubebuilder:object:root=true

@@ -31,11 +31,11 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	valid8orv1alpha1 "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
+	validatorv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
 
-	"github.com/spectrocloud-labs/valid8or-plugin-network/api/v1alpha1"
-	validationv1alpha1 "github.com/spectrocloud-labs/valid8or-plugin-network/api/v1alpha1"
-	"github.com/spectrocloud-labs/valid8or-plugin-network/internal/controller"
+	"github.com/spectrocloud-labs/validator-plugin-network/api/v1alpha1"
+	validationv1alpha1 "github.com/spectrocloud-labs/validator-plugin-network/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator-plugin-network/internal/controller"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -46,7 +46,7 @@ var (
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
-	utilruntime.Must(valid8orv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(validatorv1alpha1.AddToScheme(scheme))
 	utilruntime.Must(v1alpha1.AddToScheme(scheme))
 	utilruntime.Must(validationv1alpha1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme

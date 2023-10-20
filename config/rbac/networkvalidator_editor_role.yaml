@@ -6,8 +6,8 @@ metadata:
     app.kubernetes.io/name: clusterrole
     app.kubernetes.io/instance: networkvalidator-editor-role
     app.kubernetes.io/component: rbac
-    app.kubernetes.io/created-by: valid8or-plugin-network
-    app.kubernetes.io/part-of: valid8or-plugin-network
+    app.kubernetes.io/created-by: validator-plugin-network
+    app.kubernetes.io/part-of: validator-plugin-network
     app.kubernetes.io/managed-by: kustomize
   name: networkvalidator-editor-role
 rules:

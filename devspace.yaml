@@ -1,11 +1,11 @@
-name: valid8or-plugin-network
+name: validator-plugin-network
 version: v2beta1
 
 vars:
-  IMAGE: quay.io/spectrocloud-labs/valid8or-plugin-network
+  IMAGE: quay.io/spectrocloud-labs/validator-plugin-network
 
 images:
-  valid8or-plugin-network:
+  validator-plugin-network:
     image: ${IMAGE}
     tags:
     - dev
@@ -15,15 +15,15 @@ images:
     docker: {}
 
 deployments:
-  valid8or-plugin-network:
-    namespace: valid8or-plugin-network-system
+  validator-plugin-network:
+    namespace: validator-plugin-network-system
     kubectl:
       kustomize: true
       manifests:
       - config/devspace
 
 dev:
-  valid8or-plugin-network:
+  validator-plugin-network:
     imageSelector: ${IMAGE}
     terminal:
       enabled: true

@@ -1,4 +1,4 @@
-module github.com/spectrocloud-labs/valid8or-plugin-network
+module github.com/spectrocloud-labs/validator-plugin-network
 
 go 1.20
 
@@ -6,7 +6,7 @@ require (
 	github.com/go-logr/logr v1.2.4
 	github.com/onsi/ginkgo/v2 v2.13.0
 	github.com/onsi/gomega v1.28.0
-	github.com/spectrocloud-labs/valid8or v0.0.9
+	github.com/spectrocloud-labs/validator v0.0.10
 	k8s.io/apimachinery v0.28.3
 	k8s.io/client-go v0.28.3
 	sigs.k8s.io/controller-runtime v0.16.3
