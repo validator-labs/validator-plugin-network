@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:alpine3.17 AS builder
+FROM --platform=$TARGETPLATFORM golang:alpine3.17 AS builder
 ARG TARGETOS
 ARG TARGETARCH
 
@@ -24,7 +24,7 @@ COPY internal/ internal/
 RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -a -o manager cmd/main.go
 
 # Use alpine as minimal base image to package the manager and network inspection binaries
-FROM alpine:latest AS production
+FROM --platform=$TARGETPLATFORM alpine:latest AS production
 WORKDIR /
 RUN apk add --no-cache bind-tools iputils netcat-openbsd
 COPY --from=builder /workspace/manager .
