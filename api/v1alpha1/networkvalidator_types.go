@@ -35,6 +35,10 @@ type NetworkValidatorSpec struct {
 	TCPConnRules []TCPConnRule `json:"tcpConnRules,omitempty" yaml:"tcpConnRules,omitempty"`
 }
 
+func (s NetworkValidatorSpec) ResultCount() int {
+	return len(s.DNSRules) + len(s.ICMPRules) + len(s.IPRangeRules) + len(s.MTURules) + len(s.TCPConnRules)
+}
+
 type DNSRule struct {
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
