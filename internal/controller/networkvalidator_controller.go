@@ -32,7 +32,6 @@ import (
 	"github.com/spectrocloud-labs/validator-plugin-network/internal/constants"
 	"github.com/spectrocloud-labs/validator-plugin-network/internal/validators"
 	vapi "github.com/spectrocloud-labs/validator/api/v1alpha1"
-	"github.com/spectrocloud-labs/validator/pkg/types"
 	vres "github.com/spectrocloud-labs/validator/pkg/validationresult"
 )
 
@@ -68,22 +67,19 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		Namespace: req.Namespace,
 	}
 	if err := r.Get(ctx, nn, vr); err == nil {
-		res, err := vres.HandleExistingValidationResult(nn, vr, r.Log)
-		if res != nil {
-			return *res, err
-		}
+		vres.HandleExistingValidationResult(nn, vr, r.Log)
 	} else {
 		if !apierrs.IsNotFound(err) {
 			r.Log.V(0).Error(err, "unexpected error getting ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
 		}
-		res, err := vres.HandleNewValidationResult(r.Client, constants.PluginCode, nn, vr, r.Log)
-		if res != nil {
-			return *res, err
+		if err := vres.HandleNewValidationResult(
+			r.Client, constants.PluginCode, validator.Spec.ResultCount(), nn, r.Log,
+		); err != nil {
+			return ctrl.Result{}, err
 		}
 	}
 
 	networkService := validators.NewNetworkService(r.Log)
-	failed := &types.MonotonicBool{}
 
 	// DNS rules
 	for _, rule := range validator.Spec.DNSRules {
@@ -91,7 +87,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile DNS rule")
 		}
-		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, failed, err, r.Log)
+		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, err, r.Log)
 	}
 
 	// ICMP rules
@@ -100,7 +96,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile ICMP rule")
 		}
-		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, failed, err, r.Log)
+		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, err, r.Log)
 	}
 
 	// IP range rules
@@ -109,7 +105,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile IP range rule")
 		}
-		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, failed, err, r.Log)
+		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, err, r.Log)
 	}
 
 	// MTU rules
@@ -118,7 +114,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile MTU rule")
 		}
-		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, failed, err, r.Log)
+		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, err, r.Log)
 	}
 
 	// TCP connection rules
@@ -127,7 +123,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile netcat rule")
 		}
-		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, failed, err, r.Log)
+		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, err, r.Log)
 	}
 
 	r.Log.V(0).Info("Requeuing for re-validation in two minutes.", "name", req.Name, "namespace", req.Namespace)
