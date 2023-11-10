@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.0.5](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.4...v0.0.5) (2023-11-10)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/go-logr/logr to v1.3.0 ([#67](https://github.com/spectrocloud-labs/validator-plugin-network/issues/67)) ([4362ecd](https://github.com/spectrocloud-labs/validator-plugin-network/commit/4362ecdd33ef4427efdbd914d52b8b0840564de1))
+* **deps:** update module github.com/onsi/gomega to v1.28.1 ([#64](https://github.com/spectrocloud-labs/validator-plugin-network/issues/64)) ([f3b43c7](https://github.com/spectrocloud-labs/validator-plugin-network/commit/f3b43c7af08941dba32c94bea505ab1ecbbc9e4e))
+* **deps:** update module github.com/onsi/gomega to v1.29.0 ([#65](https://github.com/spectrocloud-labs/validator-plugin-network/issues/65)) ([75fde95](https://github.com/spectrocloud-labs/validator-plugin-network/commit/75fde955fdabbc659e2e8ae4148b4b21df72df25))
+* **deps:** update module github.com/onsi/gomega to v1.30.0 ([#71](https://github.com/spectrocloud-labs/validator-plugin-network/issues/71)) ([806234a](https://github.com/spectrocloud-labs/validator-plugin-network/commit/806234a462c83c83c3be0ee370e077444c2c8f72))
+
+
+### Other
+
+* add license ([d70ed62](https://github.com/spectrocloud-labs/validator-plugin-network/commit/d70ed62c20d16219cd55fdfc6dde002de91acb0f))
+* better platform support for images ([#75](https://github.com/spectrocloud-labs/validator-plugin-network/issues/75)) ([037439a](https://github.com/spectrocloud-labs/validator-plugin-network/commit/037439a33471fbec8635e815f8ccfa343c2690e2))
+* **deps:** pin dependencies ([#73](https://github.com/spectrocloud-labs/validator-plugin-network/issues/73)) ([196783d](https://github.com/spectrocloud-labs/validator-plugin-network/commit/196783d1248b356f20a651cf8d4cdf0ee323693d))
+* **deps:** update actions/checkout action to v4 ([#74](https://github.com/spectrocloud-labs/validator-plugin-network/issues/74)) ([214c3e8](https://github.com/spectrocloud-labs/validator-plugin-network/commit/214c3e8a29ee6d78c58f6f522ad71cbe759d6d97))
+* **deps:** update gcr.io/kubebuilder/kube-rbac-proxy docker tag to v0.15.0 ([#62](https://github.com/spectrocloud-labs/validator-plugin-network/issues/62)) ([d4d00ff](https://github.com/spectrocloud-labs/validator-plugin-network/commit/d4d00ffee950688e4b1cb23682b4e83c11e7ae0e))
+* **deps:** update google-github-actions/release-please-action digest to db8f2c6 ([#70](https://github.com/spectrocloud-labs/validator-plugin-network/issues/70)) ([2617096](https://github.com/spectrocloud-labs/validator-plugin-network/commit/2617096a9100c4dc327d448b29c2b6933080b7fe))
+* **deps:** update helm/chart-testing-action action to v2.6.0 ([#68](https://github.com/spectrocloud-labs/validator-plugin-network/issues/68)) ([2ba587e](https://github.com/spectrocloud-labs/validator-plugin-network/commit/2ba587ea82312f82de4203233ca4a8a95bfe6b7d))
+* **deps:** update helm/chart-testing-action action to v2.6.1 ([#69](https://github.com/spectrocloud-labs/validator-plugin-network/issues/69)) ([8613f0d](https://github.com/spectrocloud-labs/validator-plugin-network/commit/8613f0d838bed1b45753f64f39508d8a8130b7cb))
+* tidy imports ([#66](https://github.com/spectrocloud-labs/validator-plugin-network/issues/66)) ([65a4d9b](https://github.com/spectrocloud-labs/validator-plugin-network/commit/65a4d9b771bfd1fa10c34ee8df6981a2914962b1))
+* update validator core & align w/ VR changes ([#77](https://github.com/spectrocloud-labs/validator-plugin-network/issues/77)) ([929a56f](https://github.com/spectrocloud-labs/validator-plugin-network/commit/929a56f693140b2ec1a341ca853d03ad295fff70))
+
 ## [0.0.4](https://github.com/spectrocloud-labs/valid8or-plugin-network/compare/v0.0.3...v0.0.4) (2023-10-20)
 
 
