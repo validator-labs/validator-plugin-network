@@ -1,6 +1,7 @@
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/spectrocloud-labs/validator-plugin-network/issues)
 ![Build](https://github.com/spectrocloud-labs/validator-plugin-network/actions/workflows/build_container.yaml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/spectrocloud-labs/validator-plugin-network)](https://goreportcard.com/report/github.com/spectrocloud-labs/validator-plugin-network)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/spectrocloud-labs/validator-plugin-network/issues)
+[![codecov](https://codecov.io/github/spectrocloud-labs/validator-plugin-network/graph/badge.svg?token=Q15XUCRNCN)](https://codecov.io/github/spectrocloud-labs/validator-plugin-network)
 [![Go Reference](https://pkg.go.dev/badge/github.com/spectrocloud-labs/validator-plugin-network.svg)](https://pkg.go.dev/github.com/spectrocloud-labs/validator-plugin-network)
 
 # validator-plugin-network
