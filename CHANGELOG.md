@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.0.6](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.5...v0.0.6) (2023-11-13)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.13.1 ([#78](https://github.com/spectrocloud-labs/validator-plugin-network/issues/78)) ([97f0a94](https://github.com/spectrocloud-labs/validator-plugin-network/commit/97f0a94055390b2707d1e05cb883e5885e5c730d))
+* **deps:** update module github.com/spectrocloud-labs/validator to v0.0.17 ([#76](https://github.com/spectrocloud-labs/validator-plugin-network/issues/76)) ([88b278d](https://github.com/spectrocloud-labs/validator-plugin-network/commit/88b278d5c6e13a55ac59191c31df492687dd7c4b))
+* **deps:** update module github.com/spectrocloud-labs/validator to v0.0.18 ([#80](https://github.com/spectrocloud-labs/validator-plugin-network/issues/80)) ([f94ebc3](https://github.com/spectrocloud-labs/validator-plugin-network/commit/f94ebc3b5cb86ef94b3695e517549131ef488b07))
+* typo in TCP conn rule failure ([6b51a54](https://github.com/spectrocloud-labs/validator-plugin-network/commit/6b51a54b8fbbbd509a2b3124c325b04be5ff5b88))
+* typo in ValidationResult names ([1b18967](https://github.com/spectrocloud-labs/validator-plugin-network/commit/1b18967633194c24a06eaa3e5f2477a06be78dc6))
+
 ## [0.0.5](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.4...v0.0.5) (2023-11-10)
 
 
