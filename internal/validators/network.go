@@ -169,7 +169,7 @@ func (n *NetworkService) ReconcileTCPConnRule(nn ktypes.NamespacedName, rule v1a
 	// execute netcat
 	stdout, stderr, exitCode, err := execCmd(nc, args...)
 	if err != nil || stderr != "" || exitCode != 0 {
-		n.failResult(vr, err, ping, errMsg, stdout, stderr, rule.RuleName, args...)
+		n.failResult(vr, err, nc, errMsg, stdout, stderr, rule.RuleName, args...)
 		return vr, err
 	} else {
 		vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s succeeded", nc, args))
