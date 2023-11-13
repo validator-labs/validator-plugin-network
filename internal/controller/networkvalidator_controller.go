@@ -63,7 +63,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	// Get the active validator's validation result
 	vr := &vapi.ValidationResult{}
 	nn := ktypes.NamespacedName{
-		Name:      fmt.Sprintf("validator-plugin-aws-%s", validator.Name),
+		Name:      validationResultName(validator),
 		Namespace: req.Namespace,
 	}
 	if err := r.Get(ctx, nn, vr); err == nil {
@@ -135,4 +135,8 @@ func (r *NetworkValidatorReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&v1alpha1.NetworkValidator{}).
 		Complete(r)
+}
+
+func validationResultName(validator *v1alpha1.NetworkValidator) string {
+	return fmt.Sprintf("validator-plugin-network-%s", validator.Name)
 }
