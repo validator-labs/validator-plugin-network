@@ -25,6 +25,9 @@ const (
 	nslookup string = "nslookup"
 
 	icmpPacketSize int = 28
+
+	pingFail       = "3 packets transmitted, 0 received"
+	pingFailDarwin = "3 packets transmitted, 0 packets received"
 )
 
 type networkRule interface {
@@ -98,7 +101,7 @@ func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1a
 		args := []string{"-c", "3", "-W", "3", ip.String()}
 		stdout, stderr, _, err := execCmd(ping, args...)
 		if err != nil || stderr != "" {
-			if !strings.Contains(stdout, "3 packets transmitted, 0 received") {
+			if !(strings.Contains(stdout, pingFail) || strings.Contains(stdout, pingFailDarwin)) {
 				n.failResult(vr, err, ping, errMsg, stdout, stderr, rule.RuleName, args...)
 				return vr, err
 			}

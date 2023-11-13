@@ -17,7 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	validatorv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -94,12 +93,7 @@ func (r TCPConnRule) Name() string {
 }
 
 // NetworkValidatorStatus defines the observed state of NetworkValidator
-type NetworkValidatorStatus struct {
-	// +optional
-	// +patchMergeKey=type
-	// +patchStrategy=merge
-	Conditions []validatorv1alpha1.ValidationCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
-}
+type NetworkValidatorStatus struct{}
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
