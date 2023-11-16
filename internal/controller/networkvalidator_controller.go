@@ -54,11 +54,9 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	validator := &v1alpha1.NetworkValidator{}
 	if err := r.Get(ctx, req.NamespacedName, validator); err != nil {
-		// Ignore not-found errors, since they can't be fixed by an immediate requeue
-		if apierrs.IsNotFound(err) {
-			return ctrl.Result{}, nil
+		if !apierrs.IsNotFound(err) {
+			r.Log.Error(err, "failed to fetch NetworkValidator", "key", req)
 		}
-		r.Log.Error(err, "failed to fetch NetworkValidator")
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
