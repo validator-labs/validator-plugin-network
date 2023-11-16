@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.7](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.6...v0.0.7) (2023-11-16)
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.28.4 ([#82](https://github.com/spectrocloud-labs/validator-plugin-network/issues/82)) ([19525b6](https://github.com/spectrocloud-labs/validator-plugin-network/commit/19525b603ef53f7bd3681c556ef64ba929fbec17))
+* set owner references on VR to ensure cleanup ([#84](https://github.com/spectrocloud-labs/validator-plugin-network/issues/84)) ([f9a4357](https://github.com/spectrocloud-labs/validator-plugin-network/commit/f9a43579ed05b576d2959d52592404b8e0827184))
+
 ## [0.0.6](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.5...v0.0.6) (2023-11-13)
 
 
