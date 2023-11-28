@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.0.8](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.7...v0.0.8) (2023-11-28)
+
+
+### Features
+
+* add support for proxy setup and enabling proxy certs ([#90](https://github.com/spectrocloud-labs/validator-plugin-network/issues/90)) ([02ac489](https://github.com/spectrocloud-labs/validator-plugin-network/commit/02ac4892b9700b9facfa45efb5bc30b6a576144e))
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/spectrocloud-labs/validator to v0.0.25 ([#88](https://github.com/spectrocloud-labs/validator-plugin-network/issues/88)) ([91f92c8](https://github.com/spectrocloud-labs/validator-plugin-network/commit/91f92c8eec2f2b9b5a3515778d401b0ca0f21678))
+
+
+### Other
+
+* **deps:** update anchore/sbom-action action to v0.15.0 ([#89](https://github.com/spectrocloud-labs/validator-plugin-network/issues/89)) ([6f5aa92](https://github.com/spectrocloud-labs/validator-plugin-network/commit/6f5aa923d6189d7281b1282f21484239894b046d))
+* **deps:** update docker/build-push-action digest to 4a13e50 ([#87](https://github.com/spectrocloud-labs/validator-plugin-network/issues/87)) ([8453b0a](https://github.com/spectrocloud-labs/validator-plugin-network/commit/8453b0ac24d2e4c5eb65b56f8a6f5d26f978de36))
+
+
+### Refactoring
+
+* standardize get CR in Reconcile ([638bc76](https://github.com/spectrocloud-labs/validator-plugin-network/commit/638bc7667bd7b3bf0d241243f30efceb42abd83e))
+
 ## [0.0.7](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.6...v0.0.7) (2023-11-16)
 
 
