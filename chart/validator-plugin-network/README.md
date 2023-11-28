@@ -36,6 +36,9 @@ The following table lists the configurable parameters of the Validator-plugin-ne
 | `metricsService.ports` |  | `[{"name": "https", "port": 8443, "protocol": "TCP", "targetPort": "https"}]` |
 | `metricsService.type` |  | `"ClusterIP"` |
 | `env` |  | `null` |
+| `proxy.enabled` |  | `false` |
+| `proxy.image` |  | `"ubuntu"` |
+| `proxy.secretName` |  | `"proxy-cert"` |
 
 
 
