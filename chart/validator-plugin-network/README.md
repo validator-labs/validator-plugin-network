@@ -2,7 +2,7 @@
 Validator-plugin-network
 ===========
 
-Perform various network validations (DNS, ICMP, Netcat, IP-range)
+Perform various network validations (DNS, ICMP, MTU, Netcat, IP-range)
 
 
 ## Configuration
@@ -15,13 +15,14 @@ The following table lists the configurable parameters of the Validator-plugin-ne
 | `controllerManager.kubeRbacProxy.containerSecurityContext.allowPrivilegeEscalation` |  | `false` |
 | `controllerManager.kubeRbacProxy.containerSecurityContext.capabilities.drop` |  | `["ALL"]` |
 | `controllerManager.kubeRbacProxy.image.repository` |  | `"gcr.io/kubebuilder/kube-rbac-proxy"` |
-| `controllerManager.kubeRbacProxy.image.tag` |  | `"v0.14.1"` |
+| `controllerManager.kubeRbacProxy.image.tag` |  | `"v0.15.0"` |
 | `controllerManager.kubeRbacProxy.resources.limits.cpu` |  | `"500m"` |
 | `controllerManager.kubeRbacProxy.resources.limits.memory` |  | `"128Mi"` |
 | `controllerManager.kubeRbacProxy.resources.requests.cpu` |  | `"5m"` |
 | `controllerManager.kubeRbacProxy.resources.requests.memory` |  | `"64Mi"` |
-| `controllerManager.manager.args` |  | `["--health-probe-bind-address=:8081", "--metrics-bind-address=127.0.0.1:8080", "--leader-elect"]` |
-| `controllerManager.manager.containerSecurityContext.allowPrivilegeEscalation` |  | `false` |
+| `controllerManager.manager.args` |  | `["--health-probe-bind-address=:8081", "--leader-elect"]` |
+| `controllerManager.manager.containerSecurityContext.allowPrivilegeEscalation` |  | `true` |
+| `controllerManager.manager.containerSecurityContext.capabilities.add` |  | `["NET_RAW"]` |
 | `controllerManager.manager.containerSecurityContext.capabilities.drop` |  | `["ALL"]` |
 | `controllerManager.manager.image.repository` |  | `"quay.io/spectrocloud-labs/validator-plugin-network"` |
 | `controllerManager.manager.image.tag` | x-release-please-version | `"v0.0.7"` |
@@ -34,6 +35,10 @@ The following table lists the configurable parameters of the Validator-plugin-ne
 | `kubernetesClusterDomain` |  | `"cluster.local"` |
 | `metricsService.ports` |  | `[{"name": "https", "port": 8443, "protocol": "TCP", "targetPort": "https"}]` |
 | `metricsService.type` |  | `"ClusterIP"` |
+| `env` |  | `null` |
+| `proxy.enabled` |  | `false` |
+| `proxy.image` |  | `"ubuntu"` |
+| `proxy.secretName` |  | `"proxy-cert"` |
 
 
 
