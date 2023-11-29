@@ -30,7 +30,7 @@ spec:
         args: ["update-ca-certificates && cp -r /etc/ca-certificates.conf /usr/share/ca-certificates /etc/ssl/certs"]
         volumeMounts:
         - name: ca-pemstore
-          mountPath: /usr/local/share/ca-certificates/
+          mountPath: /usr/local/share/ca-certificates
           readOnly: false
         - name: certs
           mountPath: /etc/ssl/certs
