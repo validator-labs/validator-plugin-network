@@ -24,14 +24,6 @@ controllerManager:
     args:
     - --health-probe-bind-address=:8081
     - --leader-elect
-    # Optional environment variable configuration
-    env: []
-    # - name: HTTP_PROXY
-    #   value: http://192.168.1.100:8080
-    # - name: HTTPS_PROXY
-    #   value: http://192.168.1.100:8080
-    # - name: NO_PROXY
-    #   value: foo.bar.com,127.0.0.1
     containerSecurityContext:
       allowPrivilegeEscalation: true
       capabilities:
@@ -60,6 +52,15 @@ metricsService:
     protocol: TCP
     targetPort: https
   type: ClusterIP
+
+# Optional environment variable configuration
+env: []
+# - name: HTTP_PROXY
+#   value: http://192.168.1.100:8080
+# - name: HTTPS_PROXY
+#   value: http://192.168.1.100:8080
+# - name: NO_PROXY
+#   value: foo.bar.com,127.0.0.1
 
 # Optional proxy configuration. If enabled, the secret containing your proxy CA certificate
 # will be mounted in the manager container and configured via an init container.

@@ -35,9 +35,9 @@ The following table lists the configurable parameters of the Validator-plugin-ne
 | `kubernetesClusterDomain` |  | `"cluster.local"` |
 | `metricsService.ports` |  | `[{"name": "https", "port": 8443, "protocol": "TCP", "targetPort": "https"}]` |
 | `metricsService.type` |  | `"ClusterIP"` |
-| `env` |  | `null` |
+| `env` |  | `[]` |
 | `proxy.enabled` |  | `false` |
-| `proxy.image` |  | `"ubuntu"` |
+| `proxy.image` |  | `"quay.io/spectrocloud-labs/validator-certs-init:latest"` |
 | `proxy.secretName` |  | `"proxy-cert"` |
 
 
