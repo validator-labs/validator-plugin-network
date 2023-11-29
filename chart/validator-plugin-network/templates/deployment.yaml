@@ -36,7 +36,7 @@ spec:
           mountPath: /etc/ssl/certs
           readOnly: false
         securityContext:
-          runAsNonRoot: false
+          runAsNonRoot: true
       {{- end }}
       containers:
       - args: {{- toYaml .Values.controllerManager.kubeRbacProxy.args | nindent 8 }}
