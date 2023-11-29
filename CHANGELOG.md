@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.9](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.8...v0.0.9) (2023-11-29)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.13.2 ([#93](https://github.com/spectrocloud-labs/validator-plugin-network/issues/93)) ([5fd248a](https://github.com/spectrocloud-labs/validator-plugin-network/commit/5fd248ac4551a0bbb6cd2eaf0e3cda26da6e4c05))
+* **deps:** update module github.com/spectrocloud-labs/validator to v0.0.26 ([#92](https://github.com/spectrocloud-labs/validator-plugin-network/issues/92)) ([9d970b7](https://github.com/spectrocloud-labs/validator-plugin-network/commit/9d970b790a3906abd6051909d732da6713a1311f))
+* refactor proxy config; use image w/ update-ca-certificates preinstalled ([#91](https://github.com/spectrocloud-labs/validator-plugin-network/issues/91)) ([8f0e61c](https://github.com/spectrocloud-labs/validator-plugin-network/commit/8f0e61cf9027423947c8b36d8eabea09ce6b90b4))
+
 ## [0.0.8](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.7...v0.0.8) (2023-11-28)
 
 
