@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.0.10](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.9...v0.0.10) (2023-12-07)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/spectrocloud-labs/validator to v0.0.27 ([#95](https://github.com/spectrocloud-labs/validator-plugin-network/issues/95)) ([d3b7eca](https://github.com/spectrocloud-labs/validator-plugin-network/commit/d3b7ecaf072de035fec6eaed0a7a3d82016cf58a))
+* **deps:** update module github.com/spectrocloud-labs/validator to v0.0.28 ([#99](https://github.com/spectrocloud-labs/validator-plugin-network/issues/99)) ([c7a4560](https://github.com/spectrocloud-labs/validator-plugin-network/commit/c7a45606580021c2a8e7a3d4bc8b22606c9e039c))
+* ensure unique rules to avoid overwriting conditions ([#102](https://github.com/spectrocloud-labs/validator-plugin-network/issues/102)) ([6cad704](https://github.com/spectrocloud-labs/validator-plugin-network/commit/6cad70425f7165173350904ba5b67bbabd442eff))
+
+
+### Other
+
+* **deps:** update actions/setup-go action to v5 ([#101](https://github.com/spectrocloud-labs/validator-plugin-network/issues/101)) ([9e46eb3](https://github.com/spectrocloud-labs/validator-plugin-network/commit/9e46eb3deeb0377d51fdc88af54b3d572be0413c))
+* **deps:** update actions/setup-python action to v5 ([#100](https://github.com/spectrocloud-labs/validator-plugin-network/issues/100)) ([d982bc8](https://github.com/spectrocloud-labs/validator-plugin-network/commit/d982bc891484a55b4640e094f26159ef1956a666))
+* **deps:** update anchore/sbom-action action to v0.15.1 ([#98](https://github.com/spectrocloud-labs/validator-plugin-network/issues/98)) ([408dee2](https://github.com/spectrocloud-labs/validator-plugin-network/commit/408dee268d3be654998ea7341baa9141bba890fb))
+* **deps:** update google-github-actions/release-please-action action to v4 ([#97](https://github.com/spectrocloud-labs/validator-plugin-network/issues/97)) ([6b4bcd2](https://github.com/spectrocloud-labs/validator-plugin-network/commit/6b4bcd298830015e0a20f0b6c335c382973a0a03))
+
 ## [0.0.9](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.8...v0.0.9) (2023-11-29)
 
 
