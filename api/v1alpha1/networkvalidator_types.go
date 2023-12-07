@@ -23,14 +23,24 @@ import (
 // NetworkValidatorSpec defines the desired state of NetworkValidator
 type NetworkValidatorSpec struct {
 	// DNSRules validate DNS name resolution of network hosts
+	// +kubebuilder:validation:MaxItems=5
+	// +kubebuilder:validation:XValidation:message="DNSRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	DNSRules []DNSRule `json:"dnsRules,omitempty" yaml:"dnsRules,omitempty"`
 	// ICMPRules validate ICMP pings to network hosts
+	// +kubebuilder:validation:MaxItems=5
+	// +kubebuilder:validation:XValidation:message="ICMPRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	ICMPRules []ICMPRule `json:"icmpRules,omitempty" yaml:"icmpRules,omitempty"`
 	// IPRangeRules validate that all IPs in a given CIDR range are free (unallocated)
+	// +kubebuilder:validation:MaxItems=5
+	// +kubebuilder:validation:XValidation:message="IPRangeRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	IPRangeRules []IPRangeRule `json:"ipRangeRules,omitempty" yaml:"ipRangeRules,omitempty"`
 	// MTURules validate that the default NIC has an MTU of at least X, where X is the provided MTU
+	// +kubebuilder:validation:MaxItems=5
+	// +kubebuilder:validation:XValidation:message="MTURules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	MTURules []MTURule `json:"mtuRules,omitempty" yaml:"mtuRules,omitempty"`
 	// TCPConnRules validate arbitrary TCP connections, including proxied connections
+	// +kubebuilder:validation:MaxItems=5
+	// +kubebuilder:validation:XValidation:message="TCPConnRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	TCPConnRules []TCPConnRule `json:"tcpConnRules,omitempty" yaml:"tcpConnRules,omitempty"`
 }
 
