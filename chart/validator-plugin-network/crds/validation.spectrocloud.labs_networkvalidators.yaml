@@ -52,8 +52,7 @@ spec:
                 type: array
                 x-kubernetes-validations:
                 - message: DNSRules must have unique names
-                  rule: self.all(e, size(self.filter(x, x.ruleName == e.ruleName))
-                    == 1)
+                  rule: self.all(e, size(self.filter(x, x.name == e.name)) == 1)
               icmpRules:
                 description: ICMPRules validate ICMP pings to network hosts
                 items:
@@ -70,8 +69,7 @@ spec:
                 type: array
                 x-kubernetes-validations:
                 - message: ICMPRules must have unique names
-                  rule: self.all(e, size(self.filter(x, x.ruleName == e.ruleName))
-                    == 1)
+                  rule: self.all(e, size(self.filter(x, x.name == e.name)) == 1)
               ipRangeRules:
                 description: IPRangeRules validate that all IPs in a given CIDR range
                   are free (unallocated)
@@ -92,8 +90,7 @@ spec:
                 type: array
                 x-kubernetes-validations:
                 - message: IPRangeRules must have unique names
-                  rule: self.all(e, size(self.filter(x, x.ruleName == e.ruleName))
-                    == 1)
+                  rule: self.all(e, size(self.filter(x, x.name == e.name)) == 1)
               mtuRules:
                 description: MTURules validate that the default NIC has an MTU of
                   at least X, where X is the provided MTU
@@ -114,8 +111,7 @@ spec:
                 type: array
                 x-kubernetes-validations:
                 - message: MTURules must have unique names
-                  rule: self.all(e, size(self.filter(x, x.ruleName == e.ruleName))
-                    == 1)
+                  rule: self.all(e, size(self.filter(x, x.name == e.name)) == 1)
               tcpConnRules:
                 description: TCPConnRules validate arbitrary TCP connections, including
                   proxied connections
@@ -145,8 +141,7 @@ spec:
                 type: array
                 x-kubernetes-validations:
                 - message: TCPConnRules must have unique names
-                  rule: self.all(e, size(self.filter(x, x.ruleName == e.ruleName))
-                    == 1)
+                  rule: self.all(e, size(self.filter(x, x.name == e.name)) == 1)
             type: object
           status:
             description: NetworkValidatorStatus defines the observed state of NetworkValidator
