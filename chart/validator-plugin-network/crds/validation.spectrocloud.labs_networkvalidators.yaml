@@ -1,3 +1,4 @@
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -47,7 +48,12 @@ spec:
                   - host
                   - name
                   type: object
+                maxItems: 5
                 type: array
+                x-kubernetes-validations:
+                - message: DNSRules must have unique names
+                  rule: self.all(e, size(self.filter(x, x.ruleName == e.ruleName))
+                    == 1)
               icmpRules:
                 description: ICMPRules validate ICMP pings to network hosts
                 items:
@@ -60,7 +66,12 @@ spec:
                   - host
                   - name
                   type: object
+                maxItems: 5
                 type: array
+                x-kubernetes-validations:
+                - message: ICMPRules must have unique names
+                  rule: self.all(e, size(self.filter(x, x.ruleName == e.ruleName))
+                    == 1)
               ipRangeRules:
                 description: IPRangeRules validate that all IPs in a given CIDR range
                   are free (unallocated)
@@ -77,7 +88,12 @@ spec:
                   - name
                   - startIp
                   type: object
+                maxItems: 5
                 type: array
+                x-kubernetes-validations:
+                - message: IPRangeRules must have unique names
+                  rule: self.all(e, size(self.filter(x, x.ruleName == e.ruleName))
+                    == 1)
               mtuRules:
                 description: MTURules validate that the default NIC has an MTU of
                   at least X, where X is the provided MTU
@@ -94,7 +110,12 @@ spec:
                   - mtu
                   - name
                   type: object
+                maxItems: 5
                 type: array
+                x-kubernetes-validations:
+                - message: MTURules must have unique names
+                  rule: self.all(e, size(self.filter(x, x.ruleName == e.ruleName))
+                    == 1)
               tcpConnRules:
                 description: TCPConnRules validate arbitrary TCP connections, including
                   proxied connections
@@ -120,54 +141,15 @@ spec:
                   - name
                   - ports
                   type: object
+                maxItems: 5
                 type: array
+                x-kubernetes-validations:
+                - message: TCPConnRules must have unique names
+                  rule: self.all(e, size(self.filter(x, x.ruleName == e.ruleName))
+                    == 1)
             type: object
           status:
             description: NetworkValidatorStatus defines the observed state of NetworkValidator
-            properties:
-              conditions:
-                items:
-                  properties:
-                    details:
-                      description: Human-readable messages indicating additional details
-                        for the last transition.
-                      items:
-                        type: string
-                      type: array
-                    failures:
-                      description: Human-readable messages indicating additional failure
-                        details for the last transition.
-                      items:
-                        type: string
-                      type: array
-                    lastValidationTime:
-                      description: Timestamp of most recent execution of the validation
-                        rule associated with the condition.
-                      format: date-time
-                      type: string
-                    message:
-                      description: Human-readable message indicating details about
-                        the last transition.
-                      type: string
-                    status:
-                      description: True if the validation rule succeeded, otherwise
-                        False
-                      type: string
-                    validationRule:
-                      description: Unique, one-word description of the validation
-                        rule associated with the condition.
-                      type: string
-                    validationType:
-                      description: Unique, one-word description of the validation
-                        type associated with the condition.
-                      type: string
-                  required:
-                  - lastValidationTime
-                  - status
-                  - validationRule
-                  - validationType
-                  type: object
-                type: array
             type: object
         type: object
     served: true
