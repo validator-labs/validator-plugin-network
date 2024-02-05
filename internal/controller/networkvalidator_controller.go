@@ -33,6 +33,7 @@ import (
 	"github.com/spectrocloud-labs/validator-plugin-network/internal/constants"
 	"github.com/spectrocloud-labs/validator-plugin-network/internal/validators"
 	vapi "github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/pkg/types"
 	"github.com/spectrocloud-labs/validator/pkg/util/ptr"
 	vres "github.com/spectrocloud-labs/validator/pkg/validationresult"
 )
@@ -85,7 +86,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile DNS rule")
 		}
-		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, err, r.Log)
+		r.safeUpdate(nn, validator, validationResult, err)
 	}
 
 	// ICMP rules
@@ -94,7 +95,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile ICMP rule")
 		}
-		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, err, r.Log)
+		r.safeUpdate(nn, validator, validationResult, err)
 	}
 
 	// IP range rules
@@ -103,7 +104,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile IP range rule")
 		}
-		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, err, r.Log)
+		r.safeUpdate(nn, validator, validationResult, err)
 	}
 
 	// MTU rules
@@ -112,7 +113,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile MTU rule")
 		}
-		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, err, r.Log)
+		r.safeUpdate(nn, validator, validationResult, err)
 	}
 
 	// TCP connection rules
@@ -121,11 +122,15 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if err != nil {
 			r.Log.V(0).Error(err, "failed to reconcile netcat rule")
 		}
-		vres.SafeUpdateValidationResult(r.Client, nn, validationResult, err, r.Log)
+		r.safeUpdate(nn, validator, validationResult, err)
 	}
 
 	r.Log.V(0).Info("Requeuing for re-validation in two minutes.", "name", req.Name, "namespace", req.Namespace)
 	return ctrl.Result{RequeueAfter: time.Second * 120}, nil
+}
+
+func (r *NetworkValidatorReconciler) safeUpdate(nn ktypes.NamespacedName, v *v1alpha1.NetworkValidator, vr *types.ValidationResult, err error) {
+	vres.SafeUpdateValidationResult(r.Client, nn, vr, v.Spec.ResultCount(), err, r.Log)
 }
 
 // SetupWithManager sets up the controller with the Manager.
