@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.0.11](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.10...v0.0.11) (2024-02-05)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/go-logr/logr to v1.4.0 ([#110](https://github.com/spectrocloud-labs/validator-plugin-network/issues/110)) ([85c816f](https://github.com/spectrocloud-labs/validator-plugin-network/commit/85c816f6e0c30007cb7b651880f2c985269f3dc9))
+* **deps:** update module github.com/go-logr/logr to v1.4.1 ([#111](https://github.com/spectrocloud-labs/validator-plugin-network/issues/111)) ([f180697](https://github.com/spectrocloud-labs/validator-plugin-network/commit/f180697b324058a2b100ac3fcc4fa603130df98b))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.14.0 ([#117](https://github.com/spectrocloud-labs/validator-plugin-network/issues/117)) ([4c62b94](https://github.com/spectrocloud-labs/validator-plugin-network/commit/4c62b94e01cb412aa71c87a48e9429f0c1593280))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.15.0 ([#120](https://github.com/spectrocloud-labs/validator-plugin-network/issues/120)) ([46196e0](https://github.com/spectrocloud-labs/validator-plugin-network/commit/46196e0c9d6c88948bbfa6c12d50ec6d0e3e02ff))
+* **deps:** update module github.com/onsi/gomega to v1.31.0 ([#121](https://github.com/spectrocloud-labs/validator-plugin-network/issues/121)) ([9223a3b](https://github.com/spectrocloud-labs/validator-plugin-network/commit/9223a3b8142a0189d28a22c8354e74dda61b81ee))
+* **deps:** update module github.com/onsi/gomega to v1.31.1 ([#124](https://github.com/spectrocloud-labs/validator-plugin-network/issues/124)) ([03e3920](https://github.com/spectrocloud-labs/validator-plugin-network/commit/03e39208b75dbbb77ffc5b81d27a3e10a336d811))
+* **deps:** update module github.com/spectrocloud-labs/validator to v0.0.30 ([#109](https://github.com/spectrocloud-labs/validator-plugin-network/issues/109)) ([0993052](https://github.com/spectrocloud-labs/validator-plugin-network/commit/09930523f60c98b53205585a3c5d9e710eae3a9a))
+* **deps:** update module github.com/spectrocloud-labs/validator to v0.0.31 ([#112](https://github.com/spectrocloud-labs/validator-plugin-network/issues/112)) ([51ab53f](https://github.com/spectrocloud-labs/validator-plugin-network/commit/51ab53fac719b3186daaff6ca2ad1c150ad167d8))
+* **deps:** update module github.com/spectrocloud-labs/validator to v0.0.32 ([#113](https://github.com/spectrocloud-labs/validator-plugin-network/issues/113)) ([ef6332b](https://github.com/spectrocloud-labs/validator-plugin-network/commit/ef6332b80e77b4e5d1b9f302d2fd397ba51b9941))
+* update VR's ExpectedResults if/when rules are added to an existing NetworkValidator ([#135](https://github.com/spectrocloud-labs/validator-plugin-network/issues/135)) ([8370ea1](https://github.com/spectrocloud-labs/validator-plugin-network/commit/8370ea105c461da1f705dc3a05b25e125322a49f))
+
+
+### Other
+
+* **deps:** update actions/upload-artifact action to v4 ([#106](https://github.com/spectrocloud-labs/validator-plugin-network/issues/106)) ([c0ccd9c](https://github.com/spectrocloud-labs/validator-plugin-network/commit/c0ccd9cfb727d8c89544dc17354335dc95a9a3aa))
+* **deps:** update actions/upload-artifact digest to 1eb3cb2 ([#118](https://github.com/spectrocloud-labs/validator-plugin-network/issues/118)) ([f27d094](https://github.com/spectrocloud-labs/validator-plugin-network/commit/f27d094d81188cd204907f2976f114dc173d438b))
+* **deps:** update actions/upload-artifact digest to 26f96df ([#126](https://github.com/spectrocloud-labs/validator-plugin-network/issues/126)) ([a70ce05](https://github.com/spectrocloud-labs/validator-plugin-network/commit/a70ce054b474db028e656fa34d75e08c5be9aec9))
+* **deps:** update actions/upload-artifact digest to 694cdab ([#123](https://github.com/spectrocloud-labs/validator-plugin-network/issues/123)) ([d3e30cf](https://github.com/spectrocloud-labs/validator-plugin-network/commit/d3e30cfda0fe8694df18f50372a5428f892bb017))
+* **deps:** update anchore/sbom-action action to v0.15.2 ([#114](https://github.com/spectrocloud-labs/validator-plugin-network/issues/114)) ([a986b24](https://github.com/spectrocloud-labs/validator-plugin-network/commit/a986b2402f61329ce069bc8ab8fe216ff31d92f2))
+* **deps:** update anchore/sbom-action action to v0.15.3 ([#115](https://github.com/spectrocloud-labs/validator-plugin-network/issues/115)) ([8e2af10](https://github.com/spectrocloud-labs/validator-plugin-network/commit/8e2af10846a430ff38ddb3afc7825b6495d6d3bd))
+* **deps:** update anchore/sbom-action action to v0.15.4 ([#122](https://github.com/spectrocloud-labs/validator-plugin-network/issues/122)) ([db5b683](https://github.com/spectrocloud-labs/validator-plugin-network/commit/db5b683f682689818b7d7e97a331874c1f0957f2))
+* **deps:** update anchore/sbom-action action to v0.15.5 ([#125](https://github.com/spectrocloud-labs/validator-plugin-network/issues/125)) ([37cfb39](https://github.com/spectrocloud-labs/validator-plugin-network/commit/37cfb39c1916208296ee7ffb31c7786ad4a02d48))
+* **deps:** update anchore/sbom-action action to v0.15.7 ([#128](https://github.com/spectrocloud-labs/validator-plugin-network/issues/128)) ([1209721](https://github.com/spectrocloud-labs/validator-plugin-network/commit/1209721ff9079870d2b20e1fb7761a423c15278d))
+* **deps:** update anchore/sbom-action action to v0.15.8 ([#131](https://github.com/spectrocloud-labs/validator-plugin-network/issues/131)) ([119a5f2](https://github.com/spectrocloud-labs/validator-plugin-network/commit/119a5f24974df0043100da782696a7b462ccd3af))
+* **deps:** update codecov/codecov-action digest to 4fe8c5f ([#127](https://github.com/spectrocloud-labs/validator-plugin-network/issues/127)) ([0504666](https://github.com/spectrocloud-labs/validator-plugin-network/commit/05046666231314acc092c65bf6b39effbdf12aeb))
+* **deps:** update codecov/codecov-action digest to ab904c4 ([#129](https://github.com/spectrocloud-labs/validator-plugin-network/issues/129)) ([6e86876](https://github.com/spectrocloud-labs/validator-plugin-network/commit/6e8687636bdfc9aa3383b5651b63b6a045ef38b2))
+* **deps:** update codecov/codecov-action digest to e0b68c6 ([#133](https://github.com/spectrocloud-labs/validator-plugin-network/issues/133)) ([b162804](https://github.com/spectrocloud-labs/validator-plugin-network/commit/b162804e31f97e51f096650e48c9a00ed332ca17))
+* **deps:** update gcr.io/spectro-images-public/golang docker tag to v1.22 ([#116](https://github.com/spectrocloud-labs/validator-plugin-network/issues/116)) ([53c0027](https://github.com/spectrocloud-labs/validator-plugin-network/commit/53c00278bd6e3854cce38d1a680b53bd2ebb4e6b))
+* **deps:** update google-github-actions/release-please-action digest to a2d8d68 ([#103](https://github.com/spectrocloud-labs/validator-plugin-network/issues/103)) ([cd040a3](https://github.com/spectrocloud-labs/validator-plugin-network/commit/cd040a36db2f849a5367de2f03bb4674a5171efa))
+* **deps:** update google-github-actions/release-please-action digest to cc61a07 ([#107](https://github.com/spectrocloud-labs/validator-plugin-network/issues/107)) ([71ee77c](https://github.com/spectrocloud-labs/validator-plugin-network/commit/71ee77cd1b3f3fafda37589ea07e03c7213fd5f5))
+
 ## [0.0.10](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.9...v0.0.10) (2023-12-07)
 
 
