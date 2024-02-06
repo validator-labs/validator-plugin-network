@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.12](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.11...v0.0.12) (2024-02-06)
+
+
+### Other
+
+* update validator ([f715be5](https://github.com/spectrocloud-labs/validator-plugin-network/commit/f715be52a0ae187263e3ee1c75a7facf4a2ee776))
+
 ## [0.0.11](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.10...v0.0.11) (2024-02-05)
 
 
