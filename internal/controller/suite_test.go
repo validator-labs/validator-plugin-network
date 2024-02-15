@@ -98,6 +98,8 @@ var _ = BeforeSuite(func() {
 		),
 		UseExistingCluster: ptr.Ptr(false),
 	}
+	args := testEnv.ControlPlane.APIServer.Configure()
+	args.Set("secure-port", "6444")
 
 	if os.Getenv("KUBECONFIG") != "" {
 		testEnv.UseExistingCluster = ptr.Ptr(true)
