@@ -40,6 +40,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
+	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 
 	v1alpha1 "github.com/spectrocloud-labs/validator-plugin-network/api/v1alpha1"
 	vapi "github.com/spectrocloud-labs/validator/api/v1alpha1"
@@ -98,8 +99,6 @@ var _ = BeforeSuite(func() {
 		),
 		UseExistingCluster: ptr.Ptr(false),
 	}
-	args := testEnv.ControlPlane.GetAPIServer().Configure()
-	args.Set("secure-port", "6444")
 
 	if os.Getenv("KUBECONFIG") != "" {
 		testEnv.UseExistingCluster = ptr.Ptr(true)
@@ -128,6 +127,10 @@ var _ = BeforeSuite(func() {
 
 	k8sManager, err := ctrl.NewManager(cfg, ctrl.Options{
 		Scheme: scheme.Scheme,
+		Metrics: metricsserver.Options{
+			// Prevent port contention on self-hosted runner
+			BindAddress: ":8084",
+		},
 	})
 	Expect(err).ToNot(HaveOccurred(), "failed to init manager")
 
