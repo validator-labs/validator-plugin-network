@@ -54,7 +54,7 @@ const (
 	k8sVersion         = "1.27.1"
 	validatorNamespace = "validator"
 
-	timeout  = time.Minute * 5
+	timeout  = time.Minute * 6
 	interval = time.Millisecond * 250
 )
 
