@@ -91,13 +91,14 @@ var _ = Describe("NetworkValidator controller", Ordered, func() {
 					failConditions++
 				}
 			}
-			stateOk := vr.Status.State == vapi.ValidationFailed
+			stateFailed := vr.Status.State == vapi.ValidationFailed
 			// OR required here due to:
 			// - ping's lack of MTU discovery support on Darwin
 			// - ICMP blocked on GHA runners: https://github.com/orgs/community/discussions/26184
-			passOk := passConditions == 3 || passConditions == 4
-			failOk := failConditions == 1 || failConditions == 2
-			return stateOk && passOk && failOk
+			darwinOk := stateFailed && failConditions == 1 && passConditions == 4
+			ghOnlineOk := stateFailed && failConditions == 2 && passConditions == 3
+			ghSelfHostedOk := !stateFailed && failConditions == 0 && passConditions == 5
+			return darwinOk || ghOnlineOk || ghSelfHostedOk
 		}, timeout, interval).Should(BeTrue(), "failed to create a ValidationResult")
 	})
 })
