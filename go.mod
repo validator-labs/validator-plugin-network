@@ -4,7 +4,7 @@ go 1.21.6
 
 require (
 	github.com/go-logr/logr v1.4.1
-	github.com/onsi/ginkgo/v2 v2.15.0
+	github.com/onsi/ginkgo/v2 v2.16.0
 	github.com/onsi/gomega v1.31.1
 	github.com/spectrocloud-labs/validator v0.0.34
 	k8s.io/api v0.29.2
