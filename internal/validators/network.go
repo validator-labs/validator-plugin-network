@@ -16,7 +16,7 @@ import (
 	"github.com/spectrocloud-labs/validator-plugin-network/internal/constants"
 	vapi "github.com/spectrocloud-labs/validator/api/v1alpha1"
 	"github.com/spectrocloud-labs/validator/pkg/types"
-	"github.com/spectrocloud-labs/validator/pkg/util/ptr"
+	"github.com/spectrocloud-labs/validator/pkg/util"
 )
 
 const (
@@ -90,7 +90,7 @@ func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1a
 	// parse the starting IP
 	ip, err := toIpV4(rule.StartIP)
 	if err != nil {
-		vr.State = ptr.Ptr(vapi.ValidationFailed)
+		vr.State = util.Ptr(vapi.ValidationFailed)
 		vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("invalid start IP: %s. error: %v", rule.StartIP, err))
 		vr.Condition.Message = errMsg
 		return vr, nil
@@ -108,7 +108,7 @@ func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1a
 			vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s failed", ping, args))
 		} else {
 			n.log.V(0).Info("IP allocated", "stdout", stdout, "rule", rule.RuleName)
-			vr.State = ptr.Ptr(vapi.ValidationFailed)
+			vr.State = util.Ptr(vapi.ValidationFailed)
 			vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s succeeded", ping, args))
 			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("stdout: %s", stdout))
 			vr.Condition.Message = "One or more IPs in the provided range was allocated"
@@ -154,7 +154,7 @@ func (n *NetworkService) ReconcileTCPConnRule(nn ktypes.NamespacedName, rule v1a
 	// construct args
 	args := []string{"-w", "3"}
 	if rule.ProxyProtocol != "" && rule.ProxyAddress == "" || rule.ProxyProtocol == "" && rule.ProxyAddress != "" {
-		vr.State = ptr.Ptr(vapi.ValidationFailed)
+		vr.State = util.Ptr(vapi.ValidationFailed)
 		vr.Condition.Failures = append(vr.Condition.Failures, "invalid rule: proxyProtocol & proxyAddress must both be defined, or both undefined")
 		vr.Condition.Message = errMsg
 	}
@@ -212,7 +212,7 @@ func (n *NetworkService) handleRuleExec(vr *types.ValidationResult, r networkRul
 func (n *NetworkService) failResult(vr *types.ValidationResult, err error, binary, errMsg, stdout, stderr, ruleName string, args ...string) {
 	n.log.V(0).Info(errMsg, "stdout", stdout, "stderr", stderr, "error", err.Error(), "rule", ruleName)
 	failure := fmt.Sprintf("stdout: %s, stderr: %s, error: %v", stdout, stderr, err)
-	vr.State = ptr.Ptr(vapi.ValidationFailed)
+	vr.State = util.Ptr(vapi.ValidationFailed)
 	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s failed", binary, args))
 	vr.Condition.Failures = append(vr.Condition.Failures, failure)
 	vr.Condition.Message = errMsg
