@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.0.13](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.12...v0.0.13) (2024-03-11)
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.29.2 ([#140](https://github.com/spectrocloud-labs/validator-plugin-network/issues/140)) ([6a0d006](https://github.com/spectrocloud-labs/validator-plugin-network/commit/6a0d00666d1a510198a52bca926e02c568b42da0))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.16.0 ([#149](https://github.com/spectrocloud-labs/validator-plugin-network/issues/149)) ([45db49d](https://github.com/spectrocloud-labs/validator-plugin-network/commit/45db49dd1b816e6a927d244066fa101eb445f888))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.17.1 ([#119](https://github.com/spectrocloud-labs/validator-plugin-network/issues/119)) ([ace6047](https://github.com/spectrocloud-labs/validator-plugin-network/commit/ace6047994166ec831d27dda1471a7065c85ee9c))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.17.2 ([#143](https://github.com/spectrocloud-labs/validator-plugin-network/issues/143)) ([18bc184](https://github.com/spectrocloud-labs/validator-plugin-network/commit/18bc1847dee81ca143882cf3d6c0083dbe7c9957))
+
+
+### Other
+
+* **deps:** update actions/upload-artifact digest to 5d5d22a ([#136](https://github.com/spectrocloud-labs/validator-plugin-network/issues/136)) ([10d9b75](https://github.com/spectrocloud-labs/validator-plugin-network/commit/10d9b75c45e30d54cf8926a5bd3a94e07d62feb8))
+* **deps:** update anchore/sbom-action action to v0.15.9 ([#150](https://github.com/spectrocloud-labs/validator-plugin-network/issues/150)) ([224d8b0](https://github.com/spectrocloud-labs/validator-plugin-network/commit/224d8b08d280f43511fbeda2ac43692d7578fdf4))
+* **deps:** update azure/setup-helm action to v4 ([#148](https://github.com/spectrocloud-labs/validator-plugin-network/issues/148)) ([ad470b1](https://github.com/spectrocloud-labs/validator-plugin-network/commit/ad470b115d8c94b587dbf69bf3357629d9f9ca41))
+* **deps:** update codecov/codecov-action digest to 54bcd87 ([#145](https://github.com/spectrocloud-labs/validator-plugin-network/issues/145)) ([1f0d1dc](https://github.com/spectrocloud-labs/validator-plugin-network/commit/1f0d1dce011f56a20ae0dedd04870e918b826bba))
+* **deps:** update docker/build-push-action digest to af5a7ed ([#151](https://github.com/spectrocloud-labs/validator-plugin-network/issues/151)) ([2b1091e](https://github.com/spectrocloud-labs/validator-plugin-network/commit/2b1091e24b97090a56fc03e421b9c4d08280f427))
+* **deps:** update docker/setup-buildx-action digest to 0d103c3 ([#146](https://github.com/spectrocloud-labs/validator-plugin-network/issues/146)) ([b274a04](https://github.com/spectrocloud-labs/validator-plugin-network/commit/b274a04c888040431df426a5418187b2383dbed5))
+* **deps:** update helm/kind-action action to v1.9.0 ([#139](https://github.com/spectrocloud-labs/validator-plugin-network/issues/139)) ([8a94dc6](https://github.com/spectrocloud-labs/validator-plugin-network/commit/8a94dc69e7f3f77ce878ad9ec47399e8cb65a326))
+* fix broken build link in README ([#147](https://github.com/spectrocloud-labs/validator-plugin-network/issues/147)) ([c6e6ae7](https://github.com/spectrocloud-labs/validator-plugin-network/commit/c6e6ae754c455bd3265755e920aba39cb9d57490))
+* upgrade to validator v0.0.36 ([#153](https://github.com/spectrocloud-labs/validator-plugin-network/issues/153)) ([a2d6d9b](https://github.com/spectrocloud-labs/validator-plugin-network/commit/a2d6d9b3c95422d0b0b93c2407fe01af80ebbc28))
+
 ## [0.0.12](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.11...v0.0.12) (2024-02-06)
 
 
