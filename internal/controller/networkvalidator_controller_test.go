@@ -83,7 +83,7 @@ var _ = Describe("NetworkValidator controller", Ordered, func() {
 				return false
 			}
 			passConditions, failConditions := 0, 0
-			for _, c := range vr.Status.Conditions {
+			for _, c := range vr.Status.ValidationConditions {
 				if c.Status == corev1.ConditionTrue {
 					passConditions++
 				}
