@@ -26,6 +26,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ktypes "k8s.io/apimachinery/pkg/types"
+	"sigs.k8s.io/cluster-api/util/patch"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -51,86 +52,102 @@ type NetworkValidatorReconciler struct {
 
 // Reconcile reconciles each rule found in each NetworkValidator in the cluster and creates ValidationResults accordingly
 func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	r.Log.V(0).Info("Reconciling NetworkValidator", "name", req.Name, "namespace", req.Namespace)
+	l := r.Log.V(0).WithValues("name", req.Name, "namespace", req.Namespace)
+	l.Info("Reconciling NetworkValidator")
 
 	validator := &v1alpha1.NetworkValidator{}
 	if err := r.Get(ctx, req.NamespacedName, validator); err != nil {
 		if !apierrs.IsNotFound(err) {
-			r.Log.Error(err, "failed to fetch NetworkValidator", "key", req)
+			l.Error(err, "failed to fetch NetworkValidator")
 		}
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
 	// Get the active validator's validation result
 	vr := &vapi.ValidationResult{}
+	p, err := patch.NewHelper(vr, r.Client)
+	if err != nil {
+		l.Error(err, "failed to create patch helper")
+		return ctrl.Result{}, err
+	}
 	nn := ktypes.NamespacedName{
 		Name:      validationResultName(validator),
 		Namespace: req.Namespace,
 	}
 	if err := r.Get(ctx, nn, vr); err == nil {
-		vres.HandleExistingValidationResult(nn, vr, r.Log)
+		vres.HandleExistingValidationResult(vr, r.Log)
 	} else {
 		if !apierrs.IsNotFound(err) {
-			r.Log.V(0).Error(err, "unexpected error getting ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+			l.Error(err, "unexpected error getting ValidationResult")
 		}
-		if err := vres.HandleNewValidationResult(r.Client, buildValidationResult(validator), r.Log); err != nil {
+		if err := vres.HandleNewValidationResult(ctx, r.Client, p, buildValidationResult(validator), r.Log); err != nil {
 			return ctrl.Result{}, err
 		}
+		return ctrl.Result{RequeueAfter: time.Millisecond}, nil
+	}
+
+	// Always update the expected result count in case the validator's rules have changed
+	vr.Spec.ExpectedResults = validator.Spec.ResultCount()
+
+	resp := types.ValidationResponse{
+		ValidationRuleResults: make([]*types.ValidationRuleResult, 0, vr.Spec.ExpectedResults),
+		ValidationRuleErrors:  make([]error, 0, vr.Spec.ExpectedResults),
 	}
 
 	networkService := validators.NewNetworkService(r.Log)
 
 	// DNS rules
 	for _, rule := range validator.Spec.DNSRules {
-		validationResult, err := networkService.ReconcileDNSRule(nn, rule)
+		vrr, err := networkService.ReconcileDNSRule(nn, rule)
 		if err != nil {
-			r.Log.V(0).Error(err, "failed to reconcile DNS rule")
+			l.Error(err, "failed to reconcile DNS rule")
 		}
-		r.safeUpdate(nn, validator, validationResult, err)
+		resp.AddResult(vrr, err)
 	}
 
 	// ICMP rules
 	for _, rule := range validator.Spec.ICMPRules {
-		validationResult, err := networkService.ReconcileICMPRule(nn, rule)
+		vrr, err := networkService.ReconcileICMPRule(nn, rule)
 		if err != nil {
-			r.Log.V(0).Error(err, "failed to reconcile ICMP rule")
+			l.Error(err, "failed to reconcile ICMP rule")
 		}
-		r.safeUpdate(nn, validator, validationResult, err)
+		resp.AddResult(vrr, err)
 	}
 
 	// IP range rules
 	for _, rule := range validator.Spec.IPRangeRules {
-		validationResult, err := networkService.ReconcileIPRangeRule(nn, rule)
+		vrr, err := networkService.ReconcileIPRangeRule(nn, rule)
 		if err != nil {
-			r.Log.V(0).Error(err, "failed to reconcile IP range rule")
+			l.Error(err, "failed to reconcile IP range rule")
 		}
-		r.safeUpdate(nn, validator, validationResult, err)
+		resp.AddResult(vrr, err)
 	}
 
 	// MTU rules
 	for _, rule := range validator.Spec.MTURules {
-		validationResult, err := networkService.ReconcileMTURule(nn, rule)
+		vrr, err := networkService.ReconcileMTURule(nn, rule)
 		if err != nil {
-			r.Log.V(0).Error(err, "failed to reconcile MTU rule")
+			l.Error(err, "failed to reconcile MTU rule")
 		}
-		r.safeUpdate(nn, validator, validationResult, err)
+		resp.AddResult(vrr, err)
 	}
 
 	// TCP connection rules
 	for _, rule := range validator.Spec.TCPConnRules {
-		validationResult, err := networkService.ReconcileTCPConnRule(nn, rule)
+		vrr, err := networkService.ReconcileTCPConnRule(nn, rule)
 		if err != nil {
-			r.Log.V(0).Error(err, "failed to reconcile netcat rule")
+			l.Error(err, "failed to reconcile netcat rule")
 		}
-		r.safeUpdate(nn, validator, validationResult, err)
+		resp.AddResult(vrr, err)
 	}
 
-	r.Log.V(0).Info("Requeuing for re-validation in two minutes.", "name", req.Name, "namespace", req.Namespace)
-	return ctrl.Result{RequeueAfter: time.Second * 120}, nil
-}
+	// Patch the ValidationResult with the latest ValidationRuleResults
+	if err := vres.SafeUpdateValidationResult(ctx, p, vr, resp, r.Log); err != nil {
+		return ctrl.Result{}, err
+	}
 
-func (r *NetworkValidatorReconciler) safeUpdate(nn ktypes.NamespacedName, v *v1alpha1.NetworkValidator, vr *types.ValidationResult, err error) {
-	vres.SafeUpdateValidationResult(r.Client, nn, vr, v.Spec.ResultCount(), err, r.Log)
+	l.Info("Requeuing for re-validation in two minutes.")
+	return ctrl.Result{RequeueAfter: time.Second * 120}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.
