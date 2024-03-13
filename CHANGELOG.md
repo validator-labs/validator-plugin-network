@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.0.14](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.13...v0.0.14) (2024-03-13)
+
+
+### Other
+
+* **deps:** update google-github-actions/release-please-action digest to a37ac6e ([#156](https://github.com/spectrocloud-labs/validator-plugin-network/issues/156)) ([7ddf5c0](https://github.com/spectrocloud-labs/validator-plugin-network/commit/7ddf5c0a002c7191b31afb84daa653e6ee497821))
+* **deps:** update softprops/action-gh-release action to v2 ([#152](https://github.com/spectrocloud-labs/validator-plugin-network/issues/152)) ([477953d](https://github.com/spectrocloud-labs/validator-plugin-network/commit/477953d1269f29f77d5b902d0c455dfdce9eed78))
+* **deps:** update softprops/action-gh-release digest to 3198ee1 ([#155](https://github.com/spectrocloud-labs/validator-plugin-network/issues/155)) ([10b7f4c](https://github.com/spectrocloud-labs/validator-plugin-network/commit/10b7f4c9b23d5b3aabb3a7303a48da5e5ed53fe2))
+* **deps:** update softprops/action-gh-release digest to 9d7c94c ([#158](https://github.com/spectrocloud-labs/validator-plugin-network/issues/158)) ([a0f5751](https://github.com/spectrocloud-labs/validator-plugin-network/commit/a0f5751a4fd870298a67c14c3a679c723b0d25f7))
+* update validator; use patch helper ([#159](https://github.com/spectrocloud-labs/validator-plugin-network/issues/159)) ([e13d376](https://github.com/spectrocloud-labs/validator-plugin-network/commit/e13d376f5ea30d2860bfa72532b3461819db2316))
+
 ## [0.0.13](https://github.com/spectrocloud-labs/validator-plugin-network/compare/v0.0.12...v0.0.13) (2024-03-11)
 
 
