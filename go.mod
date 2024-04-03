@@ -1,6 +1,6 @@
 module github.com/spectrocloud-labs/validator-plugin-network
 
-go 1.21.6
+go 1.22.2
 
 require (
 	github.com/go-logr/logr v1.4.1
