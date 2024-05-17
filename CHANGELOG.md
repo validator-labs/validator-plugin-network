@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.0.15](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.14...v0.0.15) (2024-05-17)
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.29.3 ([#167](https://github.com/validator-labs/validator-plugin-network/issues/167)) ([ca51116](https://github.com/validator-labs/validator-plugin-network/commit/ca511169f0bfa91a48458a042ac4596d0ec9199c))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.17.0 ([#168](https://github.com/validator-labs/validator-plugin-network/issues/168)) ([9b07b26](https://github.com/validator-labs/validator-plugin-network/commit/9b07b263a718e9195bf6c133579ea285135f95e6))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.17.1 ([#170](https://github.com/validator-labs/validator-plugin-network/issues/170)) ([23429d9](https://github.com/validator-labs/validator-plugin-network/commit/23429d958afe646e4333138e285ba33da0072d7a))
+* **deps:** update module github.com/onsi/gomega to v1.32.0 ([#169](https://github.com/validator-labs/validator-plugin-network/issues/169)) ([c2a19a5](https://github.com/validator-labs/validator-plugin-network/commit/c2a19a5486e0effc517ca266337cde94bf94eb80))
+* **deps:** update module github.com/spectrocloud-labs/validator to v0.0.38 ([#134](https://github.com/validator-labs/validator-plugin-network/issues/134)) ([dd12a3b](https://github.com/validator-labs/validator-plugin-network/commit/dd12a3b43ec08d0878e65e4d0f0ce4e305d78ff6))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.6.3 ([#166](https://github.com/validator-labs/validator-plugin-network/issues/166)) ([a63f65e](https://github.com/validator-labs/validator-plugin-network/commit/a63f65e150d012b6b85ef779a791a4fb8d513824))
+
+
+### Other
+
+* **deps:** update actions/setup-python digest to 82c7e63 ([#171](https://github.com/validator-labs/validator-plugin-network/issues/171)) ([320a3f2](https://github.com/validator-labs/validator-plugin-network/commit/320a3f2bee46998457a0bd8c631eb2f9ae339048))
+* **deps:** update anchore/sbom-action action to v0.15.10 ([#173](https://github.com/validator-labs/validator-plugin-network/issues/173)) ([74248ef](https://github.com/validator-labs/validator-plugin-network/commit/74248efc7d8075e3121e12cacba8618f4ef402f0))
+* **deps:** update codecov/codecov-action digest to c16abc2 ([#172](https://github.com/validator-labs/validator-plugin-network/issues/172)) ([682c027](https://github.com/validator-labs/validator-plugin-network/commit/682c0275418bde03a5ef97405297f9efe1c2e10b))
+* **deps:** update docker/build-push-action digest to 2cdde99 ([#163](https://github.com/validator-labs/validator-plugin-network/issues/163)) ([00e145a](https://github.com/validator-labs/validator-plugin-network/commit/00e145ae15d2d904d550750c0630930b7da8c276))
+* **deps:** update docker/login-action digest to e92390c ([#160](https://github.com/validator-labs/validator-plugin-network/issues/160)) ([85eea8c](https://github.com/validator-labs/validator-plugin-network/commit/85eea8c01e53d783d0159a00daa206a3bad16eed))
+* **deps:** update docker/setup-buildx-action digest to 2b51285 ([#164](https://github.com/validator-labs/validator-plugin-network/issues/164)) ([f842933](https://github.com/validator-labs/validator-plugin-network/commit/f8429333ecceabd3a478ccbac15b2f041e4f2165))
+* **deps:** update gcr.io/kubebuilder/kube-rbac-proxy docker tag to v0.16.0 ([#174](https://github.com/validator-labs/validator-plugin-network/issues/174)) ([ad0c353](https://github.com/validator-labs/validator-plugin-network/commit/ad0c353e64008979bbd7e5d82781fc80ff66bbbf))
+* migrate from spectrocloud-labs to validator-labs ([#185](https://github.com/validator-labs/validator-plugin-network/issues/185)) ([3dd7762](https://github.com/validator-labs/validator-plugin-network/commit/3dd77621d249f1619d8f886dbf277e11717d12bc))
+
 ## [0.0.14](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.13...v0.0.14) (2024-03-13)
 
 
