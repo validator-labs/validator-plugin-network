@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.16](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.15...v0.0.16) (2024-05-17)
+
+
+### Other
+
+* update chart docs ([#186](https://github.com/validator-labs/validator-plugin-network/issues/186)) ([c22f07e](https://github.com/validator-labs/validator-plugin-network/commit/c22f07ef1e580f7e56c362cb5677cbf76651e0cf))
+
 ## [0.0.15](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.14...v0.0.15) (2024-05-17)
 
 
