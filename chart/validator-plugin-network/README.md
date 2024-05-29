@@ -15,7 +15,7 @@ The following table lists the configurable parameters of the Validator-plugin-ne
 | `controllerManager.kubeRbacProxy.containerSecurityContext.allowPrivilegeEscalation` |  | `false` |
 | `controllerManager.kubeRbacProxy.containerSecurityContext.capabilities.drop` |  | `["ALL"]` |
 | `controllerManager.kubeRbacProxy.image.repository` |  | `"gcr.io/kubebuilder/kube-rbac-proxy"` |
-| `controllerManager.kubeRbacProxy.image.tag` |  | `"v0.15.0"` |
+| `controllerManager.kubeRbacProxy.image.tag` |  | `"v0.16.0"` |
 | `controllerManager.kubeRbacProxy.resources.limits.cpu` |  | `"500m"` |
 | `controllerManager.kubeRbacProxy.resources.limits.memory` |  | `"128Mi"` |
 | `controllerManager.kubeRbacProxy.resources.requests.cpu` |  | `"5m"` |
@@ -24,8 +24,8 @@ The following table lists the configurable parameters of the Validator-plugin-ne
 | `controllerManager.manager.containerSecurityContext.allowPrivilegeEscalation` |  | `true` |
 | `controllerManager.manager.containerSecurityContext.capabilities.add` |  | `["NET_RAW"]` |
 | `controllerManager.manager.containerSecurityContext.capabilities.drop` |  | `["ALL"]` |
-| `controllerManager.manager.image.repository` |  | `"quay.io/spectrocloud-labs/validator-plugin-network"` |
-| `controllerManager.manager.image.tag` | x-release-please-version | `"v0.0.14"` |
+| `controllerManager.manager.image.repository` |  | `"quay.io/validator-labs/validator-plugin-network"` |
+| `controllerManager.manager.image.tag` | x-release-please-version | `"v0.0.16"` |
 | `controllerManager.manager.resources.limits.cpu` |  | `"500m"` |
 | `controllerManager.manager.resources.limits.memory` |  | `"128Mi"` |
 | `controllerManager.manager.resources.requests.cpu` |  | `"10m"` |
@@ -37,7 +37,7 @@ The following table lists the configurable parameters of the Validator-plugin-ne
 | `metricsService.type` |  | `"ClusterIP"` |
 | `env` |  | `[]` |
 | `proxy.enabled` |  | `false` |
-| `proxy.image` |  | `"quay.io/spectrocloud-labs/validator-certs-init:latest"` |
+| `proxy.image` |  | `"quay.io/validator-labs/validator-certs-init:latest"` |
 | `proxy.secretName` |  | `"proxy-cert"` |
 
 
