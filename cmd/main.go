@@ -31,11 +31,11 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	validatorv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
+	validatorv1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
 
-	"github.com/spectrocloud-labs/validator-plugin-network/api/v1alpha1"
-	validationv1alpha1 "github.com/spectrocloud-labs/validator-plugin-network/api/v1alpha1"
-	"github.com/spectrocloud-labs/validator-plugin-network/internal/controller"
+	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
+	validationv1alpha1 "github.com/validator-labs/validator-plugin-network/api/v1alpha1"
+	"github.com/validator-labs/validator-plugin-network/internal/controller"
 	//+kubebuilder:scaffold:imports
 )
 
