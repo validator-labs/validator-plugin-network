@@ -1,12 +1,12 @@
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/spectrocloud-labs/validator-plugin-network/issues)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/validator-labs/validator-plugin-network/issues)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![Test](https://github.com/spectrocloud-labs/validator-plugin-network/actions/workflows/test.yaml/badge.svg)
-[![Go Report Card](https://goreportcard.com/badge/github.com/spectrocloud-labs/validator-plugin-network)](https://goreportcard.com/report/github.com/spectrocloud-labs/validator-plugin-network)
-[![codecov](https://codecov.io/github/spectrocloud-labs/validator-plugin-network/graph/badge.svg?token=Q15XUCRNCN)](https://codecov.io/github/spectrocloud-labs/validator-plugin-network)
-[![Go Reference](https://pkg.go.dev/badge/github.com/spectrocloud-labs/validator-plugin-network.svg)](https://pkg.go.dev/github.com/spectrocloud-labs/validator-plugin-network)
+![Test](https://github.com/validator-labs/validator-plugin-network/actions/workflows/test.yaml/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/validator-labs/validator-plugin-network)](https://goreportcard.com/report/github.com/validator-labs/validator-plugin-network)
+[![codecov](https://codecov.io/github/validator-labs/validator-plugin-network/graph/badge.svg?token=Q15XUCRNCN)](https://codecov.io/github/validator-labs/validator-plugin-network)
+[![Go Reference](https://pkg.go.dev/badge/github.com/validator-labs/validator-plugin-network.svg)](https://pkg.go.dev/github.com/validator-labs/validator-plugin-network)
 
 # validator-plugin-network
-The Network [validator](https://github.com/spectrocloud-labs/validator) plugin ensures that your network matches a user-configurable expected state.
+The Network [validator](https://github.com/validator-labs/validator) plugin ensures that your network matches a user-configurable expected state.
 
 ## Description
 The Network validator plugin reconciles `NetworkValidator` custom resources to perform the following validations against your network:
@@ -19,13 +19,13 @@ The Network validator plugin reconciles `NetworkValidator` custom resources to p
 
 Each `NetworkValidator` CR is (re)-processed every two minutes to continuously ensure that your network matches the expected state.
 
-See the [samples](https://github.com/spectrocloud-labs/validator-plugin-network/tree/main/config/samples) directory for example `NetworkValidator` configurations.
+See the [samples](https://github.com/validator-labs/validator-plugin-network/tree/main/config/samples) directory for example `NetworkValidator` configurations.
 
 ## Installation
-The Network validator plugin is meant to be [installed by validator](https://github.com/spectrocloud-labs/validator/tree/gh_pages#installation) (via a ValidatorConfig), but it can also be installed directly as follows:
+The Network validator plugin is meant to be [installed by validator](https://github.com/validator-labs/validator/tree/gh_pages#installation) (via a ValidatorConfig), but it can also be installed directly as follows:
 
 ```bash
-helm repo add validator-plugin-network https://spectrocloud-labs.github.io/validator-plugin-network
+helm repo add validator-plugin-network https://validator-labs.github.io/validator-plugin-network
 helm repo update
 helm install validator-plugin-network validator-plugin-network/validator-plugin-network -n validator-plugin-network --create-namespace
 ```
