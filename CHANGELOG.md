@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.0.17](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.16...v0.0.17) (2024-06-05)
+
+
+### Bug Fixes
+
+* correct IP range failure logic; add support for configurable ping packet size for MTU checks ([#200](https://github.com/validator-labs/validator-plugin-network/issues/200)) ([dec0b85](https://github.com/validator-labs/validator-plugin-network/commit/dec0b85f0ae96624c61a497a0d0d0040069be04f))
+* **deps:** update kubernetes packages to v0.30.1 ([#180](https://github.com/validator-labs/validator-plugin-network/issues/180)) ([1347078](https://github.com/validator-labs/validator-plugin-network/commit/134707854d1328ada98938fa129a62e3558825ad))
+* **deps:** update module github.com/go-logr/logr to v1.4.2 ([#195](https://github.com/validator-labs/validator-plugin-network/issues/195)) ([86beecc](https://github.com/validator-labs/validator-plugin-network/commit/86beeccd3afe7fc4fe75eb0fce5927e3866f1099))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.19.0 ([#198](https://github.com/validator-labs/validator-plugin-network/issues/198)) ([668a91d](https://github.com/validator-labs/validator-plugin-network/commit/668a91d9ec78e49ced80026198daccc37e5b1041))
+* **deps:** update module github.com/onsi/gomega to v1.33.1 ([#181](https://github.com/validator-labs/validator-plugin-network/issues/181)) ([592a773](https://github.com/validator-labs/validator-plugin-network/commit/592a773ee8cb4cf2d615708625ceade14971d264))
+* **deps:** update module github.com/validator-labs/validator to v0.0.41 ([#196](https://github.com/validator-labs/validator-plugin-network/issues/196)) ([49bff7d](https://github.com/validator-labs/validator-plugin-network/commit/49bff7db3fd3f2a4b0e25febce73c39bfbe0f24e))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.7.2 ([#179](https://github.com/validator-labs/validator-plugin-network/issues/179)) ([5c1f475](https://github.com/validator-labs/validator-plugin-network/commit/5c1f475df9eef727f60d2d5e58a900b8da31bffc))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.18.4 ([#202](https://github.com/validator-labs/validator-plugin-network/issues/202)) ([fa9c1fb](https://github.com/validator-labs/validator-plugin-network/commit/fa9c1fba10088b5c6b6b8c35f045eb240625dc00))
+
+
+### Other
+
+* **deps:** bump golang.org/x/net from 0.21.0 to 0.23.0 ([#182](https://github.com/validator-labs/validator-plugin-network/issues/182)) ([7199ff8](https://github.com/validator-labs/validator-plugin-network/commit/7199ff88a41a21663fc11c2f0a1431fb2c9ab720))
+* **deps:** pin googleapis/release-please-action action to f3969c0 ([#189](https://github.com/validator-labs/validator-plugin-network/issues/189)) ([12b3380](https://github.com/validator-labs/validator-plugin-network/commit/12b33806056f07bdc6099616cac62ecf0deab017))
+* **deps:** update actions/checkout digest to 0ad4b8f ([#183](https://github.com/validator-labs/validator-plugin-network/issues/183)) ([3d3f24d](https://github.com/validator-labs/validator-plugin-network/commit/3d3f24d966fb2d2e2d9eab2a9b2d1e6f725187ab))
+* **deps:** update actions/checkout digest to a5ac7e5 ([#190](https://github.com/validator-labs/validator-plugin-network/issues/190)) ([b08f14e](https://github.com/validator-labs/validator-plugin-network/commit/b08f14ee717458fcab8d4f4854127b02034429ff))
+* **deps:** update actions/setup-go digest to cdcb360 ([#192](https://github.com/validator-labs/validator-plugin-network/issues/192)) ([f6a4347](https://github.com/validator-labs/validator-plugin-network/commit/f6a434791c62066129a3267d138093c3ea548363))
+* **deps:** update anchore/sbom-action action to v0.16.0 ([#197](https://github.com/validator-labs/validator-plugin-network/issues/197)) ([8741cc9](https://github.com/validator-labs/validator-plugin-network/commit/8741cc94977bab55b177608bf2909b7c2a5e08ed))
+* **deps:** update azure/setup-helm digest to fe7b79c ([#178](https://github.com/validator-labs/validator-plugin-network/issues/178)) ([adbd1c0](https://github.com/validator-labs/validator-plugin-network/commit/adbd1c02ab102b3fe560b8ea19028bf5795e21cd))
+* **deps:** update codecov/codecov-action digest to 125fc84 ([#191](https://github.com/validator-labs/validator-plugin-network/issues/191)) ([c2e67e3](https://github.com/validator-labs/validator-plugin-network/commit/c2e67e331c636b3dd9233198e262520edf75ff44))
+* **deps:** update codecov/codecov-action digest to 6d79887 ([#175](https://github.com/validator-labs/validator-plugin-network/issues/175)) ([07e51ea](https://github.com/validator-labs/validator-plugin-network/commit/07e51eab5e1760a3b7d7f19d7c79d6d706f5eab3))
+* **deps:** update dependency go to v1.22.4 ([#199](https://github.com/validator-labs/validator-plugin-network/issues/199)) ([2e5bbe9](https://github.com/validator-labs/validator-plugin-network/commit/2e5bbe92e38a66cf42bf7eac39ee377e2786543a))
+* **deps:** update docker/login-action digest to 0d4c9c5 ([#193](https://github.com/validator-labs/validator-plugin-network/issues/193)) ([4aede1f](https://github.com/validator-labs/validator-plugin-network/commit/4aede1fe2a3e4ca5a22a3ee7831ccfe1bd227a10))
+* **deps:** update docker/setup-buildx-action digest to d70bba7 ([#176](https://github.com/validator-labs/validator-plugin-network/issues/176)) ([92ace5b](https://github.com/validator-labs/validator-plugin-network/commit/92ace5b52cedcc03bad34b825ba5753bf14f6d47))
+* **deps:** update gcr.io/spectro-images-public/golang docker tag to v1.22 ([#144](https://github.com/validator-labs/validator-plugin-network/issues/144)) ([ad2a4f1](https://github.com/validator-labs/validator-plugin-network/commit/ad2a4f1bfdd0112b0ef9beb96623b69ecb4b634a))
+* **deps:** update helm/kind-action action to v1.10.0 ([#184](https://github.com/validator-labs/validator-plugin-network/issues/184)) ([d47ff92](https://github.com/validator-labs/validator-plugin-network/commit/d47ff92b1a2fec67b5ff8c1b301110db0676537b))
+* **deps:** update softprops/action-gh-release digest to 69320db ([#194](https://github.com/validator-labs/validator-plugin-network/issues/194)) ([2b72308](https://github.com/validator-labs/validator-plugin-network/commit/2b72308ec3d6c9b04c5a752a97896d0143dc758d))
+
 ## [0.0.16](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.15...v0.0.16) (2024-05-17)
 
 
