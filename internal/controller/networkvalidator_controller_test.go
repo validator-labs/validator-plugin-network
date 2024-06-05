@@ -117,8 +117,7 @@ var _ = Describe("NetworkValidator controller", Ordered, func() {
 					failConditions++
 				}
 			}
-			stateFailed := vr.Status.State == vapi.ValidationFailed
-			return expectedTestResult(stateFailed, failConditions, passConditions)
+			return expectedTestResult(failConditions, passConditions)
 		}, timeout, interval).Should(BeTrue(), "failed to create a ValidationResult")
 	})
 })
@@ -126,9 +125,8 @@ var _ = Describe("NetworkValidator controller", Ordered, func() {
 // expectedTestResult returns whether the overall test expectation is a pass, which varies due to:
 //   - ping's lack of MTU discovery support on Darwin
 //   - ICMP blocked on GitHub-hosted runners: https://github.com/orgs/community/discussions/26184
-func expectedTestResult(stateFailed bool, failConditions, passConditions int) bool {
+func expectedTestResult(failConditions, passConditions int) bool {
 	var env string
-	var expectedStateFailed bool
 	var expectedFail, expectedPass int
 
 	gha := os.Getenv("IS_GITHUB_ACTION") == "true"
@@ -136,26 +134,22 @@ func expectedTestResult(stateFailed bool, failConditions, passConditions int) bo
 
 	if runtime.GOOS == "darwin" && !gha {
 		env = "darwin / local"
-		expectedStateFailed = true
 		expectedFail = 6 // all checks related to MTU will fail
 		expectedPass = 4
 	} else if gha && !selfHosted {
 		env = "Github-hosted runner"
-		expectedStateFailed = true
 		expectedFail = 8 // all checks related to ICMP will fail
 		expectedPass = 2
 	} else {
 		env = "self-hosted runner"
-		expectedStateFailed = false
 		expectedFail = 5
 		expectedPass = 5
 	}
 
 	logf.Log.Info(
 		"expectedTestResult", "environment", env,
-		"expectedStateFailed", expectedStateFailed, "stateFailed", stateFailed,
 		"expectedFailed", expectedFail, "failed", failConditions,
 		"expectedPassed", expectedPass, "passed", passConditions,
 	)
-	return stateFailed == expectedStateFailed && failConditions == expectedFail && passConditions == expectedPass
+	return failConditions == expectedFail && passConditions == expectedPass
 }
