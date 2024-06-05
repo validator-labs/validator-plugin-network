@@ -2,6 +2,8 @@ package controller
 
 import (
 	"context"
+	"os"
+	"runtime"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -9,6 +11,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
+	logf "sigs.k8s.io/controller-runtime/pkg/log"
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
 	vapi "github.com/validator-labs/validator/api/v1alpha1"
@@ -34,35 +37,58 @@ var _ = Describe("NetworkValidator controller", Ordered, func() {
 		Spec: v1alpha1.NetworkValidatorSpec{
 			DNSRules: []v1alpha1.DNSRule{
 				{
-					RuleName: "DNS Rule",
+					RuleName: "DNS Rule - Pass",
 					Host:     "google.com",
+				},
+				{
+					RuleName: "DNS Rule - Fail",
+					Host:     "_invalid_",
 				},
 			},
 			ICMPRules: []v1alpha1.ICMPRule{
 				{
-					RuleName: "ICMP Rule",
+					RuleName: "ICMP Rule - Pass",
 					Host:     "google.com",
+				},
+				{
+					RuleName: "ICMP Rule - Fail",
+					Host:     "_invalid_",
 				},
 			},
 			IPRangeRules: []v1alpha1.IPRangeRule{
 				{
-					RuleName: "IP Range Rule",
+					RuleName: "IP Range Rule - Pass",
+					StartIP:  "127.0.0.1",
+					Length:   1,
+				},
+				{
+					RuleName: "IP Range Rule - Fail",
 					StartIP:  "10.0.0.0",
 					Length:   4,
 				},
 			},
 			MTURules: []v1alpha1.MTURule{
 				{
-					RuleName: "MTU Rule",
+					RuleName: "MTU Rule - Pass",
 					Host:     "google.com",
 					MTU:      1200,
+				},
+				{
+					RuleName: "MTU Rule - Fail",
+					Host:     "google.com",
+					MTU:      4000,
 				},
 			},
 			TCPConnRules: []v1alpha1.TCPConnRule{
 				{
-					RuleName: "TCP Connection Rule",
+					RuleName: "TCP Connection Rule - Pass",
 					Host:     "google.com",
 					Ports:    []int{443},
+				},
+				{
+					RuleName: "TCP Connection Rule - Fail",
+					Host:     "google.com",
+					Ports:    []int{9999},
 				},
 			},
 		},
@@ -92,13 +118,44 @@ var _ = Describe("NetworkValidator controller", Ordered, func() {
 				}
 			}
 			stateFailed := vr.Status.State == vapi.ValidationFailed
-			// OR required here due to:
-			// - ping's lack of MTU discovery support on Darwin
-			// - ICMP blocked on GHA runners: https://github.com/orgs/community/discussions/26184
-			darwinOk := stateFailed && failConditions == 1 && passConditions == 4
-			ghOnlineOk := stateFailed && failConditions == 2 && passConditions == 3
-			ghSelfHostedOk := !stateFailed && failConditions == 0 && passConditions == 5
-			return darwinOk || ghOnlineOk || ghSelfHostedOk
+			return expectedTestResult(stateFailed, failConditions, passConditions)
 		}, timeout, interval).Should(BeTrue(), "failed to create a ValidationResult")
 	})
 })
+
+// expectedTestResult returns whether the overall test expectation is a pass, which varies due to:
+//   - ping's lack of MTU discovery support on Darwin
+//   - ICMP blocked on GitHub-hosted runners: https://github.com/orgs/community/discussions/26184
+func expectedTestResult(stateFailed bool, failConditions, passConditions int) bool {
+	var env string
+	var expectedStateFailed bool
+	var expectedFail, expectedPass int
+
+	gha := os.Getenv("IS_GITHUB_ACTION") == "true"
+	selfHosted := os.Getenv("IS_SELF_HOSTED") == "true"
+
+	if runtime.GOOS == "darwin" && !gha {
+		env = "darwin / local"
+		expectedStateFailed = true
+		expectedFail = 6 // all checks related to MTU will fail
+		expectedPass = 4
+	} else if gha && !selfHosted {
+		env = "Github-hosted runner"
+		expectedStateFailed = true
+		expectedFail = 8 // all checks related to ICMP will fail
+		expectedPass = 2
+	} else {
+		env = "self-hosted runner"
+		expectedStateFailed = false
+		expectedFail = 5
+		expectedPass = 5
+	}
+
+	logf.Log.Info(
+		"expectedTestResult", "environment", env,
+		"expectedStateFailed", expectedStateFailed, "stateFailed", stateFailed,
+		"expectedFailed", expectedFail, "failed", failConditions,
+		"expectedPassed", expectedPass, "passed", passConditions,
+	)
+	return stateFailed == expectedStateFailed && failConditions == expectedFail && passConditions == expectedPass
+}
