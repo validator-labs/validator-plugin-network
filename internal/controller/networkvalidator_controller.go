@@ -98,46 +98,31 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	// DNS rules
 	for _, rule := range validator.Spec.DNSRules {
-		vrr, err := networkService.ReconcileDNSRule(nn, rule)
-		if err != nil {
-			l.Error(err, "failed to reconcile DNS rule")
-		}
+		vrr := networkService.ReconcileDNSRule(nn, rule)
 		resp.AddResult(vrr, err)
 	}
 
 	// ICMP rules
 	for _, rule := range validator.Spec.ICMPRules {
-		vrr, err := networkService.ReconcileICMPRule(nn, rule)
-		if err != nil {
-			l.Error(err, "failed to reconcile ICMP rule")
-		}
+		vrr := networkService.ReconcileICMPRule(nn, rule)
 		resp.AddResult(vrr, err)
 	}
 
 	// IP range rules
 	for _, rule := range validator.Spec.IPRangeRules {
-		vrr, err := networkService.ReconcileIPRangeRule(nn, rule)
-		if err != nil {
-			l.Error(err, "failed to reconcile IP range rule")
-		}
+		vrr := networkService.ReconcileIPRangeRule(nn, rule)
 		resp.AddResult(vrr, err)
 	}
 
 	// MTU rules
 	for _, rule := range validator.Spec.MTURules {
-		vrr, err := networkService.ReconcileMTURule(nn, rule)
-		if err != nil {
-			l.Error(err, "failed to reconcile MTU rule")
-		}
+		vrr := networkService.ReconcileMTURule(nn, rule)
 		resp.AddResult(vrr, err)
 	}
 
 	// TCP connection rules
 	for _, rule := range validator.Spec.TCPConnRules {
-		vrr, err := networkService.ReconcileTCPConnRule(nn, rule)
-		if err != nil {
-			l.Error(err, "failed to reconcile netcat rule")
-		}
+		vrr := networkService.ReconcileTCPConnRule(nn, rule)
 		resp.AddResult(vrr, err)
 	}
 

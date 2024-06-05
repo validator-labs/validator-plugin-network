@@ -81,6 +81,10 @@ type MTURule struct {
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 	MTU      int    `json:"mtu" yaml:"mtu"`
+	// Optionally specify the size in bytes of the packet headers for the MTU ping packet.
+	// This varies by medium, e.g. Ethernet, WiFi, etc.) and defaults to 28 bytes
+	// (20 bytes IP header + 8 bytes ICMP header)
+	PacketHeadersSize int `json:"packetHeadersSize,omitempty" yaml:"packetHeadersSize,omitempty"`
 }
 
 func (r MTURule) Name() string {

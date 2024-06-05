@@ -55,7 +55,7 @@ const (
 	k8sVersion         = "1.27.1"
 	validatorNamespace = "validator"
 
-	timeout  = time.Minute * 6
+	timeout  = time.Minute * 5
 	interval = time.Millisecond * 250
 )
 
@@ -73,7 +73,12 @@ var (
 func TestControllers(t *testing.T) {
 	RegisterFailHandler(Fail)
 
-	RunSpecs(t, "Controller Suite")
+	// Ensure verbose log output
+	suiteConfig, reporterConfig := GinkgoConfiguration()
+	reporterConfig.FullTrace = true
+	reporterConfig.Verbose = true
+
+	RunSpecs(t, "Controller Suite", suiteConfig, reporterConfig)
 }
 
 var _ = BeforeSuite(func() {

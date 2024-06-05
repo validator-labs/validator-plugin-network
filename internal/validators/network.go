@@ -2,14 +2,13 @@ package validators
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"net"
 	"os/exec"
 	"strconv"
-	"strings"
 
 	"github.com/go-logr/logr"
+	corev1 "k8s.io/api/core/v1"
 	ktypes "k8s.io/apimachinery/pkg/types"
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
@@ -20,14 +19,12 @@ import (
 )
 
 const (
-	ping     string = "ping"
+	// See conclusion section of https://www.comparitech.com/net-admin/determine-mtu-size-using-ping/
+	defaultPacketHeadersSize int = 28
+
 	nc       string = "nc"
 	nslookup string = "nslookup"
-
-	icmpPacketSize int = 28
-
-	pingFail       = "3 packets transmitted, 0 received"
-	pingFailDarwin = "3 packets transmitted, 0 packets received"
+	ping     string = "ping"
 )
 
 type networkRule interface {
@@ -45,111 +42,122 @@ func NewNetworkService(log logr.Logger) *NetworkService {
 }
 
 // ReconcileDNSRule reconciles a DNS rule from a NetworkValidator config
-func (n *NetworkService) ReconcileDNSRule(nn ktypes.NamespacedName, rule v1alpha1.DNSRule) (*types.ValidationRuleResult, error) {
+func (n *NetworkService) ReconcileDNSRule(nn ktypes.NamespacedName, rule v1alpha1.DNSRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this DNS rule
 	vr := buildValidationResult(rule, constants.ValidationTypeDNS)
 
-	errMsg := "Failed to execute DNS check"
 	args := []string{rule.Host}
 	if rule.Server != "" {
 		args = append(args, rule.Server)
 	}
-	if err := n.handleRuleExec(vr, rule, nslookup, errMsg, args...); err != nil {
-		return vr, err
-	}
-	n.log.V(0).Info("DNS check passed", "stdout", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
+	n.handleRuleExec(vr, rule, nslookup, "DNS check failed", args...)
 
-	return vr, nil
+	n.log.V(0).Info("DNS check complete", "message", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
+	return vr
 }
 
 // ReconcileICMPRule reconciles a ICMP rule from a NetworkValidator config
-func (n *NetworkService) ReconcileICMPRule(nn ktypes.NamespacedName, rule v1alpha1.ICMPRule) (*types.ValidationRuleResult, error) {
+func (n *NetworkService) ReconcileICMPRule(nn ktypes.NamespacedName, rule v1alpha1.ICMPRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this ICMP rule
 	vr := buildValidationResult(rule, constants.ValidationTypeICMP)
 
-	errMsg := "Failed to execute ICMP check"
 	args := []string{"-c", "3", "-W", "3", rule.Host}
-	if err := n.handleRuleExec(vr, rule, ping, errMsg, args...); err != nil {
-		return vr, err
-	}
-	n.log.V(0).Info("ICMP check passed", "stdout", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
+	n.handleRuleExec(vr, rule, ping, "ICMP check failed", args...)
 
-	return vr, nil
+	n.log.V(0).Info("ICMP check complete", "message", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
+	return vr
 }
 
 // ReconcileIPRangeRule reconciles an IP range rule from a NetworkValidator config
-func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1alpha1.IPRangeRule) (*types.ValidationRuleResult, error) {
+func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1alpha1.IPRangeRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this IP range rule
 	vr := buildValidationResult(rule, constants.ValidationTypeIPRange)
+	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
+		"Ensuring that %s and %d subsequent IPs are all unallocated",
+		rule.StartIP, rule.Length,
+	))
 
-	errMsg := "Failed to execute IP range check"
+	errMsg := "IP range check failed"
+
+	defer func() {
+		n.log.V(0).Info("IP range check complete", "message", vr.Condition.Message, "rule", rule.RuleName)
+	}()
 
 	// parse the starting IP
 	ip, err := toIpV4(rule.StartIP)
 	if err != nil {
-		vr.State = util.Ptr(vapi.ValidationFailed)
 		vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("invalid start IP: %s. error: %v", rule.StartIP, err))
 		vr.Condition.Message = errMsg
-		return vr, nil
+		vr.Condition.Status = corev1.ConditionFalse
+		vr.State = util.Ptr(vapi.ValidationFailed)
+		return vr
 	}
 
 	// ping each IP in the range
+	anySucceeded := false
 	for i := 0; i < rule.Length; i++ {
 		args := []string{"-c", "3", "-W", "3", ip.String()}
 		stdout, stderr, _, err := execCmd(ping, args...)
 		if err != nil || stderr != "" {
-			if !(strings.Contains(stdout, pingFail) || strings.Contains(stdout, pingFailDarwin)) {
-				n.failResult(vr, err, ping, errMsg, stdout, stderr, rule.RuleName, args...)
-				return vr, err
-			}
-			vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s failed", ping, args))
+			vr.Condition.Details = append(
+				vr.Condition.Details,
+				fmt.Sprintf("%s %s failed; err: %v, stderr: %s", ping, args, err, stderr),
+			)
 		} else {
 			n.log.V(0).Info("IP allocated", "stdout", stdout, "rule", rule.RuleName)
-			vr.State = util.Ptr(vapi.ValidationFailed)
+			anySucceeded = true
 			vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s succeeded", ping, args))
 			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("stdout: %s", stdout))
-			vr.Condition.Message = "One or more IPs in the provided range was allocated"
 		}
 		incIp(ip)
 	}
-	n.log.V(0).Info("IP range check passed", "rule", rule.RuleName)
+	if anySucceeded {
+		vr.Condition.Message = "IP range check failed: one or more IPs in the provided range was allocated"
+		vr.Condition.Status = corev1.ConditionFalse
+		vr.State = util.Ptr(vapi.ValidationFailed)
+		return vr
+	}
 
-	return vr, nil
+	return vr
 }
 
 // ReconcileMTURule reconciles an MTU rule from a NetworkValidator config
-func (n *NetworkService) ReconcileMTURule(nn ktypes.NamespacedName, rule v1alpha1.MTURule) (*types.ValidationRuleResult, error) {
+func (n *NetworkService) ReconcileMTURule(nn ktypes.NamespacedName, rule v1alpha1.MTURule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this MTU rule
 	vr := buildValidationResult(rule, constants.ValidationTypeMTU)
 
-	errMsg := "Failed to execute MTU check"
-	size := strconv.FormatInt(int64(rule.MTU-icmpPacketSize), 10)
-	args := []string{"-c", "3", "-W", "3", "-M", "do", "-s", size, rule.Host}
-
-	stdout, stderr, _, err := execCmd(ping, args...)
-	if err != nil || stderr != "" {
-		n.failResult(vr, err, ping, errMsg, stdout, stderr, rule.RuleName, args...)
-		return vr, err
-	} else {
-		vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s succeeded", ping, args))
-		vr.Condition.Message = stdout
+	packetHeadersSize := defaultPacketHeadersSize
+	if rule.PacketHeadersSize != 0 {
+		packetHeadersSize = rule.PacketHeadersSize
 	}
-	n.log.V(0).Info("MTU check passed", "rule", rule.RuleName)
+	size := strconv.FormatInt(int64(rule.MTU-packetHeadersSize), 10)
+	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
+		"MTU check ping packet size: %s = %d (MTU) - %d (packet headers bytes)",
+		size, rule.MTU, packetHeadersSize,
+	))
 
-	return vr, nil
+	args := []string{"-c", "3", "-W", "3", "-M", "do", "-s", size, rule.Host}
+	n.handleRuleExec(vr, rule, ping, "MTU check failed", args...)
+
+	n.log.V(0).Info("MTU check complete", "message", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
+	return vr
 }
 
 // ReconcileTCPConnRule reconciles a TCP connection rule from a NetworkValidator config
-func (n *NetworkService) ReconcileTCPConnRule(nn ktypes.NamespacedName, rule v1alpha1.TCPConnRule) (*types.ValidationRuleResult, error) {
+func (n *NetworkService) ReconcileTCPConnRule(nn ktypes.NamespacedName, rule v1alpha1.TCPConnRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this TCP connection rule
 	vr := buildValidationResult(rule, constants.ValidationTypeTCPConn)
+	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
+		"Ensuring that TCP connection(s) can be established to %s on port(s) %v",
+		rule.Host, rule.Ports,
+	))
 
-	errMsg := "Failed to execute TCP connection check"
+	errMsg := "TCP connection check failed"
 
 	// construct args
 	args := []string{"-w", "3"}
@@ -165,19 +173,10 @@ func (n *NetworkService) ReconcileTCPConnRule(nn ktypes.NamespacedName, rule v1a
 	for _, p := range rule.Ports {
 		args = append(args, strconv.FormatInt(int64(p), 10))
 	}
+	n.handleRuleExec(vr, rule, nc, errMsg, args...)
 
-	// execute netcat
-	stdout, stderr, exitCode, err := execCmd(nc, args...)
-	if err != nil || stderr != "" || exitCode != 0 {
-		n.failResult(vr, err, nc, errMsg, stdout, stderr, rule.RuleName, args...)
-		return vr, err
-	} else {
-		vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s succeeded", nc, args))
-		vr.Condition.Message = stdout
-	}
-	n.log.V(0).Info("TCP connection check passed", "rule", rule.RuleName)
-
-	return vr, nil
+	n.log.V(0).Info("TCP connection check complete", "message", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
+	return vr
 }
 
 // buildValidationResult builds a default ValidationResult for a given validation type
@@ -193,19 +192,15 @@ func buildValidationResult(rule networkRule, validationType string) *types.Valid
 }
 
 // handleRuleExec executes a rule's command and updates the rule's validation result accordingly
-func (n *NetworkService) handleRuleExec(vr *types.ValidationRuleResult, r networkRule, binary, errMsg string, args ...string) error {
+func (n *NetworkService) handleRuleExec(vr *types.ValidationRuleResult, r networkRule, binary, errMsg string, args ...string) {
 	n.log.V(0).Info("Executing command: %s %s", binary, args)
-	stdout, stderr, _, err := execCmd(binary, args...)
-	if err != nil || stderr != "" {
+	stdout, stderr, exitCode, err := execCmd(binary, args...)
+	if err != nil || stderr != "" || exitCode != 0 {
 		n.failResult(vr, err, binary, errMsg, stdout, stderr, r.Name(), args...)
-		if err == nil {
-			err = errors.New(errMsg)
-		}
-		return err
+		return
 	}
 	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s succeeded", binary, args))
 	vr.Condition.Message = stdout
-	return nil
 }
 
 // failResult updates a validation result with failure details
@@ -213,6 +208,7 @@ func (n *NetworkService) failResult(vr *types.ValidationRuleResult, err error, b
 	n.log.V(0).Info(errMsg, "stdout", stdout, "stderr", stderr, "error", err.Error(), "rule", ruleName)
 	failure := fmt.Sprintf("stdout: %s, stderr: %s, error: %v", stdout, stderr, err)
 	vr.State = util.Ptr(vapi.ValidationFailed)
+	vr.Condition.Status = corev1.ConditionFalse
 	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s failed", binary, args))
 	vr.Condition.Failures = append(vr.Condition.Failures, failure)
 	vr.Condition.Message = errMsg

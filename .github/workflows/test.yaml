@@ -24,6 +24,9 @@ jobs:
           go-version-file: go.mod
 
       - name: Test
+        env:
+          IS_GITHUB_ACTION: true
+          IS_SELF_HOSTED: true
         run: make test
 
       - name: Workaround for https://github.com/codecov/feedback/issues/263
