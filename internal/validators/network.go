@@ -75,6 +75,10 @@ func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1a
 
 	// Build the default ValidationResult for this IP range rule
 	vr := buildValidationResult(rule, constants.ValidationTypeIPRange)
+	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
+		"Ensuring that %s and %d subsequent IPs are all unallocated",
+		rule.StartIP, rule.Length,
+	))
 
 	errMsg := "IP range check failed"
 
@@ -131,7 +135,10 @@ func (n *NetworkService) ReconcileMTURule(nn ktypes.NamespacedName, rule v1alpha
 		packetHeadersSize = rule.PacketHeadersSize
 	}
 	size := strconv.FormatInt(int64(rule.MTU-packetHeadersSize), 10)
-	n.log.V(1).Info("MTU check ping packet size == (MTU-packetHeadersSize)", "MTU", rule.MTU, "packetHeadersSize", packetHeadersSize, "finalSize", size)
+	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
+		"MTU check ping packet size: %s = %d (MTU) - %d (packet headers bytes)",
+		size, rule.MTU, packetHeadersSize,
+	))
 
 	args := []string{"-c", "3", "-W", "3", "-M", "do", "-s", size, rule.Host}
 	n.handleRuleExec(vr, rule, ping, "MTU check failed", args...)
@@ -145,6 +152,10 @@ func (n *NetworkService) ReconcileTCPConnRule(nn ktypes.NamespacedName, rule v1a
 
 	// Build the default ValidationResult for this TCP connection rule
 	vr := buildValidationResult(rule, constants.ValidationTypeTCPConn)
+	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
+		"Ensuring that TCP connection(s) can be established to %s on port(s) %v",
+		rule.Host, rule.Ports,
+	))
 
 	errMsg := "TCP connection check failed"
 
