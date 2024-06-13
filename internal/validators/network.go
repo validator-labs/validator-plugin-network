@@ -104,7 +104,7 @@ func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1a
 		if err != nil || stderr != "" {
 			vr.Condition.Details = append(
 				vr.Condition.Details,
-				fmt.Sprintf("%s %s failed; err: %v, stderr: %s", ping, args, err, stderr),
+				fmt.Sprintf("%s %s failed, IP is available; err: %v, stderr: %s", ping, args, err, stderr),
 			)
 		} else {
 			n.log.V(0).Info("IP allocated", "stdout", stdout, "rule", rule.RuleName)
