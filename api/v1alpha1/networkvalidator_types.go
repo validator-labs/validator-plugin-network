@@ -44,39 +44,47 @@ type NetworkValidatorSpec struct {
 	TCPConnRules []TCPConnRule `json:"tcpConnRules,omitempty" yaml:"tcpConnRules,omitempty"`
 }
 
+// ResultCount returns the number of validation results expected for a NetworkValidatorSpec.
 func (s NetworkValidatorSpec) ResultCount() int {
 	return len(s.DNSRules) + len(s.ICMPRules) + len(s.IPRangeRules) + len(s.MTURules) + len(s.TCPConnRules)
 }
 
+// DNSRule defines a DNS validation rule.
 type DNSRule struct {
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 	Server   string `json:"server,omitempty" yaml:"server,omitempty"`
 }
 
+// Name returns the name of a DNSRule.
 func (r DNSRule) Name() string {
 	return r.RuleName
 }
 
+// ICMPRule defines an ICMP validation rule.
 type ICMPRule struct {
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 }
 
+// Name returns the name of an ICMPRule.
 func (r ICMPRule) Name() string {
 	return r.RuleName
 }
 
+// IPRangeRule defines an IP range validation rule.
 type IPRangeRule struct {
 	RuleName string `json:"name" yaml:"name"`
 	StartIP  string `json:"startIp" yaml:"startIp"`
 	Length   int    `json:"length" yaml:"length"`
 }
 
+// Name returns the name of an IPRangeRule.
 func (r IPRangeRule) Name() string {
 	return r.RuleName
 }
 
+// MTURule defines an MTU validation rule.
 type MTURule struct {
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
@@ -87,10 +95,12 @@ type MTURule struct {
 	PacketHeadersSize int `json:"packetHeadersSize,omitempty" yaml:"packetHeadersSize,omitempty"`
 }
 
+// Name returns the name of an MTURule.
 func (r MTURule) Name() string {
 	return r.RuleName
 }
 
+// TCPConnRule defines a TCP connection validation rule.
 type TCPConnRule struct {
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
@@ -102,6 +112,7 @@ type TCPConnRule struct {
 	// TODO: use socat for proxy validation using TLS CAFile & basic auth?
 }
 
+// Name returns the name of a TCPConnRule.
 func (r TCPConnRule) Name() string {
 	return r.RuleName
 }

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package main initializes a NetworkValidator controller.
 package main
 
 import (
@@ -34,7 +35,6 @@ import (
 	validatorv1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
-	validationv1alpha1 "github.com/validator-labs/validator-plugin-network/api/v1alpha1"
 	"github.com/validator-labs/validator-plugin-network/internal/controller"
 	//+kubebuilder:scaffold:imports
 )
@@ -48,7 +48,6 @@ func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 	utilruntime.Must(validatorv1alpha1.AddToScheme(scheme))
 	utilruntime.Must(v1alpha1.AddToScheme(scheme))
-	utilruntime.Must(validationv1alpha1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 

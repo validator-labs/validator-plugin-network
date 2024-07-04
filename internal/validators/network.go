@@ -1,3 +1,4 @@
+// Package validators contains network plugin validators.
 package validators
 
 import (
@@ -9,7 +10,6 @@ import (
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
-	ktypes "k8s.io/apimachinery/pkg/types"
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
 	"github.com/validator-labs/validator-plugin-network/internal/constants"
@@ -31,18 +31,20 @@ type networkRule interface {
 	Name() string
 }
 
+// NetworkService is a service for network validation.
 type NetworkService struct {
 	log logr.Logger
 }
 
+// NewNetworkService creates a new NetworkService.
 func NewNetworkService(log logr.Logger) *NetworkService {
 	return &NetworkService{
 		log: log,
 	}
 }
 
-// ReconcileDNSRule reconciles a DNS rule from a NetworkValidator config
-func (n *NetworkService) ReconcileDNSRule(nn ktypes.NamespacedName, rule v1alpha1.DNSRule) *types.ValidationRuleResult {
+// ReconcileDNSRule reconciles a DNS rule from a NetworkValidator config.
+func (n *NetworkService) ReconcileDNSRule(rule v1alpha1.DNSRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this DNS rule
 	vr := buildValidationResult(rule, constants.ValidationTypeDNS)
@@ -57,8 +59,8 @@ func (n *NetworkService) ReconcileDNSRule(nn ktypes.NamespacedName, rule v1alpha
 	return vr
 }
 
-// ReconcileICMPRule reconciles a ICMP rule from a NetworkValidator config
-func (n *NetworkService) ReconcileICMPRule(nn ktypes.NamespacedName, rule v1alpha1.ICMPRule) *types.ValidationRuleResult {
+// ReconcileICMPRule reconciles a ICMP rule from a NetworkValidator config.
+func (n *NetworkService) ReconcileICMPRule(rule v1alpha1.ICMPRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this ICMP rule
 	vr := buildValidationResult(rule, constants.ValidationTypeICMP)
@@ -70,8 +72,8 @@ func (n *NetworkService) ReconcileICMPRule(nn ktypes.NamespacedName, rule v1alph
 	return vr
 }
 
-// ReconcileIPRangeRule reconciles an IP range rule from a NetworkValidator config
-func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1alpha1.IPRangeRule) *types.ValidationRuleResult {
+// ReconcileIPRangeRule reconciles an IP range rule from a NetworkValidator config.
+func (n *NetworkService) ReconcileIPRangeRule(rule v1alpha1.IPRangeRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this IP range rule
 	vr := buildValidationResult(rule, constants.ValidationTypeIPRange)
@@ -87,7 +89,7 @@ func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1a
 	}()
 
 	// parse the starting IP
-	ip, err := toIpV4(rule.StartIP)
+	ip, err := toIPV4(rule.StartIP)
 	if err != nil {
 		vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("invalid start IP: %s. error: %v", rule.StartIP, err))
 		vr.Condition.Message = errMsg
@@ -112,7 +114,7 @@ func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1a
 			vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s succeeded", ping, args))
 			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("stdout: %s", stdout))
 		}
-		incIp(ip)
+		incIP(ip)
 	}
 	if anySucceeded {
 		vr.Condition.Message = "IP range check failed: one or more IPs in the provided range was allocated"
@@ -124,8 +126,8 @@ func (n *NetworkService) ReconcileIPRangeRule(nn ktypes.NamespacedName, rule v1a
 	return vr
 }
 
-// ReconcileMTURule reconciles an MTU rule from a NetworkValidator config
-func (n *NetworkService) ReconcileMTURule(nn ktypes.NamespacedName, rule v1alpha1.MTURule) *types.ValidationRuleResult {
+// ReconcileMTURule reconciles an MTU rule from a NetworkValidator config.
+func (n *NetworkService) ReconcileMTURule(rule v1alpha1.MTURule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this MTU rule
 	vr := buildValidationResult(rule, constants.ValidationTypeMTU)
@@ -147,8 +149,8 @@ func (n *NetworkService) ReconcileMTURule(nn ktypes.NamespacedName, rule v1alpha
 	return vr
 }
 
-// ReconcileTCPConnRule reconciles a TCP connection rule from a NetworkValidator config
-func (n *NetworkService) ReconcileTCPConnRule(nn ktypes.NamespacedName, rule v1alpha1.TCPConnRule) *types.ValidationRuleResult {
+// ReconcileTCPConnRule reconciles a TCP connection rule from a NetworkValidator config.
+func (n *NetworkService) ReconcileTCPConnRule(rule v1alpha1.TCPConnRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this TCP connection rule
 	vr := buildValidationResult(rule, constants.ValidationTypeTCPConn)
@@ -179,7 +181,7 @@ func (n *NetworkService) ReconcileTCPConnRule(nn ktypes.NamespacedName, rule v1a
 	return vr
 }
 
-// buildValidationResult builds a default ValidationResult for a given validation type
+// buildValidationResult builds a default ValidationResult for a given validation type.
 func buildValidationResult(rule networkRule, validationType string) *types.ValidationRuleResult {
 	state := vapi.ValidationSucceeded
 	latestCondition := vapi.DefaultValidationCondition()
@@ -191,7 +193,7 @@ func buildValidationResult(rule networkRule, validationType string) *types.Valid
 	return &types.ValidationRuleResult{Condition: &latestCondition, State: &state}
 }
 
-// handleRuleExec executes a rule's command and updates the rule's validation result accordingly
+// handleRuleExec executes a rule's command and updates the rule's validation result accordingly.
 func (n *NetworkService) handleRuleExec(vr *types.ValidationRuleResult, r networkRule, binary, errMsg string, args ...string) {
 	n.log.V(0).Info("Executing command: %s %s", binary, args)
 	stdout, stderr, exitCode, err := execCmd(binary, args...)
@@ -203,7 +205,7 @@ func (n *NetworkService) handleRuleExec(vr *types.ValidationRuleResult, r networ
 	vr.Condition.Message = stdout
 }
 
-// failResult updates a validation result with failure details
+// failResult updates a validation result with failure details.
 func (n *NetworkService) failResult(vr *types.ValidationRuleResult, err error, binary, errMsg, stdout, stderr, ruleName string, args ...string) {
 	n.log.V(0).Info(errMsg, "stdout", stdout, "stderr", stderr, "error", err.Error(), "rule", ruleName)
 	failure := fmt.Sprintf("stdout: %s, stderr: %s, error: %v", stdout, stderr, err)
@@ -214,7 +216,7 @@ func (n *NetworkService) failResult(vr *types.ValidationRuleResult, err error, b
 	vr.Condition.Message = errMsg
 }
 
-// execCmd executes an arbitrary binary with arbitrary arguments
+// execCmd executes an arbitrary binary with arbitrary arguments.
 func execCmd(binary string, args ...string) (string, string, int, error) {
 	cmd := exec.Command(binary, args...)
 	stderr, stdout := bytes.Buffer{}, bytes.Buffer{}
@@ -233,8 +235,8 @@ func execCmd(binary string, args ...string) (string, string, int, error) {
 	return stdout.String(), stderr.String(), exitCode, err
 }
 
-// toIpV4 converts a string to a net.IP
-func toIpV4(s string) (ip net.IP, err error) {
+// toIPV4 converts a string to a net.IP.
+func toIPV4(s string) (ip net.IP, err error) {
 	ip = net.ParseIP(s).To4()
 	if ip == nil {
 		err = fmt.Errorf("failed to parse %s as an IPv4 address", s)
@@ -242,8 +244,8 @@ func toIpV4(s string) (ip net.IP, err error) {
 	return
 }
 
-// incIp increments a net.IP
-func incIp(ip net.IP) {
+// incIP increments a net.IP.
+func incIP(ip net.IP) {
 	for j := len(ip) - 1; j >= 0; j-- {
 		ip[j]++
 		if ip[j] > 0 {
