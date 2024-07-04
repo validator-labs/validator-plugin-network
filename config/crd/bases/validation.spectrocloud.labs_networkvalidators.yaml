@@ -42,6 +42,7 @@ spec:
               dnsRules:
                 description: DNSRules validate DNS name resolution of network hosts
                 items:
+                  description: DNSRule defines a DNS validation rule.
                   properties:
                     host:
                       type: string
@@ -61,6 +62,7 @@ spec:
               icmpRules:
                 description: ICMPRules validate ICMP pings to network hosts
                 items:
+                  description: ICMPRule defines an ICMP validation rule.
                   properties:
                     host:
                       type: string
@@ -79,6 +81,7 @@ spec:
                 description: IPRangeRules validate that all IPs in a given CIDR range
                   are free (unallocated)
                 items:
+                  description: IPRangeRule defines an IP range validation rule.
                   properties:
                     length:
                       type: integer
@@ -100,6 +103,7 @@ spec:
                 description: MTURules validate that the default NIC has an MTU of
                   at least X, where X is the provided MTU
                 items:
+                  description: MTURule defines an MTU validation rule.
                   properties:
                     host:
                       type: string
@@ -127,6 +131,7 @@ spec:
                 description: TCPConnRules validate arbitrary TCP connections, including
                   proxied connections
                 items:
+                  description: TCPConnRule defines a TCP connection validation rule.
                   properties:
                     host:
                       type: string

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package controller defines a controller for reconciling NetworkValidator objects.
 package controller
 
 import (
@@ -98,31 +99,31 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	// DNS rules
 	for _, rule := range validator.Spec.DNSRules {
-		vrr := networkService.ReconcileDNSRule(nn, rule)
+		vrr := networkService.ReconcileDNSRule(rule)
 		resp.AddResult(vrr, err)
 	}
 
 	// ICMP rules
 	for _, rule := range validator.Spec.ICMPRules {
-		vrr := networkService.ReconcileICMPRule(nn, rule)
+		vrr := networkService.ReconcileICMPRule(rule)
 		resp.AddResult(vrr, err)
 	}
 
 	// IP range rules
 	for _, rule := range validator.Spec.IPRangeRules {
-		vrr := networkService.ReconcileIPRangeRule(nn, rule)
+		vrr := networkService.ReconcileIPRangeRule(rule)
 		resp.AddResult(vrr, err)
 	}
 
 	// MTU rules
 	for _, rule := range validator.Spec.MTURules {
-		vrr := networkService.ReconcileMTURule(nn, rule)
+		vrr := networkService.ReconcileMTURule(rule)
 		resp.AddResult(vrr, err)
 	}
 
 	// TCP connection rules
 	for _, rule := range validator.Spec.TCPConnRules {
-		vrr := networkService.ReconcileTCPConnRule(nn, rule)
+		vrr := networkService.ReconcileTCPConnRule(rule)
 		resp.AddResult(vrr, err)
 	}
 
