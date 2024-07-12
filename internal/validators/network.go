@@ -189,6 +189,7 @@ func (n *NetworkService) ReconcileTCPConnRule(rule v1alpha1.TCPConnRule) *types.
 	return vr
 }
 
+// ReconcileHTTPFileRule reconciles an HTTP file rule from a NetworkValidator config.
 func (n *NetworkService) ReconcileHTTPFileRule(rule v1alpha1.HTTPFileRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this HTTP file rule
