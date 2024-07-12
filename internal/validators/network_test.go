@@ -52,7 +52,7 @@ func TestPublicBlobRuleService_ReconcileHTTPRule2(t *testing.T) {
 			name: "Pass (all files found - 2 files)",
 			rule: v1alpha1.HTTPFileRule{
 				RuleName: "rule-1",
-				Paths:    []string{"/file1", "/file2"}, // Adjust the paths
+				Paths:    []string{"/file1", "/file2"},
 			},
 			handler: func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusOK)
