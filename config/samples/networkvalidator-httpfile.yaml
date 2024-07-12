@@ -6,4 +6,4 @@ spec:
   httpFileRules:
   - name: Spectro Cloud Azure VM VHD file
     paths:
-    - https://nonexistentstorageaccount.blob.core.windows.net/system/Microsoft.Compute/Images/spectroimages/c-77-0-k-11611-0-osDisk.8ed00fe6-11e0-42e9-8da9-28ea8bbf2046.vhd
+    - https://spectroimageprod.blob.core.windows.net/system/Microsoft.Compute/Images/spectroimages/c-77-0-k-11611-0-osDisk.8ed00fe6-11e0-42e9-8da9-28ea8bbf2046.vhd
