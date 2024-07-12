@@ -46,7 +46,7 @@ func createDoer(statusCode int, err error) doer {
 	}
 }
 
-func TestPublicBlobRuleService_ReconcilePublicBlobRule(t *testing.T) {
+func TestPublicBlobRuleService_ReconcileHTTPRule(t *testing.T) {
 
 	type testCase struct {
 		name           string

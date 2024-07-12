@@ -50,7 +50,7 @@ type NetworkValidatorSpec struct {
 
 // ResultCount returns the number of validation results expected for a NetworkValidatorSpec.
 func (s NetworkValidatorSpec) ResultCount() int {
-	return len(s.DNSRules) + len(s.ICMPRules) + len(s.IPRangeRules) + len(s.MTURules) + len(s.TCPConnRules)
+	return len(s.DNSRules) + len(s.ICMPRules) + len(s.IPRangeRules) + len(s.MTURules) + len(s.TCPConnRules) + len(s.HTTPFileRules)
 }
 
 // DNSRule defines a DNS validation rule.
