@@ -32,21 +32,16 @@ type networkRule interface {
 	Name() string
 }
 
-// httpClient defines the interface for the HTTP client used by the PublicBlobRuleService.
-type httpClient interface {
-	Do(req *http.Request) (*http.Response, error)
-}
-
 // NetworkService is a service for network validation.
 type NetworkService struct {
-	httpClient httpClient
+	httpClient *http.Client
 	log        logr.Logger
 }
 
 // NewNetworkService creates a new NetworkService.
-func NewNetworkService(httpClient httpClient, log logr.Logger) *NetworkService {
+func NewNetworkService(log logr.Logger) *NetworkService {
 	return &NetworkService{
-		httpClient: httpClient,
+		httpClient: http.DefaultClient,
 		log:        log,
 	}
 }

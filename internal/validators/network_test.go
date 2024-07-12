@@ -1,11 +1,9 @@
-// Package validators contains network plugin validators.
 package validators
 
 import (
-	"bytes"
-	"fmt"
-	"io"
 	"net/http"
+	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-logr/logr"
@@ -16,65 +14,33 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
-// doer is an interface that defines the Do method for an HTTP client.
-type doer func(req *http.Request) (*http.Response, error)
-
-// FakeHTTPClient is a fake HTTP client that implements the httpClient interface.
-type fakeHTTPClient struct {
-	doer doer
-}
-
-// Do is a method that satisfies the httpClient interface. Uses the doer function to return a
-// response during testing.
-func (f fakeHTTPClient) Do(req *http.Request) (*http.Response, error) {
-	return f.doer(req)
-}
-
-// createDoer is a helper function that creates a doer function that returns either an error or a
-// response with the specified status code.
-func createDoer(statusCode int, err error) doer {
-	if err != nil {
-		return func(_ *http.Request) (*http.Response, error) {
-			return nil, err
-		}
-	}
-	return func(_ *http.Request) (*http.Response, error) {
-		return &http.Response{
-			StatusCode: statusCode,
-			Body:       io.NopCloser(bytes.NewBufferString("")),
-		}, nil
-	}
-}
-
-func TestPublicBlobRuleService_ReconcileHTTPRule(t *testing.T) {
-
-	type testCase struct {
+func TestPublicBlobRuleService_ReconcileHTTPRule2(t *testing.T) {
+	testCases := []struct {
 		name           string
 		rule           v1alpha1.HTTPFileRule
-		httpClientMock httpClient
-		expectedError  error
+		handler        http.HandlerFunc
 		expectedResult vapitypes.ValidationRuleResult
-	}
-
-	testCases := []testCase{
+	}{
+		// Test cases use httptest, and we don't know the server URL (inc. its port) until the tests
+		// run, so the test case Details and Failures are templates. When running the tests, it subs
+		// in the real server URL of the test server before asserting.
 		{
 			name: "Pass (all files found - 1 file)",
 			rule: v1alpha1.HTTPFileRule{
 				RuleName: "rule-1",
-				Paths:    []string{"https://file1"},
+				Paths:    []string{"/file1"},
 			},
-			httpClientMock: fakeHTTPClient{
-				doer: createDoer(http.StatusOK, nil),
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
 			},
-			expectedError: nil,
 			expectedResult: vapitypes.ValidationRuleResult{
 				Condition: &vapi.ValidationCondition{
 					ValidationType: "http-file",
 					ValidationRule: "rule-1",
 					Message:        "All files are publicly accessible.",
 					Details: []string{
-						"Ensuring that files [https://file1] are publicly accessible.",
-						"File 'https://file1' is publicly accessible.",
+						"Ensuring that files [{{serverUrl}}/file1] are publicly accessible.",
+						"File '{{serverUrl}}/file1' is publicly accessible.",
 					},
 					Failures: []string{},
 					Status:   corev1.ConditionTrue,
@@ -86,21 +52,20 @@ func TestPublicBlobRuleService_ReconcileHTTPRule(t *testing.T) {
 			name: "Pass (all files found - 2 files)",
 			rule: v1alpha1.HTTPFileRule{
 				RuleName: "rule-1",
-				Paths:    []string{"https://file1", "https://file2"},
+				Paths:    []string{"/file1", "/file2"}, // Adjust the paths
 			},
-			httpClientMock: fakeHTTPClient{
-				doer: createDoer(http.StatusOK, nil),
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
 			},
-			expectedError: nil,
 			expectedResult: vapitypes.ValidationRuleResult{
 				Condition: &vapi.ValidationCondition{
 					ValidationType: "http-file",
 					ValidationRule: "rule-1",
 					Message:        "All files are publicly accessible.",
 					Details: []string{
-						"Ensuring that files [https://file1 https://file2] are publicly accessible.",
-						"File 'https://file1' is publicly accessible.",
-						"File 'https://file2' is publicly accessible.",
+						"Ensuring that files [{{serverUrl}}/file1 {{serverUrl}}/file2] are publicly accessible.",
+						"File '{{serverUrl}}/file1' is publicly accessible.",
+						"File '{{serverUrl}}/file2' is publicly accessible.",
 					},
 					Failures: []string{},
 					Status:   corev1.ConditionTrue,
@@ -112,22 +77,32 @@ func TestPublicBlobRuleService_ReconcileHTTPRule(t *testing.T) {
 			name: "Fail (error making HTTP request)",
 			rule: v1alpha1.HTTPFileRule{
 				RuleName: "rule-1",
-				Paths:    []string{"https://file1"},
+				Paths:    []string{"/file1"},
 			},
-			httpClientMock: fakeHTTPClient{
-				doer: createDoer(0, fmt.Errorf("Do error")),
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				// Close the connection immediately to simulate an error
+				hj, ok := w.(http.Hijacker)
+				if !ok {
+					http.Error(w, "webserver doesn't support hijacking", http.StatusInternalServerError)
+					return
+				}
+				conn, _, err := hj.Hijack()
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				_ = conn.Close()
 			},
-			expectedError: nil,
 			expectedResult: vapitypes.ValidationRuleResult{
 				Condition: &vapi.ValidationCondition{
 					ValidationType: "http-file",
 					ValidationRule: "rule-1",
 					Message:        "One or more files not publicly accessible. See failures for details.",
 					Details: []string{
-						"Ensuring that files [https://file1] are publicly accessible.",
+						"Ensuring that files [{{serverUrl}}/file1] are publicly accessible.",
 					},
 					Failures: []string{
-						"failed to check file 'https://file1': failed to send HTTP request: Do error",
+						`failed to check file '{{serverUrl}}/file1': failed to send HTTP request: Head "{{serverUrl}}/file1": EOF`,
 					},
 					Status: corev1.ConditionFalse,
 				},
@@ -138,22 +113,21 @@ func TestPublicBlobRuleService_ReconcileHTTPRule(t *testing.T) {
 			name: "Fail (HTTP request succeeds but has non-200 OK response)",
 			rule: v1alpha1.HTTPFileRule{
 				RuleName: "rule-1",
-				Paths:    []string{"https://file1"},
+				Paths:    []string{"/file1"},
 			},
-			httpClientMock: fakeHTTPClient{
-				doer: createDoer(http.StatusNotFound, nil),
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusNotFound)
 			},
-			expectedError: nil,
 			expectedResult: vapitypes.ValidationRuleResult{
 				Condition: &vapi.ValidationCondition{
 					ValidationType: "http-file",
 					ValidationRule: "rule-1",
 					Message:        "One or more files not publicly accessible. See failures for details.",
 					Details: []string{
-						"Ensuring that files [https://file1] are publicly accessible.",
+						"Ensuring that files [{{serverUrl}}/file1] are publicly accessible.",
 					},
 					Failures: []string{
-						"file 'https://file1' is not publicly accessible; '404' status code in response to HEAD request",
+						"file '{{serverUrl}}/file1' is not publicly accessible; '404' status code in response to HEAD request",
 					},
 					Status: corev1.ConditionFalse,
 				},
@@ -163,8 +137,30 @@ func TestPublicBlobRuleService_ReconcileHTTPRule(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		svc := NewNetworkService(tc.httpClientMock, logr.Logger{})
-		result := svc.ReconcileHTTPFileRule(tc.rule)
-		util.CheckTestCase(t, result, tc.expectedResult, nil, nil)
+		t.Run(tc.name, func(t *testing.T) {
+			// Create a test server
+			server := httptest.NewServer(tc.handler)
+			defer server.Close()
+
+			// Update the rule's paths and the expected result to use the test server's URL
+			for i := range tc.rule.Paths {
+				tc.rule.Paths[i] = server.URL + tc.rule.Paths[i]
+				for j := range tc.expectedResult.Condition.Details {
+					tc.expectedResult.Condition.Details[j] =
+						strings.ReplaceAll(tc.expectedResult.Condition.Details[j], "{{serverUrl}}", server.URL)
+				}
+				for k := range tc.expectedResult.Condition.Failures {
+					tc.expectedResult.Condition.Failures[k] =
+						strings.ReplaceAll(tc.expectedResult.Condition.Failures[k], "{{serverUrl}}", server.URL)
+				}
+			}
+
+			// Create the network service with the default HTTP client
+			svc := NewNetworkService(logr.Logger{})
+
+			// Test
+			result := svc.ReconcileHTTPFileRule(tc.rule)
+			util.CheckTestCase(t, result, tc.expectedResult, nil, nil)
+		})
 	}
 }

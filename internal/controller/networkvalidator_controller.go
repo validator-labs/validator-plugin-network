@@ -20,7 +20,6 @@ package controller
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/go-logr/logr"
@@ -96,7 +95,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		ValidationRuleErrors:  make([]error, 0, vr.Spec.ExpectedResults),
 	}
 
-	networkService := validators.NewNetworkService(&http.Client{}, r.Log)
+	networkService := validators.NewNetworkService(r.Log)
 
 	// DNS rules
 	for _, rule := range validator.Spec.DNSRules {
