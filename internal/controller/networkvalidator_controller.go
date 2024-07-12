@@ -1,5 +1,5 @@
 /*
-Copyright 2023.
+Copyright 2024.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package controller
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/go-logr/logr"
@@ -95,7 +96,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		ValidationRuleErrors:  make([]error, 0, vr.Spec.ExpectedResults),
 	}
 
-	networkService := validators.NewNetworkService(r.Log)
+	networkService := validators.NewNetworkService(&http.Client{}, r.Log)
 
 	// DNS rules
 	for _, rule := range validator.Spec.DNSRules {
@@ -124,6 +125,12 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	// TCP connection rules
 	for _, rule := range validator.Spec.TCPConnRules {
 		vrr := networkService.ReconcileTCPConnRule(rule)
+		resp.AddResult(vrr, err)
+	}
+
+	// HTTP file rules
+	for _, rule := range validator.Spec.HTTPFileRules {
+		vrr := networkService.ReconcileHTTPFileRule(rule)
 		resp.AddResult(vrr, err)
 	}
 

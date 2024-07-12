@@ -19,4 +19,7 @@ const (
 
 	// ValidationTypeTCPConn is the TCP connection validation type.
 	ValidationTypeTCPConn string = "network-tcp-conn"
+
+	// ValidationTypeHTTPFile is the HTTP file validation type.
+	ValidationTypeHTTPFile string = "http-file"
 )

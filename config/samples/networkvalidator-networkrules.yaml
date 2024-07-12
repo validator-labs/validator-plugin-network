@@ -1,7 +1,7 @@
 apiVersion: validation.spectrocloud.labs/v1alpha1
 kind: NetworkValidator
 metadata:
-  name: network-validator-sample
+  name: network-validator-network-rules
 spec:
   dnsRules:
   - name: Resolve Spectro Cloud

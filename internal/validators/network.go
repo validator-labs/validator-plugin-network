@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"net"
+	"net/http"
 	"os/exec"
 	"strconv"
 
@@ -31,15 +32,22 @@ type networkRule interface {
 	Name() string
 }
 
+// httpClient defines the interface for the HTTP client used by the PublicBlobRuleService.
+type httpClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
 // NetworkService is a service for network validation.
 type NetworkService struct {
-	log logr.Logger
+	httpClient httpClient
+	log        logr.Logger
 }
 
 // NewNetworkService creates a new NetworkService.
-func NewNetworkService(log logr.Logger) *NetworkService {
+func NewNetworkService(httpClient httpClient, log logr.Logger) *NetworkService {
 	return &NetworkService{
-		log: log,
+		httpClient: httpClient,
+		log:        log,
 	}
 }
 
@@ -179,6 +187,65 @@ func (n *NetworkService) ReconcileTCPConnRule(rule v1alpha1.TCPConnRule) *types.
 
 	n.log.V(0).Info("TCP connection check complete", "message", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
 	return vr
+}
+
+func (n *NetworkService) ReconcileHTTPFileRule(rule v1alpha1.HTTPFileRule) *types.ValidationRuleResult {
+
+	// Build the default ValidationResult for this HTTP file rule
+	vr := buildValidationResult(rule, constants.ValidationTypeHTTPFile)
+	vr.Condition.Message = "All files are publicly accessible."
+	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
+		"Ensuring that files %v are publicly accessible.",
+		rule.Paths,
+	))
+
+	errMsg := "One or more files not publicly accessible. See failures for details."
+
+	for _, path := range rule.Paths {
+		checkFileErrMsg, err := n.checkFile(path)
+		if err != nil {
+			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("failed to check file '%s': %s", path, err))
+			continue
+		}
+		if checkFileErrMsg != "" {
+			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("file '%s' is not publicly accessible; %s", path, checkFileErrMsg))
+			continue
+		}
+
+		vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("File '%s' is publicly accessible.", path))
+	}
+
+	if len(vr.Condition.Failures) > 0 {
+		vr.Condition.Message = errMsg
+		vr.Condition.Status = corev1.ConditionFalse
+		vr.State = util.Ptr(vapi.ValidationFailed)
+	}
+
+	return vr
+}
+
+func (n *NetworkService) checkFile(path string) (string, error) {
+	// Create a new HTTP HEAD request for the file.
+	req, err := http.NewRequest("HEAD", path, nil)
+	if err != nil {
+		return "", fmt.Errorf("failed to create HTTP request: %w", err)
+	}
+
+	// Send the request. If a 200 response comes back, we consider the file accessible.
+	client := n.httpClient
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to send HTTP request: %w", err)
+	}
+	defer func() {
+		_ = resp.Body.Close()
+	}()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Sprintf("'%d' status code in response to HEAD request", resp.StatusCode), nil
+	}
+
+	// Blob accessible.
+	return "", nil
 }
 
 // buildValidationResult builds a default ValidationResult for a given validation type.
