@@ -245,7 +245,7 @@ func (n *NetworkService) checkFile(path string) (string, error) {
 		return fmt.Sprintf("'%d' status code in response to HEAD request", resp.StatusCode), nil
 	}
 
-	// Blob accessible.
+	// File accessible.
 	return "", nil
 }
 
