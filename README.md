@@ -20,7 +20,7 @@ The Network validator plugin reconciles `NetworkValidator` custom resources to p
 
 The plugin also performs the following validations for networking concerns in general:
 
-1. Check that each file in a list of URLs is availane and publicly accessible by any HTTP client, unless the client were behind a firewall that would prevent it from connecting to the host in the URL. This is useful for verifying that assets expected to be available over HTTP are and remain available.
+1. Check that each file in a list of URLs is available and publicly accessible by any HTTP client, unless the client were behind a firewall that would prevent it from connecting to the host in the URL. This is useful for verifying that assets expected to be available over HTTP are and remain available.
 
 Each `NetworkValidator` CR is (re)-processed every two minutes to continuously ensure that your network matches the expected state.
 
