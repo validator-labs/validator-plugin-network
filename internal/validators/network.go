@@ -3,6 +3,7 @@ package validators
 
 import (
 	"bytes"
+	"crypto/tls"
 	"fmt"
 	"net"
 	"net/http"
@@ -38,10 +39,30 @@ type NetworkService struct {
 	log        logr.Logger
 }
 
+// NetworkServiceHTTPClientOption allows customizing the NetworkService's HTTP client.
+type NetworkServiceHTTPClientOption func(*http.Client)
+
+// WithTLSConfig allows callers to optionally provide a custom TLS configuration.
+func WithTLSConfig(config *tls.Config) NetworkServiceHTTPClientOption {
+	return func(client *http.Client) {
+		client.Transport = &http.Transport{
+			TLSClientConfig: config,
+		}
+	}
+}
+
 // NewNetworkService creates a new NetworkService.
-func NewNetworkService(log logr.Logger) *NetworkService {
+func NewNetworkService(log logr.Logger, opts ...NetworkServiceHTTPClientOption) *NetworkService {
+	// Start with the default HTTP client.
+	client := http.DefaultClient
+
+	// If caller provided options, customize the client.
+	for _, opt := range opts {
+		opt(client)
+	}
+
 	return &NetworkService{
-		httpClient: http.DefaultClient,
+		httpClient: client,
 		log:        log,
 	}
 }
