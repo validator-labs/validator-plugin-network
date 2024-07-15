@@ -69,6 +69,11 @@ spec:
                 items:
                   description: HTTPFileRule defines an HTTP file rule.
                   properties:
+                    insecureSkipVerify:
+                      description: |-
+                        InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS
+                        certificate verification. Defaults to false.
+                      type: boolean
                     name:
                       description: RuleName is a unique identifier for the rule in
                         the validator. Used to ensure conditions do not overwrite

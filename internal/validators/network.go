@@ -3,7 +3,6 @@ package validators
 
 import (
 	"bytes"
-	"crypto/tls"
 	"fmt"
 	"net"
 	"net/http"
@@ -42,12 +41,10 @@ type NetworkService struct {
 // NetworkServiceHTTPClientOption allows customizing the NetworkService's HTTP client.
 type NetworkServiceHTTPClientOption func(*http.Client)
 
-// WithTLSConfig allows callers to optionally provide a custom TLS configuration.
-func WithTLSConfig(config *tls.Config) NetworkServiceHTTPClientOption {
+// WithTransport allows callers to optionally provide a custom transport for the HTTP client.
+func WithTransport(transport http.RoundTripper) NetworkServiceHTTPClientOption {
 	return func(client *http.Client) {
-		client.Transport = &http.Transport{
-			TLSClientConfig: config,
-		}
+		client.Transport = transport
 	}
 }
 

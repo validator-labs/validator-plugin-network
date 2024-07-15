@@ -19,7 +19,9 @@ package controller
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/go-logr/logr"
@@ -129,7 +131,9 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	// HTTP file rules
 	for _, rule := range validator.Spec.HTTPFileRules {
-		vrr := networkService.ReconcileHTTPFileRule(rule)
+		transport := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: rule.InsecureSkipVerify}}
+		svc := validators.NewNetworkService(r.Log, validators.WithTransport(transport))
+		vrr := svc.ReconcileHTTPFileRule(rule)
 		resp.AddResult(vrr, err)
 	}
 

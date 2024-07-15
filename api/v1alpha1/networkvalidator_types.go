@@ -139,6 +139,9 @@ type HTTPFileRule struct {
 	// Paths is a list of file paths to check. When performing HTTP requests, if any of the paths result in a non-200 OK response code, the rule fails validation.
 	// +kubebuilder:validation:MaxItems=1000
 	Paths []string `json:"paths" yaml:"paths"`
+	// InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS
+	// certificate verification. Defaults to false.
+	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
 }
 
 // Name returns the name of a HTTPFileRule.
