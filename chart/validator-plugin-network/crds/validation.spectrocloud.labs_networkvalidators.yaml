@@ -44,8 +44,7 @@ spec:
                   TLS. Applies to TCPConnRules and HTTPFileRules.
                 properties:
                   certs:
-                    description: Certs is a list of certificates to use. Should not
-                      be base64-encoded.
+                    description: Certs is a list of certificates to use.
                     items:
                       description: Certificate is a certificate specified inline.
                       minLength: 1
