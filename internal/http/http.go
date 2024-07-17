@@ -26,9 +26,10 @@ func TransportWithCA(caPems [][]byte, insecureSkipVerify bool) (*http.Transport,
 	}
 
 	return &http.Transport{
-		// #nosec G402 -- InsecureSkipVerify defaults to false but users can set the property in the
-		// spec to true to disable server certificate verification.
 		TLSClientConfig: &tls.Config{
+			// InsecureSkipVerify defaults to false but users can set the property in the spec to
+			// true to disable server certificate verification.
+			//nolint:gosec
 			InsecureSkipVerify: insecureSkipVerify,
 			RootCAs:            caCertPool,
 			MinVersion:         tls.VersionTLS12,
