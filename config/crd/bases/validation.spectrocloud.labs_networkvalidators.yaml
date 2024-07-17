@@ -39,6 +39,40 @@ spec:
           spec:
             description: NetworkValidatorSpec defines the desired state of NetworkValidator
             properties:
+              caCerts:
+                description: CACerts allow additional CA certificates to be used for
+                  TLS. Applies to TCPConnRules and HTTPFileRules.
+                properties:
+                  certs:
+                    description: Certs is a list of certificates to use. Should not
+                      be base64-encoded.
+                    items:
+                      description: Certificate is a certificate specified inline.
+                      minLength: 1
+                      type: string
+                    maxItems: 500
+                    type: array
+                  secretRefs:
+                    description: SecretRefs is a list of secret references to use.
+                    items:
+                      description: SecretReference is a secret's name and the key
+                        to use to get the data.
+                      properties:
+                        key:
+                          description: Key is the key in the secret data.
+                          minLength: 1
+                          type: string
+                        name:
+                          description: Name is the name of the secret.
+                          minLength: 1
+                          type: string
+                      required:
+                      - key
+                      - name
+                      type: object
+                    maxItems: 500
+                    type: array
+                type: object
               dnsRules:
                 description: DNSRules validate DNS name resolution of network hosts
                 items:

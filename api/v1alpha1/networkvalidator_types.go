@@ -46,6 +46,34 @@ type NetworkValidatorSpec struct {
 	// +kubebuilder:validation:MaxItems=5
 	// +kubebuilder:validation:XValidation:message="HTTPFileRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	HTTPFileRules []HTTPFileRule `json:"httpFileRules,omitempty" yaml:"httpFileRules,omitempty"`
+	// CACerts allow additional CA certificates to be used for TLS. Applies to TCPConnRules and HTTPFileRules.
+	CACerts CACertificates `json:"caCerts,omitempty" yaml:"caCerts,omitempty"`
+}
+
+// CACertificates contains configuration for additional CA certificates to use for TLS. Can be certs
+// provided inline or secret references. Secrets are assumed to be in the same namespace as the
+// NetworkValidator.
+type CACertificates struct {
+	// Certs is a list of certificates to use.
+	// +kubebuilder:validation:MaxItems=500
+	Certs []Certificate `json:"certs,omitempty" yaml:"certs,omitempty"`
+	// SecretRefs is a list of secret references to use.
+	// +kubebuilder:validation:MaxItems=500
+	SecretRefs []SecretReference `json:"secretRefs,omitempty" yaml:"secretRefs,omitempty"`
+}
+
+// Certificate is a certificate specified inline.
+// +kubebuilder:validation:MinLength=1
+type Certificate string
+
+// SecretReference is a secret's name and the key to use to get the data.
+type SecretReference struct {
+	// Name is the name of the secret.
+	// +kubebuilder:validation:MinLength=1
+	Name string `json:"name" yaml:"name"`
+	// Key is the key in the secret data.
+	// +kubebuilder:validation:MinLength=1
+	Key string `json:"key" yaml:"key"`
 }
 
 // ResultCount returns the number of validation results expected for a NetworkValidatorSpec.

@@ -1,0 +1,35 @@
+apiVersion: validation.spectrocloud.labs/v1alpha1
+kind: NetworkValidator
+metadata:
+  name: network-validator-http-file-cert-inline-bad-cert
+spec:
+  httpFileRules:
+  - name: File on server using custom CA cert where cert doesn't match (expect error during validation)
+    paths:
+    - https://toolbox.palette-adv.spectrocloud.com:5001
+  caCerts:
+    certs:
+    - |-
+      -----BEGIN CERTIFICATE-----
+      MIID1zCCAr+gAwIBAgIJANxjTMWeqyLTMA0GCSqGSIb3DQEBCwUAMFQxLTArBgNV
+      BAMMJHRvb2xib3gucGFsZXR0ZS1hZHYuc3BlY3Ryb2Nsb3VkLmNvbTELMAkGA1UE
+      BhMCVVMxFjAUBgNVBAcMDVNhbiBGcmFuc2lzY28wHhcNMjMxMjIyMTgyNDAzWhcN
+      MjQxMjIxMTgyNDAzWjCBkzELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3Ju
+      aWExFjAUBgNVBAcMDVNhbiBGcmFuc2lzY28xETAPBgNVBAoMCE1Mb3BzSHViMRUw
+      EwYDVQQLDAxNbG9wc0h1YiBEZXYxLTArBgNVBAMMJHRvb2xib3gucGFsZXR0ZS1h
+      ZHYuc3BlY3Ryb2Nsb3VkLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
+      ggEBANC9+LKAmVkTHpvJm0DRwOQmJdLpLwwCFBe0+boYdcPgEMeQ5R4fs0bv1yyt
+      9XQICplCHtq44Q2M0yheiqhdLB5e2MbxuREIf1QDCqLBmGbee4WH2+oR+YUhIWla
+      39XNsWsCOOxQWLzTLqWJhXxTHBrcT5GYKvPXAywgZqRZnCt72Bvo3TfG8m7pRJt/
+      oBA6pK4Yo5fHmWIxyBw7JmUdXpe0YDObTS0MFp0d1nsBnXQfRq6v6np2R/KWRs3H
+      VNiajwYKcmpHHRT2gTLXIP5QQHr2Uzg7v/0SEd3Ier29RkjSVmltoFTUBBHgl325
+      bl62cEpNHNzc/A2yuaGTT6wf8AMCAwEAAaNsMGowHwYDVR0jBBgwFoAUcOuja62h
+      hGwZf0z6FH9q7vFBnAkwCQYDVR0TBAIwADALBgNVHQ8EBAMCBPAwLwYDVR0RBCgw
+      JoIkdG9vbGJveC5wYWxldHRlLWFkdi5zcGVjdHJvY2xvdWQuY29tMA0GCSqGSIb3
+      DQEBCwUAA4IBAQAkswhVHeQS3ERkwuxLCts/fitDYHGKTpewSMQpTHHEvC9Fh8SZ
+      c16dELR6GXPG6Rpj4mkHWETU8LZDQ/m3rMlhWPUYedaGIV0vt6UApiBtQdNycVnJ
+      3xVZXt/dsndAZm4Jsd5nNWCTgwudNgRM5uY/xGlXM/D4BiUkU7rVQKEdBTV6NtVh
+      Gvmf+g0LPqyat8vBAfsxBdlHRGS87FOmltpjArKyFEMfoPr9lPJsNT8jamU7lSMt
+      g7kncV3YesyK0O2z6YCwQ/RwFLUmDoj41KhU6hSNfFPUuLxVA10iiM5BH6++7LzL
+      V5r2BXP5LLPyL0KQxzK2FTnfDie1hq014OHz
+      -----END CERTIFICATE-----

@@ -22,4 +22,7 @@ const (
 
 	// ValidationTypeHTTPFile is the HTTP file validation type.
 	ValidationTypeHTTPFile string = "http-file"
+
+	// ClientCertificateKey is the key for the client certificate in a secret.
+	ClientCertificateKey string = "tls.crt"
 )
