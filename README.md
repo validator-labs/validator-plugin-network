@@ -17,7 +17,7 @@ The Network validator plugin reconciles `NetworkValidator` custom resources to p
 3. Validate TCP connections to arbitrary host + port(s), optionally through an HTTP proxy
 4. Check each IP in a given range (starting IP + next N IPs) to ensure that they're all unallocated
 5. Check that the default NIC has an MTU of at least X, where X is the provided MTU
-6. Check that each file in a list of URLs is available and publicly accessible by any HTTP client, unless the client were behind a firewall that would prevent it from connecting to the host in the URL. This is useful for verifying that assets expected to be available over HTTP are and remain available.
+6. Check that each file in a list of URLs is available and publicly accessible by any HTTP client, unless the client were behind a firewall that would prevent it from connecting to the host in the URL.
 
 Each `NetworkValidator` CR is (re)-processed every two minutes to continuously ensure that your network matches the expected state.
 
@@ -27,8 +27,8 @@ See the [samples](https://github.com/validator-labs/validator-plugin-network/tre
 
 You can add client CA certs to use with TCP connection and HTTP file rules.
 
-1. In `values.yaml`, you can set set `proxy` to add a CA cert to the system cert pool.
-2. In the `NetworkValidator` spec, you can set `caCerts` to provide additional CA certs to be applied on top of the system cert pool inline or via secrets.
+1. While installing the plugin, in `values.yaml`, you can set set `proxy` to add a CA cert to the system cert pool.
+2. While applying `NetworkValidator`s, in their specs, you can set `caCerts` to provide additional CA certs to be applied on top of the system cert pool. The certs can be provided inline or via secrets.
 
 ## Installation
 The Network validator plugin is meant to be [installed by validator](https://github.com/validator-labs/validator/tree/gh_pages#installation) (via a ValidatorConfig), but it can also be installed directly as follows:
