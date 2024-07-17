@@ -246,8 +246,7 @@ func (n *NetworkService) checkFile(path string) (string, error) {
 	}
 
 	// Send the request. If a 200 response comes back, we consider the file accessible.
-	client := n.httpClient
-	resp, err := client.Do(req)
+	resp, err := n.httpClient.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("failed to send HTTP request: %w", err)
 	}
