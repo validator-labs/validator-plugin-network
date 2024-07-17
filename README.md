@@ -25,14 +25,14 @@ See the [samples](https://github.com/validator-labs/validator-plugin-network/tre
 
 ## Adding CA certs
 
-For HTTP fule rules, you can add client CA certs to use by doing either of the following:
+For HTTP file rules, you can add client CA certs to use by doing either of the following:
 
-1. While installing the plugin, in `values.yaml`, you can set set `proxy` to add a CA cert to the system cert pool.
+1. While installing the plugin, in `values.yaml`, you can set `proxy` to add a CA cert to the system cert pool.
 2. While applying `NetworkValidator`s, in their specs, you can set `caCerts` to provide additional CA certs to be applied on top of the system cert pool. The certs can be provided inline or via secrets.
 
 For TCP connection rules, you can add a client CA cert to use by doing the following:
 
-1. While installing the plugin, in `values.yaml`, you can set set `proxy` to add a CA cert to the system cert pool.
+1. While installing the plugin, in `values.yaml`, you can set `proxy` to add a CA cert to the system cert pool.
 
 ## Installation
 The Network validator plugin is meant to be [installed by validator](https://github.com/validator-labs/validator/tree/gh_pages#installation) (via a ValidatorConfig), but it can also be installed directly as follows:
