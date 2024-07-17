@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.0.18](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.17...v0.0.18) (2024-07-17)
+
+
+### Features
+
+* HTTP file rule (PAD-272) ([#218](https://github.com/validator-labs/validator-plugin-network/issues/218)) ([063de0a](https://github.com/validator-labs/validator-plugin-network/commit/063de0af1ea5d28cf42c199cd238e608630cdb92))
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.30.2 ([#207](https://github.com/validator-labs/validator-plugin-network/issues/207)) ([859067b](https://github.com/validator-labs/validator-plugin-network/commit/859067bdf10e491af04c2e7e8d7fa141a25cf2cd))
+* **deps:** update module github.com/validator-labs/validator to v0.0.42 ([#204](https://github.com/validator-labs/validator-plugin-network/issues/204)) ([4f6c201](https://github.com/validator-labs/validator-plugin-network/commit/4f6c201e1a9c9c593d41148f6a1df8d39f115c56))
+* **deps:** update module github.com/validator-labs/validator to v0.0.43 ([#210](https://github.com/validator-labs/validator-plugin-network/issues/210)) ([fb6ac61](https://github.com/validator-labs/validator-plugin-network/commit/fb6ac616cbb65ffff2dc12be3a8c7e52a6418cf4))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.7.3 ([#206](https://github.com/validator-labs/validator-plugin-network/issues/206)) ([ae89dee](https://github.com/validator-labs/validator-plugin-network/commit/ae89deeabab30fe72625a7781a0e0d03c5a5aa6f))
+
+
+### Other
+
+* fix typos in README ([#219](https://github.com/validator-labs/validator-plugin-network/issues/219)) ([184a0e1](https://github.com/validator-labs/validator-plugin-network/commit/184a0e1fd1729f4db735e278982d68913ddaa795))
+* make the IP Range Rule's details a bit more clear ([#209](https://github.com/validator-labs/validator-plugin-network/issues/209)) ([f7a123a](https://github.com/validator-labs/validator-plugin-network/commit/f7a123a4c5ef839bc9145e4f6e966105fd4fb1ab))
+
+
+### Dependency Updates
+
+* **deps:** update dependency go to v1.22.5 ([#213](https://github.com/validator-labs/validator-plugin-network/issues/213)) ([571d1ae](https://github.com/validator-labs/validator-plugin-network/commit/571d1ae9838d86edbb597df7614b807dfe632c5b))
+* **deps:** update module github.com/validator-labs/validator to v0.0.44 ([#216](https://github.com/validator-labs/validator-plugin-network/issues/216)) ([2efe766](https://github.com/validator-labs/validator-plugin-network/commit/2efe766b18ce96607260f81644bed4c7dd8d20d8))
+* **deps:** update module github.com/validator-labs/validator to v0.0.46 ([#217](https://github.com/validator-labs/validator-plugin-network/issues/217)) ([3beb7f5](https://github.com/validator-labs/validator-plugin-network/commit/3beb7f53d2848e74f7f3f487fd83e29be4be2af5))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.7.4 ([#215](https://github.com/validator-labs/validator-plugin-network/issues/215)) ([f91ca8d](https://github.com/validator-labs/validator-plugin-network/commit/f91ca8dd5f7f65b2971adf83aa661f2f7f4c99c2))
+
+
+### Refactoring
+
+* enable revive & resolve all lints ([#214](https://github.com/validator-labs/validator-plugin-network/issues/214)) ([e6603d3](https://github.com/validator-labs/validator-plugin-network/commit/e6603d3c30a7a95a7e3073bbf4b1ccefb3106721))
+
 ## [0.0.17](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.16...v0.0.17) (2024-06-05)
 
 
