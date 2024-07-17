@@ -22,7 +22,7 @@ func TransportWithCA(caPems [][]byte, insecureSkipVerify bool) (*http.Transport,
 	}
 
 	for _, caPem := range caPems {
-		caCertPool.AppendCertsFromPEM([]byte(caPem))
+		caCertPool.AppendCertsFromPEM(caPem)
 	}
 
 	return &http.Transport{
