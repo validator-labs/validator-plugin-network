@@ -147,6 +147,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		transport, err := pluginhttp.TransportWithCA(caPems, rule.InsecureSkipVerify)
 		if err != nil {
 			resp.AddResult(nil, fmt.Errorf("failed to create HTTP transport: %w", err))
+			continue
 		}
 		svc := validators.NewNetworkService(r.Log, validators.WithTransport(transport))
 		vrr := svc.ReconcileHTTPFileRule(rule)
