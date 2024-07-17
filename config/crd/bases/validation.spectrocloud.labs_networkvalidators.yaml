@@ -39,6 +39,39 @@ spec:
           spec:
             description: NetworkValidatorSpec defines the desired state of NetworkValidator
             properties:
+              caCerts:
+                description: CACerts allow additional CA certificates to be used for
+                  TLS. Applies to TCPConnRules and HTTPFileRules.
+                properties:
+                  certs:
+                    description: Certs is a list of certificates to use.
+                    items:
+                      description: Certificate is a certificate specified inline.
+                      minLength: 1
+                      type: string
+                    maxItems: 500
+                    type: array
+                  secretRefs:
+                    description: SecretRefs is a list of secret references to use.
+                    items:
+                      description: SecretReference is a secret's name and the key
+                        to use to get the data.
+                      properties:
+                        key:
+                          description: Key is the key in the secret data.
+                          minLength: 1
+                          type: string
+                        name:
+                          description: Name is the name of the secret.
+                          minLength: 1
+                          type: string
+                      required:
+                      - key
+                      - name
+                      type: object
+                    maxItems: 500
+                    type: array
+                type: object
               dnsRules:
                 description: DNSRules validate DNS name resolution of network hosts
                 items:
@@ -47,6 +80,10 @@ spec:
                     host:
                       type: string
                     name:
+                      description: RuleName is a unique identifier for the rule in
+                        the validator. Used to ensure conditions do not overwrite
+                        each other.
+                      maxLength: 500
                       type: string
                     server:
                       type: string
@@ -59,6 +96,40 @@ spec:
                 x-kubernetes-validations:
                 - message: DNSRules must have unique names
                   rule: self.all(e, size(self.filter(x, x.name == e.name)) == 1)
+              httpFileRules:
+                description: HTTPFileRules validate that files are publicly available
+                  via HTTP
+                items:
+                  description: HTTPFileRule defines an HTTP file rule.
+                  properties:
+                    insecureSkipVerify:
+                      description: |-
+                        InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS
+                        certificate verification. Defaults to false.
+                      type: boolean
+                    name:
+                      description: RuleName is a unique identifier for the rule in
+                        the validator. Used to ensure conditions do not overwrite
+                        each other.
+                      maxLength: 500
+                      type: string
+                    paths:
+                      description: Paths is a list of file paths to check. When performing
+                        HTTP requests, if any of the paths result in a non-200 OK
+                        response code, the rule fails validation.
+                      items:
+                        type: string
+                      maxItems: 1000
+                      type: array
+                  required:
+                  - name
+                  - paths
+                  type: object
+                maxItems: 5
+                type: array
+                x-kubernetes-validations:
+                - message: HTTPFileRules must have unique names
+                  rule: self.all(e, size(self.filter(x, x.name == e.name)) == 1)
               icmpRules:
                 description: ICMPRules validate ICMP pings to network hosts
                 items:
@@ -67,6 +138,10 @@ spec:
                     host:
                       type: string
                     name:
+                      description: RuleName is a unique identifier for the rule in
+                        the validator. Used to ensure conditions do not overwrite
+                        each other.
+                      maxLength: 500
                       type: string
                   required:
                   - host
@@ -86,6 +161,10 @@ spec:
                     length:
                       type: integer
                     name:
+                      description: RuleName is a unique identifier for the rule in
+                        the validator. Used to ensure conditions do not overwrite
+                        each other.
+                      maxLength: 500
                       type: string
                     startIp:
                       type: string
@@ -110,6 +189,10 @@ spec:
                     mtu:
                       type: integer
                     name:
+                      description: RuleName is a unique identifier for the rule in
+                        the validator. Used to ensure conditions do not overwrite
+                        each other.
+                      maxLength: 500
                       type: string
                     packetHeadersSize:
                       description: |-
@@ -136,6 +219,10 @@ spec:
                     host:
                       type: string
                     name:
+                      description: RuleName is a unique identifier for the rule in
+                        the validator. Used to ensure conditions do not overwrite
+                        each other.
+                      maxLength: 500
                       type: string
                     ports:
                       items:

@@ -9,6 +9,7 @@
 The Network [validator](https://github.com/validator-labs/validator) plugin ensures that your network matches a user-configurable expected state.
 
 ## Description
+
 The Network validator plugin reconciles `NetworkValidator` custom resources to perform the following validations against your network:
 
 1. Execute DNS lookups
@@ -16,10 +17,22 @@ The Network validator plugin reconciles `NetworkValidator` custom resources to p
 3. Validate TCP connections to arbitrary host + port(s), optionally through an HTTP proxy
 4. Check each IP in a given range (starting IP + next N IPs) to ensure that they're all unallocated
 5. Check that the default NIC has an MTU of at least X, where X is the provided MTU
+6. Check that each file in a list of URLs is available and publicly accessible by any HTTP client, unless the client were behind a firewall that would prevent it from connecting to the host in the URL.
 
 Each `NetworkValidator` CR is (re)-processed every two minutes to continuously ensure that your network matches the expected state.
 
 See the [samples](https://github.com/validator-labs/validator-plugin-network/tree/main/config/samples) directory for example `NetworkValidator` configurations.
+
+## Adding CA certs
+
+For HTTP fule rules, you can add client CA certs to use by doing either of the following:
+
+1. While installing the plugin, in `values.yaml`, you can set set `proxy` to add a CA cert to the system cert pool.
+2. While applying `NetworkValidator`s, in their specs, you can set `caCerts` to provide additional CA certs to be applied on top of the system cert pool. The certs can be provided inline or via secrets.
+
+For TCP connection rules, you can add a client CA cert to use by doing the following:
+
+1. While installing the plugin, in `values.yaml`, you can set set `proxy` to add a CA cert to the system cert pool.
 
 ## Installation
 The Network validator plugin is meant to be [installed by validator](https://github.com/validator-labs/validator/tree/gh_pages#installation) (via a ValidatorConfig), but it can also be installed directly as follows:
@@ -113,7 +126,7 @@ More information can be found via the [Kubebuilder Documentation](https://book.k
 
 ## License
 
-Copyright 2023.
+Copyright 2024.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

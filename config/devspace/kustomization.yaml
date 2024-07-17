@@ -30,7 +30,7 @@ patches:
             - /bin/bash
             - -c
             - --
-            imagePullPolicy: Always
+            imagePullPolicy: IfNotPresent
             resources: null
             livenessProbe: null
             readinessProbe: null

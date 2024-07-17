@@ -1,5 +1,5 @@
 /*
-Copyright 2023.
+Copyright 2024.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import (
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
 	"github.com/validator-labs/validator-plugin-network/internal/constants"
+	pluginhttp "github.com/validator-labs/validator-plugin-network/internal/http"
+	"github.com/validator-labs/validator-plugin-network/internal/secrets"
 	"github.com/validator-labs/validator-plugin-network/internal/validators"
 	vapi "github.com/validator-labs/validator/api/v1alpha1"
 	"github.com/validator-labs/validator/pkg/types"
@@ -124,6 +126,31 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	// TCP connection rules
 	for _, rule := range validator.Spec.TCPConnRules {
 		vrr := networkService.ReconcileTCPConnRule(rule)
+		resp.AddResult(vrr, err)
+	}
+
+	// HTTP file rules
+	for _, rule := range validator.Spec.HTTPFileRules {
+		// If CACert config provided, use the inline certs and secret refs.
+		caPems := make([][]byte, 0)
+		for _, cert := range validator.Spec.CACerts.Certs {
+			caPems = append(caPems, []byte(cert))
+		}
+		for _, secretRef := range validator.Spec.CACerts.SecretRefs {
+			caPem, err := secrets.Read(secretRef.Name, req.Namespace, secretRef.Key, r.Client)
+			if err != nil {
+				resp.AddResult(nil, fmt.Errorf("failed to read CA certificate secret: %w", err))
+				continue
+			}
+			caPems = append(caPems, caPem)
+		}
+		transport, err := pluginhttp.TransportWithCA(caPems, rule.InsecureSkipVerify)
+		if err != nil {
+			resp.AddResult(nil, fmt.Errorf("failed to create HTTP transport: %w", err))
+			continue
+		}
+		svc := validators.NewNetworkService(r.Log, validators.WithTransport(transport))
+		vrr := svc.ReconcileHTTPFileRule(rule)
 		resp.AddResult(vrr, err)
 	}
 

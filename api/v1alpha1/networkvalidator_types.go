@@ -1,5 +1,5 @@
 /*
-Copyright 2023.
+Copyright 2024.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,15 +42,49 @@ type NetworkValidatorSpec struct {
 	// +kubebuilder:validation:MaxItems=5
 	// +kubebuilder:validation:XValidation:message="TCPConnRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	TCPConnRules []TCPConnRule `json:"tcpConnRules,omitempty" yaml:"tcpConnRules,omitempty"`
+	// HTTPFileRules validate that files are publicly available via HTTP
+	// +kubebuilder:validation:MaxItems=5
+	// +kubebuilder:validation:XValidation:message="HTTPFileRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
+	HTTPFileRules []HTTPFileRule `json:"httpFileRules,omitempty" yaml:"httpFileRules,omitempty"`
+	// CACerts allow additional CA certificates to be used for TLS. Applies to TCPConnRules and HTTPFileRules.
+	CACerts CACertificates `json:"caCerts,omitempty" yaml:"caCerts,omitempty"`
+}
+
+// CACertificates contains configuration for additional CA certificates to use for TLS. Can be certs
+// provided inline or secret references. Secrets are assumed to be in the same namespace as the
+// NetworkValidator.
+type CACertificates struct {
+	// Certs is a list of certificates to use.
+	// +kubebuilder:validation:MaxItems=500
+	Certs []Certificate `json:"certs,omitempty" yaml:"certs,omitempty"`
+	// SecretRefs is a list of secret references to use.
+	// +kubebuilder:validation:MaxItems=500
+	SecretRefs []SecretReference `json:"secretRefs,omitempty" yaml:"secretRefs,omitempty"`
+}
+
+// Certificate is a certificate specified inline.
+// +kubebuilder:validation:MinLength=1
+type Certificate string
+
+// SecretReference is a secret's name and the key to use to get the data.
+type SecretReference struct {
+	// Name is the name of the secret.
+	// +kubebuilder:validation:MinLength=1
+	Name string `json:"name" yaml:"name"`
+	// Key is the key in the secret data.
+	// +kubebuilder:validation:MinLength=1
+	Key string `json:"key" yaml:"key"`
 }
 
 // ResultCount returns the number of validation results expected for a NetworkValidatorSpec.
 func (s NetworkValidatorSpec) ResultCount() int {
-	return len(s.DNSRules) + len(s.ICMPRules) + len(s.IPRangeRules) + len(s.MTURules) + len(s.TCPConnRules)
+	return len(s.DNSRules) + len(s.ICMPRules) + len(s.IPRangeRules) + len(s.MTURules) + len(s.TCPConnRules) + len(s.HTTPFileRules)
 }
 
 // DNSRule defines a DNS validation rule.
 type DNSRule struct {
+	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
+	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 	Server   string `json:"server,omitempty" yaml:"server,omitempty"`
@@ -63,6 +97,8 @@ func (r DNSRule) Name() string {
 
 // ICMPRule defines an ICMP validation rule.
 type ICMPRule struct {
+	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
+	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 }
@@ -74,6 +110,8 @@ func (r ICMPRule) Name() string {
 
 // IPRangeRule defines an IP range validation rule.
 type IPRangeRule struct {
+	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
+	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
 	StartIP  string `json:"startIp" yaml:"startIp"`
 	Length   int    `json:"length" yaml:"length"`
@@ -86,6 +124,8 @@ func (r IPRangeRule) Name() string {
 
 // MTURule defines an MTU validation rule.
 type MTURule struct {
+	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
+	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 	MTU      int    `json:"mtu" yaml:"mtu"`
@@ -102,6 +142,8 @@ func (r MTURule) Name() string {
 
 // TCPConnRule defines a TCP connection validation rule.
 type TCPConnRule struct {
+	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
+	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 	Ports    []int  `json:"ports" yaml:"ports"`
@@ -114,6 +156,24 @@ type TCPConnRule struct {
 
 // Name returns the name of a TCPConnRule.
 func (r TCPConnRule) Name() string {
+	return r.RuleName
+}
+
+// HTTPFileRule defines an HTTP file rule.
+type HTTPFileRule struct {
+	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
+	// +kubebuilder:validation:MaxLength=500
+	RuleName string `json:"name" yaml:"name"`
+	// Paths is a list of file paths to check. When performing HTTP requests, if any of the paths result in a non-200 OK response code, the rule fails validation.
+	// +kubebuilder:validation:MaxItems=1000
+	Paths []string `json:"paths" yaml:"paths"`
+	// InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS
+	// certificate verification. Defaults to false.
+	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
+}
+
+// Name returns the name of a HTTPFileRule.
+func (r HTTPFileRule) Name() string {
 	return r.RuleName
 }
 
