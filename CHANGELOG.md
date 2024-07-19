@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.19](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.18...v0.0.19) (2024-07-19)
+
+
+### Dependency Updates
+
+* **deps:** update kubernetes packages to v0.30.3 ([#220](https://github.com/validator-labs/validator-plugin-network/issues/220)) ([a3c3128](https://github.com/validator-labs/validator-plugin-network/commit/a3c31286e54ea3462135ae292607b52cbb6d1ae1))
+
 ## [0.0.18](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.17...v0.0.18) (2024-07-17)
 
 
