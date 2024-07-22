@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.19](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.18...v0.0.19) (2024-07-22)
+
+
+### Features
+
+* enhance tcp conn rules ([#225](https://github.com/validator-labs/validator-plugin-network/issues/225)) ([7addeab](https://github.com/validator-labs/validator-plugin-network/commit/7addeab2ef45fed6f167a1f35eb520dfb31c8600))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/validator-labs/validator to v0.0.47 ([#223](https://github.com/validator-labs/validator-plugin-network/issues/223)) ([f22be0c](https://github.com/validator-labs/validator-plugin-network/commit/f22be0ce1db4cb500fb6eed2f606d20ce0be3612))
+
 ## [0.0.18](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.18...v0.0.18) (2024-07-21)
 
 
