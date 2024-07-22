@@ -26,7 +26,7 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -a -o ma
 # Use alpine as minimal base image to package the manager and network inspection binaries
 FROM --platform=$TARGETPLATFORM alpine:latest AS production
 WORKDIR /
-RUN apk add --no-cache bind-tools iputils netcat-openbsd
+RUN apk add --no-cache bind-tools iputils
 COPY --from=builder /workspace/manager .
 USER 65532:65532
 
