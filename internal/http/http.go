@@ -20,16 +20,18 @@ func TransportWithCA(caPems [][]byte, insecureSkipVerify bool) (*http.Transport,
 		// No error occurred and at least one alternative cert was provided, so start a new pool.
 		caCertPool = x509.NewCertPool()
 	}
-
 	for _, caPem := range caPems {
 		caCertPool.AppendCertsFromPEM(caPem)
 	}
 
-	return &http.Transport{
+	transport := &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: insecureSkipVerify, // #nosec G402
 			RootCAs:            caCertPool,
 			MinVersion:         tls.VersionTLS12,
 		},
-	}, nil
+	}
+
+	return transport, nil
 }

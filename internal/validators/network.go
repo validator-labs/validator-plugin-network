@@ -38,18 +38,18 @@ type NetworkService struct {
 	log        logr.Logger
 }
 
-// NetworkServiceHTTPClientOption allows customizing the NetworkService's HTTP client.
-type NetworkServiceHTTPClientOption func(*http.Client)
+// HTTPClientOption allows customizing the NetworkService's HTTP client.
+type HTTPClientOption func(*http.Client)
 
 // WithTransport allows callers to optionally provide a custom transport for the HTTP client.
-func WithTransport(transport http.RoundTripper) NetworkServiceHTTPClientOption {
+func WithTransport(transport http.RoundTripper) HTTPClientOption {
 	return func(client *http.Client) {
 		client.Transport = transport
 	}
 }
 
 // NewNetworkService creates a new NetworkService.
-func NewNetworkService(log logr.Logger, opts ...NetworkServiceHTTPClientOption) *NetworkService {
+func NewNetworkService(log logr.Logger, opts ...HTTPClientOption) *NetworkService {
 	// Start with the default HTTP client.
 	client := http.DefaultClient
 

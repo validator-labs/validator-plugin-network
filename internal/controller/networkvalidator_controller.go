@@ -33,7 +33,7 @@ import (
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
 	"github.com/validator-labs/validator-plugin-network/internal/constants"
-	pluginhttp "github.com/validator-labs/validator-plugin-network/internal/http"
+	"github.com/validator-labs/validator-plugin-network/internal/http"
 	"github.com/validator-labs/validator-plugin-network/internal/secrets"
 	"github.com/validator-labs/validator-plugin-network/internal/validators"
 	vapi "github.com/validator-labs/validator/api/v1alpha1"
@@ -144,7 +144,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 			}
 			caPems = append(caPems, caPem)
 		}
-		transport, err := pluginhttp.TransportWithCA(caPems, rule.InsecureSkipVerify)
+		transport, err := http.TransportWithCA(caPems, rule.InsecureSkipVerify)
 		if err != nil {
 			resp.AddResult(nil, fmt.Errorf("failed to create HTTP transport: %w", err))
 			continue
