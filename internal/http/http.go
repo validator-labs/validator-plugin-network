@@ -6,30 +6,37 @@ import (
 	"crypto/x509"
 	"fmt"
 	"net/http"
+
+	"github.com/go-logr/logr"
 )
 
-// TransportWithCA creates a new http.Transport with the provided CA certificates and
-// insecureSkipVerify. If loading the system cert pool fails, it must be provided with at least one
-// alternative cert to use. If no alternative certs are provided, the system cert pool must load.
-func TransportWithCA(caPems [][]byte, insecureSkipVerify bool) (*http.Transport, error) {
+// Transport creates a new http.Transport with insecureSkipVerify and optionally, additional CA certificates.
+func Transport(caPems [][]byte, insecureSkipVerify bool, log logr.Logger) (*http.Transport, error) {
+	tlsConfig, err := TLSConfig(caPems, insecureSkipVerify, log)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create TLS config: %w", err)
+	}
+	transport := &http.Transport{
+		Proxy:           http.ProxyFromEnvironment,
+		TLSClientConfig: tlsConfig,
+	}
+	return transport, nil
+}
+
+// TLSConfig creates a new tls.Config. If the system cert pool cannot be loaded, an empty pool is used.
+func TLSConfig(caPems [][]byte, insecureSkipVerify bool, log logr.Logger) (*tls.Config, error) {
 	caCertPool, err := x509.SystemCertPool()
 	if err != nil {
-		if len(caPems) == 0 {
-			return nil, fmt.Errorf("failed to get system cert pool and no alternative cert provided: %w", err)
-		}
-		// No error occurred and at least one alternative cert was provided, so start a new pool.
+		log.V(0).Info("failed to load system cert pool, using empty pool", "error", err)
 		caCertPool = x509.NewCertPool()
 	}
-
 	for _, caPem := range caPems {
 		caCertPool.AppendCertsFromPEM(caPem)
 	}
-
-	return &http.Transport{
-		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: insecureSkipVerify, // #nosec G402
-			RootCAs:            caCertPool,
-			MinVersion:         tls.VersionTLS12,
-		},
-	}, nil
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: insecureSkipVerify, // #nosec G402
+		RootCAs:            caCertPool,
+		MinVersion:         tls.VersionTLS12,
+	}
+	return tlsConfig, nil
 }

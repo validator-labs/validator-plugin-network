@@ -14,7 +14,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
-func TestPublicBlobRuleService_ReconcileHTTPRule2(t *testing.T) {
+func TestReconcileHTTPFileRule(t *testing.T) {
 	testCases := []struct {
 		name           string
 		rule           v1alpha1.HTTPFileRule
@@ -97,7 +97,7 @@ func TestPublicBlobRuleService_ReconcileHTTPRule2(t *testing.T) {
 				Condition: &vapi.ValidationCondition{
 					ValidationType: "http-file",
 					ValidationRule: "rule-1",
-					Message:        "One or more files not publicly accessible. See failures for details.",
+					Message:        "HTTPFile check(s) failed. See failures for details.",
 					Details: []string{
 						"Ensuring that files [{{serverUrl}}/file1] are publicly accessible.",
 					},
@@ -122,7 +122,7 @@ func TestPublicBlobRuleService_ReconcileHTTPRule2(t *testing.T) {
 				Condition: &vapi.ValidationCondition{
 					ValidationType: "http-file",
 					ValidationRule: "rule-1",
-					Message:        "One or more files not publicly accessible. See failures for details.",
+					Message:        "HTTPFile check(s) failed. See failures for details.",
 					Details: []string{
 						"Ensuring that files [{{serverUrl}}/file1] are publicly accessible.",
 					},

@@ -33,7 +33,7 @@ import (
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
 	"github.com/validator-labs/validator-plugin-network/internal/constants"
-	pluginhttp "github.com/validator-labs/validator-plugin-network/internal/http"
+	"github.com/validator-labs/validator-plugin-network/internal/http"
 	"github.com/validator-labs/validator-plugin-network/internal/secrets"
 	"github.com/validator-labs/validator-plugin-network/internal/validators"
 	vapi "github.com/validator-labs/validator/api/v1alpha1"
@@ -99,6 +99,20 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	networkService := validators.NewNetworkService(r.Log)
 
+	// If CACert config provided, use the inline certs and secret refs.
+	caPems := make([][]byte, 0)
+	for _, cert := range validator.Spec.CACerts.Certs {
+		caPems = append(caPems, []byte(cert))
+	}
+	for _, secretRef := range validator.Spec.CACerts.SecretRefs {
+		caPem, err := secrets.Read(secretRef.Name, req.Namespace, secretRef.Key, r.Client)
+		if err != nil {
+			r.Log.Error(err, "failed to read CA certificate secret")
+			return ctrl.Result{}, err
+		}
+		caPems = append(caPems, caPem)
+	}
+
 	// DNS rules
 	for _, rule := range validator.Spec.DNSRules {
 		vrr := networkService.ReconcileDNSRule(rule)
@@ -125,32 +139,27 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	// TCP connection rules
 	for _, rule := range validator.Spec.TCPConnRules {
-		vrr := networkService.ReconcileTCPConnRule(rule)
+		tlsConfig, err := http.TLSConfig(caPems, rule.InsecureSkipTLSVerify, r.Log)
+		if err != nil {
+			vrr := validators.BuildValidationResult(rule, constants.ValidationTypeTCPConn)
+			resp.AddResult(vrr, fmt.Errorf("failed to create TLS config: %w", err))
+			continue
+		}
+		ruleSvc := validators.NewNetworkService(r.Log, validators.WithTLSConfig(tlsConfig))
+		vrr := ruleSvc.ReconcileTCPConnRule(rule)
 		resp.AddResult(vrr, err)
 	}
 
 	// HTTP file rules
 	for _, rule := range validator.Spec.HTTPFileRules {
-		// If CACert config provided, use the inline certs and secret refs.
-		caPems := make([][]byte, 0)
-		for _, cert := range validator.Spec.CACerts.Certs {
-			caPems = append(caPems, []byte(cert))
-		}
-		for _, secretRef := range validator.Spec.CACerts.SecretRefs {
-			caPem, err := secrets.Read(secretRef.Name, req.Namespace, secretRef.Key, r.Client)
-			if err != nil {
-				resp.AddResult(nil, fmt.Errorf("failed to read CA certificate secret: %w", err))
-				continue
-			}
-			caPems = append(caPems, caPem)
-		}
-		transport, err := pluginhttp.TransportWithCA(caPems, rule.InsecureSkipVerify)
+		transport, err := http.Transport(caPems, rule.InsecureSkipTLSVerify, r.Log)
 		if err != nil {
-			resp.AddResult(nil, fmt.Errorf("failed to create HTTP transport: %w", err))
+			vrr := validators.BuildValidationResult(rule, constants.ValidationTypeHTTPFile)
+			resp.AddResult(vrr, fmt.Errorf("failed to create HTTP transport: %w", err))
 			continue
 		}
-		svc := validators.NewNetworkService(r.Log, validators.WithTransport(transport))
-		vrr := svc.ReconcileHTTPFileRule(rule)
+		ruleSvc := validators.NewNetworkService(r.Log, validators.WithTransport(transport))
+		vrr := ruleSvc.ReconcileHTTPFileRule(rule)
 		resp.AddResult(vrr, err)
 	}
 

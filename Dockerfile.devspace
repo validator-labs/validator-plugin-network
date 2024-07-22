@@ -3,7 +3,7 @@ FROM --platform=$TARGETPLATFORM golang:1.22-alpine3.20 AS builder
 ARG TARGETOS
 ARG TARGETARCH
 
-RUN apk add --no-cache bash bind-tools git iputils netcat-openbsd
+RUN apk add --no-cache bash bind-tools git iputils
 
 # Install Delve for debugging
 RUN go install github.com/go-delve/delve/cmd/dlv@latest
@@ -22,6 +22,5 @@ COPY api/ api/
 COPY internal/ internal/
 
 # Copy net-utils binaries into /workspace
-RUN cp /usr/bin/nc . && \
-    cp /usr/bin/nslookup . && \
+RUN cp /usr/bin/nslookup . && \
     cp /bin/ping .
