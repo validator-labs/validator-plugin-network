@@ -104,8 +104,8 @@ spec:
                   properties:
                     insecureSkipVerify:
                       description: |-
-                        InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS
-                        certificate verification. Defaults to false.
+                        InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
+                        Defaults to false.
                       type: boolean
                     name:
                       description: RuleName is a unique identifier for the rule in
@@ -218,6 +218,11 @@ spec:
                   properties:
                     host:
                       type: string
+                    insecureSkipVerify:
+                      description: |-
+                        InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
+                        Defaults to false.
+                      type: boolean
                     name:
                       description: RuleName is a unique identifier for the rule in
                         the validator. Used to ensure conditions do not overwrite
@@ -228,13 +233,6 @@ spec:
                       items:
                         type: integer
                       type: array
-                    proxyAddress:
-                      type: string
-                    proxyPort:
-                      type: integer
-                    proxyProtocol:
-                      pattern: ^(4|5|connect)?$
-                      type: string
                   required:
                   - host
                   - name

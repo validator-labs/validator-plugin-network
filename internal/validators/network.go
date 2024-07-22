@@ -3,11 +3,13 @@ package validators
 
 import (
 	"bytes"
+	"crypto/tls"
 	"fmt"
 	"net"
 	"net/http"
 	"os/exec"
 	"strconv"
+	"time"
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
@@ -23,7 +25,6 @@ const (
 	// See conclusion section of https://www.comparitech.com/net-admin/determine-mtu-size-using-ping/
 	defaultPacketHeadersSize int = 28
 
-	nc       string = "nc"
 	nslookup string = "nslookup"
 	ping     string = "ping"
 )
@@ -34,41 +35,45 @@ type networkRule interface {
 
 // NetworkService is a service for network validation.
 type NetworkService struct {
-	httpClient *http.Client
 	log        logr.Logger
+	httpClient *http.Client
+	tlsConfig  *tls.Config
 }
 
-// HTTPClientOption allows customizing the NetworkService's HTTP client.
-type HTTPClientOption func(*http.Client)
+// Option allows customizing the NetworkService.
+type Option func(*NetworkService)
 
-// WithTransport allows callers to optionally provide a custom transport for the HTTP client.
-func WithTransport(transport http.RoundTripper) HTTPClientOption {
-	return func(client *http.Client) {
-		client.Transport = transport
+// WithTLSConfig allows callers to provide a custom TLS config for the NetworkService.
+func WithTLSConfig(tlsConfig *tls.Config) Option {
+	return func(n *NetworkService) {
+		n.tlsConfig = tlsConfig
+	}
+}
+
+// WithTransport allows callers to provide a custom transport for the NetworkService's HTTP client.
+func WithTransport(transport http.RoundTripper) Option {
+	return func(n *NetworkService) {
+		n.httpClient.Transport = transport
 	}
 }
 
 // NewNetworkService creates a new NetworkService.
-func NewNetworkService(log logr.Logger, opts ...HTTPClientOption) *NetworkService {
-	// Start with the default HTTP client.
-	client := http.DefaultClient
-
-	// If caller provided options, customize the client.
-	for _, opt := range opts {
-		opt(client)
-	}
-
-	return &NetworkService{
-		httpClient: client,
+func NewNetworkService(log logr.Logger, opts ...Option) *NetworkService {
+	n := &NetworkService{
+		httpClient: http.DefaultClient,
 		log:        log,
 	}
+	for _, opt := range opts {
+		opt(n)
+	}
+	return n
 }
 
 // ReconcileDNSRule reconciles a DNS rule from a NetworkValidator config.
 func (n *NetworkService) ReconcileDNSRule(rule v1alpha1.DNSRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this DNS rule
-	vr := buildValidationResult(rule, constants.ValidationTypeDNS)
+	vr := BuildValidationResult(rule, constants.ValidationTypeDNS)
 
 	args := []string{rule.Host}
 	if rule.Server != "" {
@@ -84,7 +89,7 @@ func (n *NetworkService) ReconcileDNSRule(rule v1alpha1.DNSRule) *types.Validati
 func (n *NetworkService) ReconcileICMPRule(rule v1alpha1.ICMPRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this ICMP rule
-	vr := buildValidationResult(rule, constants.ValidationTypeICMP)
+	vr := BuildValidationResult(rule, constants.ValidationTypeICMP)
 
 	args := []string{"-c", "3", "-W", "3", rule.Host}
 	n.handleRuleExec(vr, rule, ping, "ICMP check failed", args...)
@@ -97,13 +102,11 @@ func (n *NetworkService) ReconcileICMPRule(rule v1alpha1.ICMPRule) *types.Valida
 func (n *NetworkService) ReconcileIPRangeRule(rule v1alpha1.IPRangeRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this IP range rule
-	vr := buildValidationResult(rule, constants.ValidationTypeIPRange)
+	vr := BuildValidationResult(rule, constants.ValidationTypeIPRange)
 	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
 		"Ensuring that %s and %d subsequent IPs are all unallocated",
 		rule.StartIP, rule.Length,
 	))
-
-	errMsg := "IP range check failed"
 
 	defer func() {
 		n.log.V(0).Info("IP range check complete", "message", vr.Condition.Message, "rule", rule.RuleName)
@@ -113,7 +116,7 @@ func (n *NetworkService) ReconcileIPRangeRule(rule v1alpha1.IPRangeRule) *types.
 	ip, err := toIPV4(rule.StartIP)
 	if err != nil {
 		vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("invalid start IP: %s. error: %v", rule.StartIP, err))
-		vr.Condition.Message = errMsg
+		vr.Condition.Message = "IP range check failed. See failures for details."
 		vr.Condition.Status = corev1.ConditionFalse
 		vr.State = util.Ptr(vapi.ValidationFailed)
 		return vr
@@ -151,7 +154,7 @@ func (n *NetworkService) ReconcileIPRangeRule(rule v1alpha1.IPRangeRule) *types.
 func (n *NetworkService) ReconcileMTURule(rule v1alpha1.MTURule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this MTU rule
-	vr := buildValidationResult(rule, constants.ValidationTypeMTU)
+	vr := BuildValidationResult(rule, constants.ValidationTypeMTU)
 
 	packetHeadersSize := defaultPacketHeadersSize
 	if rule.PacketHeadersSize != 0 {
@@ -174,29 +177,38 @@ func (n *NetworkService) ReconcileMTURule(rule v1alpha1.MTURule) *types.Validati
 func (n *NetworkService) ReconcileTCPConnRule(rule v1alpha1.TCPConnRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this TCP connection rule
-	vr := buildValidationResult(rule, constants.ValidationTypeTCPConn)
+	vr := BuildValidationResult(rule, constants.ValidationTypeTCPConn)
 	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
 		"Ensuring that TCP connection(s) can be established to %s on port(s) %v",
 		rule.Host, rule.Ports,
 	))
 
-	errMsg := "TCP connection check failed"
+	tlsDialer := &tls.Dialer{
+		NetDialer: &net.Dialer{
+			Timeout:   5 * time.Second, // Set a timeout for dialing
+			LocalAddr: nil,             // Use nil to let the system choose the local address
+		},
+		Config: n.tlsConfig,
+	}
 
-	// construct args
-	args := []string{"-w", "3"}
-	if rule.ProxyProtocol != "" && rule.ProxyAddress == "" || rule.ProxyProtocol == "" && rule.ProxyAddress != "" {
+	for _, port := range rule.Ports {
+		conn, err := tlsDialer.Dial("tcp", fmt.Sprintf("%s:%d", rule.Host, port))
+		if err != nil {
+			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("failed to connect to %s on port %d: %v", rule.Host, port, err))
+			continue
+		}
+		if err := conn.Close(); err != nil {
+			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("failed to close connection to %s on port %d: %v", rule.Host, port, err))
+			continue
+		}
+		vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("Successfully connected to %s on port %d", rule.Host, port))
+	}
+
+	if len(vr.Condition.Failures) > 0 {
+		vr.Condition.Message = "TCP connection check(s) failed. See failures for details."
+		vr.Condition.Status = corev1.ConditionFalse
 		vr.State = util.Ptr(vapi.ValidationFailed)
-		vr.Condition.Failures = append(vr.Condition.Failures, "invalid rule: proxyProtocol & proxyAddress must both be defined, or both undefined")
-		vr.Condition.Message = errMsg
 	}
-	if rule.ProxyProtocol != "" && rule.ProxyAddress != "" {
-		args = append(args, "-X", rule.ProxyProtocol, "-x", rule.ProxyAddress)
-	}
-	args = append(args, rule.Host)
-	for _, p := range rule.Ports {
-		args = append(args, strconv.FormatInt(int64(p), 10))
-	}
-	n.handleRuleExec(vr, rule, nc, errMsg, args...)
 
 	n.log.V(0).Info("TCP connection check complete", "message", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
 	return vr
@@ -206,14 +218,12 @@ func (n *NetworkService) ReconcileTCPConnRule(rule v1alpha1.TCPConnRule) *types.
 func (n *NetworkService) ReconcileHTTPFileRule(rule v1alpha1.HTTPFileRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this HTTP file rule
-	vr := buildValidationResult(rule, constants.ValidationTypeHTTPFile)
+	vr := BuildValidationResult(rule, constants.ValidationTypeHTTPFile)
 	vr.Condition.Message = "All files are publicly accessible."
 	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
 		"Ensuring that files %v are publicly accessible.",
 		rule.Paths,
 	))
-
-	errMsg := "One or more files not publicly accessible. See failures for details."
 
 	for _, path := range rule.Paths {
 		checkFileErrMsg, err := n.checkFile(path)
@@ -225,12 +235,11 @@ func (n *NetworkService) ReconcileHTTPFileRule(rule v1alpha1.HTTPFileRule) *type
 			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("file '%s' is not publicly accessible; %s", path, checkFileErrMsg))
 			continue
 		}
-
 		vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("File '%s' is publicly accessible.", path))
 	}
 
 	if len(vr.Condition.Failures) > 0 {
-		vr.Condition.Message = errMsg
+		vr.Condition.Message = "HTTPFile check(s) failed. See failures for details."
 		vr.Condition.Status = corev1.ConditionFalse
 		vr.State = util.Ptr(vapi.ValidationFailed)
 	}
@@ -251,18 +260,24 @@ func (n *NetworkService) checkFile(path string) (string, error) {
 		return "", fmt.Errorf("failed to send HTTP request: %w", err)
 	}
 	defer func() {
-		_ = resp.Body.Close()
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			if err == nil {
+				err = closeErr
+			} else {
+				n.log.Error(closeErr, "failed to close HTTP response body")
+			}
+		}
 	}()
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Sprintf("'%d' status code in response to HEAD request", resp.StatusCode), nil
 	}
 
 	// File accessible.
-	return "", nil
+	return "", err
 }
 
-// buildValidationResult builds a default ValidationResult for a given validation type.
-func buildValidationResult(rule networkRule, validationType string) *types.ValidationRuleResult {
+// BuildValidationResult builds a default ValidationResult for a given validation type.
+func BuildValidationResult(rule networkRule, validationType string) *types.ValidationRuleResult {
 	state := vapi.ValidationSucceeded
 	latestCondition := vapi.DefaultValidationCondition()
 	latestCondition.Details = make([]string, 0)

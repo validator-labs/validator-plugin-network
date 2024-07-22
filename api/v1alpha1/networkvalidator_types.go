@@ -147,11 +147,9 @@ type TCPConnRule struct {
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 	Ports    []int  `json:"ports" yaml:"ports"`
-	// +kubebuilder:validation:Pattern=`^(4|5|connect)?$`
-	ProxyProtocol string `json:"proxyProtocol,omitempty" yaml:"proxyProtocol,omitempty"`
-	ProxyAddress  string `json:"proxyAddress,omitempty" yaml:"proxyAddress,omitempty"`
-	ProxyPort     int    `json:"proxyPort,omitempty" yaml:"proxyPort,omitempty"`
-	// TODO: use socat for proxy validation using TLS CAFile & basic auth?
+	// InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
+	// Defaults to false.
+	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
 }
 
 // Name returns the name of a TCPConnRule.
@@ -167,8 +165,8 @@ type HTTPFileRule struct {
 	// Paths is a list of file paths to check. When performing HTTP requests, if any of the paths result in a non-200 OK response code, the rule fails validation.
 	// +kubebuilder:validation:MaxItems=1000
 	Paths []string `json:"paths" yaml:"paths"`
-	// InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS
-	// certificate verification. Defaults to false.
+	// InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
+	// Defaults to false.
 	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
 }
 
