@@ -150,6 +150,9 @@ type TCPConnRule struct {
 	// InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
 	// Defaults to false.
 	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
+	// Timeout is the duration to wait, in seconds, for a connection to be established. Defaults to 5 seconds.
+	// +kubebuilder:default=5
+	Timeout int `json:"timeout,omitempty" yaml:"timeout,omitempty"`
 }
 
 // Name returns the name of a TCPConnRule.

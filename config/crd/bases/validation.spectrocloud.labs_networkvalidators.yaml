@@ -233,6 +233,11 @@ spec:
                       items:
                         type: integer
                       type: array
+                    timeout:
+                      default: 5
+                      description: Timeout is the duration to wait, in seconds, for
+                        a connection to be established. Defaults to 5 seconds.
+                      type: integer
                   required:
                   - host
                   - name

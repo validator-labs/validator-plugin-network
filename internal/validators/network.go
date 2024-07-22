@@ -185,8 +185,7 @@ func (n *NetworkService) ReconcileTCPConnRule(rule v1alpha1.TCPConnRule) *types.
 
 	tlsDialer := &tls.Dialer{
 		NetDialer: &net.Dialer{
-			Timeout:   5 * time.Second, // Set a timeout for dialing
-			LocalAddr: nil,             // Use nil to let the system choose the local address
+			Timeout: time.Duration(rule.Timeout) * time.Second,
 		},
 		Config: n.tlsConfig,
 	}
