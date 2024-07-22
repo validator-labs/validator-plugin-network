@@ -139,7 +139,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	// TCP connection rules
 	for _, rule := range validator.Spec.TCPConnRules {
-		tlsConfig, err := http.TLSConfig(caPems, rule.InsecureSkipVerify, r.Log)
+		tlsConfig, err := http.TLSConfig(caPems, rule.InsecureSkipTLSVerify, r.Log)
 		if err != nil {
 			vrr := validators.BuildValidationResult(rule, constants.ValidationTypeTCPConn)
 			resp.AddResult(vrr, fmt.Errorf("failed to create TLS config: %w", err))
@@ -152,7 +152,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	// HTTP file rules
 	for _, rule := range validator.Spec.HTTPFileRules {
-		transport, err := http.Transport(caPems, rule.InsecureSkipVerify, r.Log)
+		transport, err := http.Transport(caPems, rule.InsecureSkipTLSVerify, r.Log)
 		if err != nil {
 			vrr := validators.BuildValidationResult(rule, constants.ValidationTypeHTTPFile)
 			resp.AddResult(vrr, fmt.Errorf("failed to create HTTP transport: %w", err))

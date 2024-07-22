@@ -147,9 +147,9 @@ type TCPConnRule struct {
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 	Ports    []int  `json:"ports" yaml:"ports"`
-	// InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
+	// InsecureSkipTLSVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
 	// Defaults to false.
-	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
+	InsecureSkipTLSVerify bool `json:"insecureSkipTlsVerify,omitempty" yaml:"insecureSkipTlsVerify,omitempty"`
 	// Timeout is the duration to wait, in seconds, for a connection to be established. Defaults to 5 seconds.
 	// +kubebuilder:default=5
 	Timeout int `json:"timeout,omitempty" yaml:"timeout,omitempty"`
@@ -168,9 +168,9 @@ type HTTPFileRule struct {
 	// Paths is a list of file paths to check. When performing HTTP requests, if any of the paths result in a non-200 OK response code, the rule fails validation.
 	// +kubebuilder:validation:MaxItems=1000
 	Paths []string `json:"paths" yaml:"paths"`
-	// InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
+	// InsecureSkipTLSVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
 	// Defaults to false.
-	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
+	InsecureSkipTLSVerify bool `json:"insecureSkipTlsVerify,omitempty" yaml:"insecureSkipTlsVerify,omitempty"`
 }
 
 // Name returns the name of a HTTPFileRule.

@@ -102,9 +102,9 @@ spec:
                 items:
                   description: HTTPFileRule defines an HTTP file rule.
                   properties:
-                    insecureSkipVerify:
+                    insecureSkipTlsVerify:
                       description: |-
-                        InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
+                        InsecureSkipTLSVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
                         Defaults to false.
                       type: boolean
                     name:
@@ -218,9 +218,9 @@ spec:
                   properties:
                     host:
                       type: string
-                    insecureSkipVerify:
+                    insecureSkipTlsVerify:
                       description: |-
-                        InsecureSkipVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
+                        InsecureSkipTLSVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
                         Defaults to false.
                       type: boolean
                     name:
