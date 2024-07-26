@@ -3,6 +3,16 @@ entries:
   validator-plugin-network:
   - apiVersion: v2
     appVersion: 0.0.9
+    created: "2024-07-26T15:40:20.188682009Z"
+    description: Perform various network validations (DNS, ICMP, MTU, Netcat, IP-range)
+    digest: b99b97909f85c5d19cdda7c1b2a4925b8fc28a4627ed159cfcf8c2e6889c8729
+    name: validator-plugin-network
+    type: application
+    urls:
+    - https://validator-labs.github.io/validator-plugin-network/validator-plugin-network-0.0.20.tgz
+    version: 0.0.20
+  - apiVersion: v2
+    appVersion: 0.0.9
     created: "2024-07-22T21:12:19.183012509Z"
     description: Perform various network validations (DNS, ICMP, MTU, Netcat, IP-range)
     digest: 814ad1a3ee1c3aac29b71d417afe1161ceb83119bb2fd12d4f66a4b6e5adc3e5
@@ -191,4 +201,4 @@ entries:
     urls:
     - https://spectrocloud-labs.github.io/validator-plugin-network/validator-plugin-network-0.0.1.tgz
     version: 0.0.1
-generated: "2024-07-22T21:12:19.179547744Z"
+generated: "2024-07-26T15:40:20.187496216Z"
