@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.0.20](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.19...v0.0.20) (2024-07-26)
+
+
+### Bug Fixes
+
+* update chart crd ([#230](https://github.com/validator-labs/validator-plugin-network/issues/230)) ([dd42313](https://github.com/validator-labs/validator-plugin-network/commit/dd423133918c839074c8250aad09a70988fac134))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/onsi/gomega to v1.34.0 ([#229](https://github.com/validator-labs/validator-plugin-network/issues/229)) ([7e13bf0](https://github.com/validator-labs/validator-plugin-network/commit/7e13bf00b5a99c6c19b8236cb432797c1663e4b0))
+* **deps:** update module github.com/validator-labs/validator to v0.0.48 ([#226](https://github.com/validator-labs/validator-plugin-network/issues/226)) ([45cdf7d](https://github.com/validator-labs/validator-plugin-network/commit/45cdf7d7f5bef5dbcb1ea066f2c272e74183100d))
+* **deps:** update module github.com/validator-labs/validator to v0.0.49 ([#228](https://github.com/validator-labs/validator-plugin-network/issues/228)) ([d83a96d](https://github.com/validator-labs/validator-plugin-network/commit/d83a96d0e9fca9dad5d421690d5252877c1e3629))
+
 ## [0.0.19](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.18...v0.0.19) (2024-07-22)
 
 
