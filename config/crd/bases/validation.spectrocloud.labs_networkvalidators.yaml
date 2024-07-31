@@ -52,10 +52,10 @@ spec:
                     maxItems: 500
                     type: array
                   secretRefs:
-                    description: SecretRefs is a list of secret references to use.
+                    description: SecretRefs is a list of CA secret references to use.
                     items:
-                      description: SecretReference is a secret's name and the key
-                        to use to get the data.
+                      description: CASecretReference is a reference to a secret containing
+                        a CA certificate.
                       properties:
                         key:
                           description: Key is the key in the secret data.
@@ -100,8 +100,32 @@ spec:
                 description: HTTPFileRules validate that files are publicly available
                   via HTTP
                 items:
-                  description: HTTPFileRule defines an HTTP file rule.
+                  description: HTTPFileRule defines an HTTP file rule. A unique rule
+                    must be created for each host requiring HTTP basic authentication.
                   properties:
+                    authSecretRef:
+                      description: AuthSecretRef is an optional basic auth secret
+                        reference.
+                      properties:
+                        name:
+                          description: Name is the name of the secret.
+                          minLength: 1
+                          type: string
+                        passwordKey:
+                          description: PasswordKey is the password key in the secret
+                            data.
+                          minLength: 1
+                          type: string
+                        usernameKey:
+                          description: UsernameKey is the username key in the secret
+                            data.
+                          minLength: 1
+                          type: string
+                      required:
+                      - name
+                      - passwordKey
+                      - usernameKey
+                      type: object
                     insecureSkipTlsVerify:
                       description: |-
                         InsecureSkipTLSVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.

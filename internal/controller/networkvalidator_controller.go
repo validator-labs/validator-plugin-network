@@ -105,12 +105,12 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		caPems = append(caPems, []byte(cert))
 	}
 	for _, secretRef := range validator.Spec.CACerts.SecretRefs {
-		caPem, err := secrets.Read(secretRef.Name, req.Namespace, secretRef.Key, r.Client)
+		caPem, err := secrets.ReadKeys(secretRef.Name, req.Namespace, []string{secretRef.Key}, r.Client)
 		if err != nil {
 			r.Log.Error(err, "failed to read CA certificate secret")
 			return ctrl.Result{}, err
 		}
-		caPems = append(caPems, caPem)
+		caPems = append(caPems, caPem[0])
 	}
 
 	// DNS rules
@@ -139,12 +139,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	// TCP connection rules
 	for _, rule := range validator.Spec.TCPConnRules {
-		tlsConfig, err := http.TLSConfig(caPems, rule.InsecureSkipTLSVerify, r.Log)
-		if err != nil {
-			vrr := validators.BuildValidationResult(rule, constants.ValidationTypeTCPConn)
-			resp.AddResult(vrr, fmt.Errorf("failed to create TLS config: %w", err))
-			continue
-		}
+		tlsConfig := http.TLSConfig(caPems, rule.InsecureSkipTLSVerify, r.Log)
 		ruleSvc := validators.NewNetworkService(r.Log, validators.WithTLSConfig(tlsConfig))
 		vrr := ruleSvc.ReconcileTCPConnRule(rule)
 		resp.AddResult(vrr, err)
@@ -152,12 +147,16 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	// HTTP file rules
 	for _, rule := range validator.Spec.HTTPFileRules {
-		transport, err := http.Transport(caPems, rule.InsecureSkipTLSVerify, r.Log)
-		if err != nil {
-			vrr := validators.BuildValidationResult(rule, constants.ValidationTypeHTTPFile)
-			resp.AddResult(vrr, fmt.Errorf("failed to create HTTP transport: %w", err))
-			continue
+		var auth [][]byte
+		if rule.AuthSecretRef != nil {
+			auth, err = secrets.ReadKeys(rule.AuthSecretRef.Name, req.Namespace, rule.AuthSecretRef.Keys(), r.Client)
+			if err != nil {
+				vrr := validators.BuildValidationResult(rule, constants.ValidationTypeHTTPFile)
+				resp.AddResult(vrr, fmt.Errorf("failed to parse HTTP basic auth: %w", err))
+				continue
+			}
 		}
+		transport := http.Transport(caPems, auth, rule.InsecureSkipTLSVerify, r.Log)
 		ruleSvc := validators.NewNetworkService(r.Log, validators.WithTransport(transport))
 		vrr := ruleSvc.ReconcileHTTPFileRule(rule)
 		resp.AddResult(vrr, err)

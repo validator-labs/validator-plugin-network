@@ -4,27 +4,52 @@ package http
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/base64"
 	"fmt"
 	"net/http"
 
 	"github.com/go-logr/logr"
 )
 
-// Transport creates a new http.Transport with insecureSkipVerify and optionally, additional CA certificates.
-func Transport(caPems [][]byte, insecureSkipVerify bool, log logr.Logger) (*http.Transport, error) {
-	tlsConfig, err := TLSConfig(caPems, insecureSkipVerify, log)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create TLS config: %w", err)
-	}
-	transport := &http.Transport{
+// basicAuthTransport is an http.RoundTripper that adds HTTP Basic Authentication.
+type basicAuthTransport struct {
+	Username  string
+	Password  string
+	Transport http.RoundTripper
+}
+
+// RoundTrip executes a single HTTP transaction.
+func (t *basicAuthTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	// Add basic auth header
+	auth := base64.StdEncoding.EncodeToString([]byte(t.Username + ":" + t.Password))
+	req.Header.Add("Authorization", fmt.Sprintf("Basic %s", auth))
+
+	// Delegate to the original transport
+	return t.Transport.RoundTrip(req)
+}
+
+// Transport creates a new http.RoundTripper with insecureSkipVerify and optionally, additional CA certificates
+// and/or HTTP basic authentication configured.
+func Transport(caPems, auth [][]byte, insecureSkipVerify bool, log logr.Logger) http.RoundTripper {
+	var transport http.RoundTripper
+
+	transport = &http.Transport{
 		Proxy:           http.ProxyFromEnvironment,
-		TLSClientConfig: tlsConfig,
+		TLSClientConfig: TLSConfig(caPems, insecureSkipVerify, log),
 	}
-	return transport, nil
+	if len(auth) > 0 {
+		transport = &basicAuthTransport{
+			Username:  string(auth[0]),
+			Password:  string(auth[1]),
+			Transport: transport,
+		}
+	}
+
+	return transport
 }
 
 // TLSConfig creates a new tls.Config. If the system cert pool cannot be loaded, an empty pool is used.
-func TLSConfig(caPems [][]byte, insecureSkipVerify bool, log logr.Logger) (*tls.Config, error) {
+func TLSConfig(caPems [][]byte, insecureSkipVerify bool, log logr.Logger) *tls.Config {
 	caCertPool, err := x509.SystemCertPool()
 	if err != nil {
 		log.V(0).Info("failed to load system cert pool, using empty pool", "error", err)
@@ -38,5 +63,5 @@ func TLSConfig(caPems [][]byte, insecureSkipVerify bool, log logr.Logger) (*tls.
 		RootCAs:            caCertPool,
 		MinVersion:         tls.VersionTLS12,
 	}
-	return tlsConfig, nil
+	return tlsConfig
 }
