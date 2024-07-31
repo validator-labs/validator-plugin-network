@@ -57,23 +57,28 @@ type CACertificates struct {
 	// Certs is a list of certificates to use.
 	// +kubebuilder:validation:MaxItems=500
 	Certs []Certificate `json:"certs,omitempty" yaml:"certs,omitempty"`
-	// SecretRefs is a list of secret references to use.
+	// SecretRefs is a list of CA secret references to use.
 	// +kubebuilder:validation:MaxItems=500
-	SecretRefs []SecretReference `json:"secretRefs,omitempty" yaml:"secretRefs,omitempty"`
+	SecretRefs []CASecretReference `json:"secretRefs,omitempty" yaml:"secretRefs,omitempty"`
 }
 
 // Certificate is a certificate specified inline.
 // +kubebuilder:validation:MinLength=1
 type Certificate string
 
-// SecretReference is a secret's name and the key to use to get the data.
-type SecretReference struct {
+// CASecretReference is a reference to a secret containing a CA certificate.
+type CASecretReference struct {
 	// Name is the name of the secret.
 	// +kubebuilder:validation:MinLength=1
 	Name string `json:"name" yaml:"name"`
 	// Key is the key in the secret data.
 	// +kubebuilder:validation:MinLength=1
 	Key string `json:"key" yaml:"key"`
+}
+
+// Keys returns the keys in a CASecretReference.
+func (r CASecretReference) Keys() []string {
+	return []string{r.Key}
 }
 
 // ResultCount returns the number of validation results expected for a NetworkValidatorSpec.
@@ -160,7 +165,7 @@ func (r TCPConnRule) Name() string {
 	return r.RuleName
 }
 
-// HTTPFileRule defines an HTTP file rule.
+// HTTPFileRule defines an HTTP file rule. A unique rule must be created for each host requiring HTTP basic authentication.
 type HTTPFileRule struct {
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
@@ -168,6 +173,8 @@ type HTTPFileRule struct {
 	// Paths is a list of file paths to check. When performing HTTP requests, if any of the paths result in a non-200 OK response code, the rule fails validation.
 	// +kubebuilder:validation:MaxItems=1000
 	Paths []string `json:"paths" yaml:"paths"`
+	// AuthSecretRef is an optional basic auth secret reference.
+	AuthSecretRef *BasicAuthSecretReference `json:"authSecretRef,omitempty" yaml:"authSecretRef,omitempty"`
 	// InsecureSkipTLSVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
 	// Defaults to false.
 	InsecureSkipTLSVerify bool `json:"insecureSkipTlsVerify,omitempty" yaml:"insecureSkipTlsVerify,omitempty"`
@@ -176,6 +183,24 @@ type HTTPFileRule struct {
 // Name returns the name of a HTTPFileRule.
 func (r HTTPFileRule) Name() string {
 	return r.RuleName
+}
+
+// BasicAuthSecretReference is a reference to a secret containing HTTP basic authentication credentials.
+type BasicAuthSecretReference struct {
+	// Name is the name of the secret.
+	// +kubebuilder:validation:MinLength=1
+	Name string `json:"name" yaml:"name"`
+	// UsernameKey is the username key in the secret data.
+	// +kubebuilder:validation:MinLength=1
+	UsernameKey string `json:"usernameKey" yaml:"usernameKey"`
+	// PasswordKey is the password key in the secret data.
+	// +kubebuilder:validation:MinLength=1
+	PasswordKey string `json:"passwordKey" yaml:"passwordKey"`
+}
+
+// Keys returns the keys in a BasicAuthSecretReference.
+func (r BasicAuthSecretReference) Keys() []string {
+	return []string{r.UsernameKey, r.PasswordKey}
 }
 
 // NetworkValidatorStatus defines the observed state of NetworkValidator
