@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.0.21](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.20...v0.0.21) (2024-07-31)
+
+
+### Features
+
+* http basic auth support for HTTPFileRules ([#236](https://github.com/validator-labs/validator-plugin-network/issues/236)) ([49046fe](https://github.com/validator-labs/validator-plugin-network/commit/49046fed49644a9b72c0a5000121b52c56552070))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.19.1 ([#231](https://github.com/validator-labs/validator-plugin-network/issues/231)) ([fb43c3e](https://github.com/validator-labs/validator-plugin-network/commit/fb43c3e09bfb96ac9503a9f3f2aa97d0079c1390))
+* **deps:** update module github.com/onsi/gomega to v1.34.1 ([#234](https://github.com/validator-labs/validator-plugin-network/issues/234)) ([b3edb79](https://github.com/validator-labs/validator-plugin-network/commit/b3edb7957dd06bab57b4dd4b03844824353f2314))
+* **deps:** update module github.com/validator-labs/validator to v0.0.51 ([#233](https://github.com/validator-labs/validator-plugin-network/issues/233)) ([740d88e](https://github.com/validator-labs/validator-plugin-network/commit/740d88ed91406b52264f178da69142cb054700e0))
+
 ## [0.0.20](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.19...v0.0.20) (2024-07-26)
 
 
