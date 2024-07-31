@@ -30,15 +30,12 @@ func (t *basicAuthTransport) RoundTrip(req *http.Request) (*http.Response, error
 
 // Transport creates a new http.RoundTripper with insecureSkipVerify and optionally, additional CA certificates
 // and/or HTTP basic authentication configured.
-func Transport(caPems, auth [][]byte, insecureSkipVerify bool, log logr.Logger) (http.RoundTripper, error) {
-	tlsConfig, err := TLSConfig(caPems, insecureSkipVerify, log)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create TLS config: %w", err)
-	}
+func Transport(caPems, auth [][]byte, insecureSkipVerify bool, log logr.Logger) http.RoundTripper {
 	var transport http.RoundTripper
+
 	transport = &http.Transport{
 		Proxy:           http.ProxyFromEnvironment,
-		TLSClientConfig: tlsConfig,
+		TLSClientConfig: TLSConfig(caPems, insecureSkipVerify, log),
 	}
 	if len(auth) > 0 {
 		transport = &basicAuthTransport{
@@ -47,11 +44,12 @@ func Transport(caPems, auth [][]byte, insecureSkipVerify bool, log logr.Logger) 
 			Transport: transport,
 		}
 	}
-	return transport, nil
+
+	return transport
 }
 
 // TLSConfig creates a new tls.Config. If the system cert pool cannot be loaded, an empty pool is used.
-func TLSConfig(caPems [][]byte, insecureSkipVerify bool, log logr.Logger) (*tls.Config, error) {
+func TLSConfig(caPems [][]byte, insecureSkipVerify bool, log logr.Logger) *tls.Config {
 	caCertPool, err := x509.SystemCertPool()
 	if err != nil {
 		log.V(0).Info("failed to load system cert pool, using empty pool", "error", err)
@@ -65,5 +63,5 @@ func TLSConfig(caPems [][]byte, insecureSkipVerify bool, log logr.Logger) (*tls.
 		RootCAs:            caCertPool,
 		MinVersion:         tls.VersionTLS12,
 	}
-	return tlsConfig, nil
+	return tlsConfig
 }
