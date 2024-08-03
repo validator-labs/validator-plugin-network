@@ -33,11 +33,9 @@ import (
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
 	"github.com/validator-labs/validator-plugin-network/internal/constants"
-	"github.com/validator-labs/validator-plugin-network/internal/http"
 	"github.com/validator-labs/validator-plugin-network/internal/secrets"
-	"github.com/validator-labs/validator-plugin-network/internal/validators"
+	"github.com/validator-labs/validator-plugin-network/pkg/validate"
 	vapi "github.com/validator-labs/validator/api/v1alpha1"
-	"github.com/validator-labs/validator/pkg/types"
 	"github.com/validator-labs/validator/pkg/util"
 	vres "github.com/validator-labs/validator/pkg/validationresult"
 )
@@ -92,18 +90,9 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	// Always update the expected result count in case the validator's rules have changed
 	vr.Spec.ExpectedResults = validator.Spec.ResultCount()
 
-	resp := types.ValidationResponse{
-		ValidationRuleResults: make([]*types.ValidationRuleResult, 0, vr.Spec.ExpectedResults),
-		ValidationRuleErrors:  make([]error, 0, vr.Spec.ExpectedResults),
-	}
+	// Fetch additional CAs to augment the system cert pool
+	caPems := validator.Spec.CACerts.RawCerts()
 
-	networkService := validators.NewNetworkService(r.Log)
-
-	// If CACert config provided, use the inline certs and secret refs.
-	caPems := make([][]byte, 0)
-	for _, cert := range validator.Spec.CACerts.Certs {
-		caPems = append(caPems, []byte(cert))
-	}
 	for _, secretRef := range validator.Spec.CACerts.SecretRefs {
 		caPem, err := secrets.ReadKeys(secretRef.Name, req.Namespace, []string{secretRef.Key}, r.Client)
 		if err != nil {
@@ -113,54 +102,22 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		caPems = append(caPems, caPem[0])
 	}
 
-	// DNS rules
-	for _, rule := range validator.Spec.DNSRules {
-		vrr := networkService.ReconcileDNSRule(rule)
-		resp.AddResult(vrr, err)
-	}
-
-	// ICMP rules
-	for _, rule := range validator.Spec.ICMPRules {
-		vrr := networkService.ReconcileICMPRule(rule)
-		resp.AddResult(vrr, err)
-	}
-
-	// IP range rules
-	for _, rule := range validator.Spec.IPRangeRules {
-		vrr := networkService.ReconcileIPRangeRule(rule)
-		resp.AddResult(vrr, err)
-	}
-
-	// MTU rules
-	for _, rule := range validator.Spec.MTURules {
-		vrr := networkService.ReconcileMTURule(rule)
-		resp.AddResult(vrr, err)
-	}
-
-	// TCP connection rules
-	for _, rule := range validator.Spec.TCPConnRules {
-		tlsConfig := http.TLSConfig(caPems, rule.InsecureSkipTLSVerify, r.Log)
-		ruleSvc := validators.NewNetworkService(r.Log, validators.WithTLSConfig(tlsConfig))
-		vrr := ruleSvc.ReconcileTCPConnRule(rule)
-		resp.AddResult(vrr, err)
-	}
-
-	// HTTP file rules
+	// Fetch HTTP basic auth credentials
+	auths := make([][][]byte, len(validator.Spec.HTTPFileRules))
 	for _, rule := range validator.Spec.HTTPFileRules {
 		var auth [][]byte
 		if rule.AuthSecretRef != nil {
 			auth, err = secrets.ReadKeys(rule.AuthSecretRef.Name, req.Namespace, rule.AuthSecretRef.Keys(), r.Client)
 			if err != nil {
-				vrr := validators.BuildValidationResult(rule, constants.ValidationTypeHTTPFile)
-				resp.AddResult(vrr, fmt.Errorf("failed to parse HTTP basic auth: %w", err))
-				continue
+				r.Log.Error(err, "failed to parse HTTP basic auth", "rule", rule.RuleName)
+				return ctrl.Result{}, err
 			}
 		}
-		transport := http.Transport(caPems, auth, rule.InsecureSkipTLSVerify, r.Log)
-		ruleSvc := validators.NewNetworkService(r.Log, validators.WithTransport(transport))
-		vrr := ruleSvc.ReconcileHTTPFileRule(rule)
-		resp.AddResult(vrr, err)
+		auths = append(auths, auth)
 	}
+
+	// Validate the rules
+	resp := validate.Validate(validator.Spec, caPems, auths, r.Log)
 
 	// Patch the ValidationResult with the latest ValidationRuleResults
 	if err := vres.SafeUpdateValidationResult(ctx, p, vr, resp, r.Log); err != nil {

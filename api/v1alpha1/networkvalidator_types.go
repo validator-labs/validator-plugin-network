@@ -62,6 +62,16 @@ type CACertificates struct {
 	SecretRefs []CASecretReference `json:"secretRefs,omitempty" yaml:"secretRefs,omitempty"`
 }
 
+// RawCerts returns the raw certificates included in a CACertificates.
+// SecretRefs are not included.
+func (c CACertificates) RawCerts() [][]byte {
+	certs := make([][]byte, 0, len(c.Certs))
+	for _, cert := range c.Certs {
+		certs = append(certs, []byte(cert))
+	}
+	return certs
+}
+
 // Certificate is a certificate specified inline.
 // +kubebuilder:validation:MinLength=1
 type Certificate string
