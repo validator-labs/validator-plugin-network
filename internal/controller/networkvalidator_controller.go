@@ -30,7 +30,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
-	"github.com/validator-labs/validator-plugin-network/internal/secrets"
+	"github.com/validator-labs/validator-plugin-network/pkg/secrets"
 	"github.com/validator-labs/validator-plugin-network/pkg/validate"
 	vapi "github.com/validator-labs/validator/api/v1alpha1"
 	vres "github.com/validator-labs/validator/pkg/validationresult"
