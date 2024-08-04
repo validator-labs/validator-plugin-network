@@ -17,6 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"github.com/validator-labs/validator-plugin-network/internal/constants"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -48,6 +49,16 @@ type NetworkValidatorSpec struct {
 	HTTPFileRules []HTTPFileRule `json:"httpFileRules,omitempty" yaml:"httpFileRules,omitempty"`
 	// CACerts allow additional CA certificates to be used for TLS. Applies to TCPConnRules and HTTPFileRules.
 	CACerts CACertificates `json:"caCerts,omitempty" yaml:"caCerts,omitempty"`
+}
+
+// PluginCode returns the network validator's plugin code.
+func (s NetworkValidatorSpec) PluginCode() string {
+	return constants.PluginCode
+}
+
+// ResultCount returns the number of validation results expected for a NetworkValidatorSpec.
+func (s NetworkValidatorSpec) ResultCount() int {
+	return len(s.DNSRules) + len(s.ICMPRules) + len(s.IPRangeRules) + len(s.MTURules) + len(s.TCPConnRules) + len(s.HTTPFileRules)
 }
 
 // CACertificates contains configuration for additional CA certificates to use for TLS. Can be certs
@@ -89,11 +100,6 @@ type CASecretReference struct {
 // Keys returns the keys in a CASecretReference.
 func (r CASecretReference) Keys() []string {
 	return []string{r.Key}
-}
-
-// ResultCount returns the number of validation results expected for a NetworkValidatorSpec.
-func (s NetworkValidatorSpec) ResultCount() int {
-	return len(s.DNSRules) + len(s.ICMPRules) + len(s.IPRangeRules) + len(s.MTURules) + len(s.TCPConnRules) + len(s.HTTPFileRules)
 }
 
 // DNSRule defines a DNS validation rule.
@@ -226,6 +232,16 @@ type NetworkValidator struct {
 
 	Spec   NetworkValidatorSpec   `json:"spec,omitempty"`
 	Status NetworkValidatorStatus `json:"status,omitempty"`
+}
+
+// PluginCode returns the network validator's plugin code.
+func (v NetworkValidator) PluginCode() string {
+	return v.Spec.PluginCode()
+}
+
+// ResultCount returns the number of validation results expected for a NetworkValidator.
+func (v NetworkValidator) ResultCount() int {
+	return v.Spec.ResultCount()
 }
 
 //+kubebuilder:object:root=true

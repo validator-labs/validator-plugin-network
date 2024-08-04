@@ -19,12 +19,10 @@ package controller
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/go-logr/logr"
 	apierrs "k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ktypes "k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/cluster-api/util/patch"
@@ -32,11 +30,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
-	"github.com/validator-labs/validator-plugin-network/internal/constants"
 	"github.com/validator-labs/validator-plugin-network/internal/secrets"
 	"github.com/validator-labs/validator-plugin-network/pkg/validate"
 	vapi "github.com/validator-labs/validator/api/v1alpha1"
-	"github.com/validator-labs/validator/pkg/util"
 	vres "github.com/validator-labs/validator/pkg/validationresult"
 )
 
@@ -72,16 +68,16 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		return ctrl.Result{}, err
 	}
 	nn := ktypes.NamespacedName{
-		Name:      validationResultName(validator),
+		Name:      vres.Name(validator),
 		Namespace: req.Namespace,
 	}
 	if err := r.Get(ctx, nn, vr); err == nil {
-		vres.HandleExistingValidationResult(vr, r.Log)
+		vres.HandleExisting(vr, r.Log)
 	} else {
 		if !apierrs.IsNotFound(err) {
 			l.Error(err, "unexpected error getting ValidationResult")
 		}
-		if err := vres.HandleNewValidationResult(ctx, r.Client, p, buildValidationResult(validator), r.Log); err != nil {
+		if err := vres.HandleNew(ctx, r.Client, p, vres.Build(validator), r.Log); err != nil {
 			return ctrl.Result{}, err
 		}
 		return ctrl.Result{RequeueAfter: time.Millisecond}, nil
@@ -120,7 +116,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	resp := validate.Validate(validator.Spec, caPems, auths, r.Log)
 
 	// Patch the ValidationResult with the latest ValidationRuleResults
-	if err := vres.SafeUpdateValidationResult(ctx, p, vr, resp, r.Log); err != nil {
+	if err := vres.SafeUpdate(ctx, p, vr, resp, r.Log); err != nil {
 		return ctrl.Result{}, err
 	}
 
@@ -133,30 +129,4 @@ func (r *NetworkValidatorReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&v1alpha1.NetworkValidator{}).
 		Complete(r)
-}
-
-func buildValidationResult(validator *v1alpha1.NetworkValidator) *vapi.ValidationResult {
-	return &vapi.ValidationResult{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      validationResultName(validator),
-			Namespace: validator.Namespace,
-			OwnerReferences: []metav1.OwnerReference{
-				{
-					APIVersion: validator.APIVersion,
-					Kind:       validator.Kind,
-					Name:       validator.Name,
-					UID:        validator.UID,
-					Controller: util.Ptr(true),
-				},
-			},
-		},
-		Spec: vapi.ValidationResultSpec{
-			Plugin:          constants.PluginCode,
-			ExpectedResults: validator.Spec.ResultCount(),
-		},
-	}
-}
-
-func validationResultName(validator *v1alpha1.NetworkValidator) string {
-	return fmt.Sprintf("validator-plugin-network-%s", validator.Name)
 }

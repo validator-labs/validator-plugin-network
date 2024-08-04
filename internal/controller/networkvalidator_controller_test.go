@@ -15,6 +15,7 @@ import (
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
 	vapi "github.com/validator-labs/validator/api/v1alpha1"
+	vres "github.com/validator-labs/validator/pkg/validationresult"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -95,7 +96,7 @@ var _ = Describe("NetworkValidator controller", Ordered, func() {
 	}
 
 	vr := &vapi.ValidationResult{}
-	vrKey := types.NamespacedName{Name: validationResultName(val), Namespace: validatorNamespace}
+	vrKey := types.NamespacedName{Name: vres.Name(val), Namespace: validatorNamespace}
 
 	It("Should create a ValidationResult and update its Status", func() {
 		By("By creating a new NetworkValidator")
