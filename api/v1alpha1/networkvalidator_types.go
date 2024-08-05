@@ -17,8 +17,9 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"github.com/validator-labs/validator-plugin-network/pkg/constants"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/validator-labs/validator-plugin-network/pkg/constants"
 )
 
 // NetworkValidatorSpec defines the desired state of NetworkValidator
