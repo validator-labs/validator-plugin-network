@@ -1,5 +1,5 @@
-// Package validators contains network plugin validators.
-package validators
+// Package network contains network validation methods.
+package network
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
-	"github.com/validator-labs/validator-plugin-network/internal/constants"
+	"github.com/validator-labs/validator-plugin-network/pkg/constants"
 	vapi "github.com/validator-labs/validator/api/v1alpha1"
 	"github.com/validator-labs/validator/pkg/types"
 	"github.com/validator-labs/validator/pkg/util"
@@ -33,33 +33,33 @@ type networkRule interface {
 	Name() string
 }
 
-// NetworkService is a service for network validation.
-type NetworkService struct {
+// RuleService is a service for network validation.
+type RuleService struct {
 	log        logr.Logger
 	httpClient *http.Client
 	tlsConfig  *tls.Config
 }
 
-// Option allows customizing the NetworkService.
-type Option func(*NetworkService)
+// Option allows customizing the RuleService.
+type Option func(*RuleService)
 
-// WithTLSConfig allows callers to provide a custom TLS config for the NetworkService.
+// WithTLSConfig allows callers to provide a custom TLS config for the RuleService.
 func WithTLSConfig(tlsConfig *tls.Config) Option {
-	return func(n *NetworkService) {
+	return func(n *RuleService) {
 		n.tlsConfig = tlsConfig
 	}
 }
 
-// WithTransport allows callers to provide a custom transport for the NetworkService's HTTP client.
+// WithTransport allows callers to provide a custom transport for the RuleService's HTTP client.
 func WithTransport(transport http.RoundTripper) Option {
-	return func(n *NetworkService) {
+	return func(n *RuleService) {
 		n.httpClient.Transport = transport
 	}
 }
 
-// NewNetworkService creates a new NetworkService.
-func NewNetworkService(log logr.Logger, opts ...Option) *NetworkService {
-	n := &NetworkService{
+// NewRuleService creates a new RuleService.
+func NewRuleService(log logr.Logger, opts ...Option) *RuleService {
+	n := &RuleService{
 		httpClient: http.DefaultClient,
 		log:        log,
 	}
@@ -70,7 +70,7 @@ func NewNetworkService(log logr.Logger, opts ...Option) *NetworkService {
 }
 
 // ReconcileDNSRule reconciles a DNS rule from a NetworkValidator config.
-func (n *NetworkService) ReconcileDNSRule(rule v1alpha1.DNSRule) *types.ValidationRuleResult {
+func (n *RuleService) ReconcileDNSRule(rule v1alpha1.DNSRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this DNS rule
 	vr := BuildValidationResult(rule, constants.ValidationTypeDNS)
@@ -86,7 +86,7 @@ func (n *NetworkService) ReconcileDNSRule(rule v1alpha1.DNSRule) *types.Validati
 }
 
 // ReconcileICMPRule reconciles a ICMP rule from a NetworkValidator config.
-func (n *NetworkService) ReconcileICMPRule(rule v1alpha1.ICMPRule) *types.ValidationRuleResult {
+func (n *RuleService) ReconcileICMPRule(rule v1alpha1.ICMPRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this ICMP rule
 	vr := BuildValidationResult(rule, constants.ValidationTypeICMP)
@@ -99,7 +99,7 @@ func (n *NetworkService) ReconcileICMPRule(rule v1alpha1.ICMPRule) *types.Valida
 }
 
 // ReconcileIPRangeRule reconciles an IP range rule from a NetworkValidator config.
-func (n *NetworkService) ReconcileIPRangeRule(rule v1alpha1.IPRangeRule) *types.ValidationRuleResult {
+func (n *RuleService) ReconcileIPRangeRule(rule v1alpha1.IPRangeRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this IP range rule
 	vr := BuildValidationResult(rule, constants.ValidationTypeIPRange)
@@ -151,7 +151,7 @@ func (n *NetworkService) ReconcileIPRangeRule(rule v1alpha1.IPRangeRule) *types.
 }
 
 // ReconcileMTURule reconciles an MTU rule from a NetworkValidator config.
-func (n *NetworkService) ReconcileMTURule(rule v1alpha1.MTURule) *types.ValidationRuleResult {
+func (n *RuleService) ReconcileMTURule(rule v1alpha1.MTURule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this MTU rule
 	vr := BuildValidationResult(rule, constants.ValidationTypeMTU)
@@ -174,7 +174,7 @@ func (n *NetworkService) ReconcileMTURule(rule v1alpha1.MTURule) *types.Validati
 }
 
 // ReconcileTCPConnRule reconciles a TCP connection rule from a NetworkValidator config.
-func (n *NetworkService) ReconcileTCPConnRule(rule v1alpha1.TCPConnRule) *types.ValidationRuleResult {
+func (n *RuleService) ReconcileTCPConnRule(rule v1alpha1.TCPConnRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this TCP connection rule
 	vr := BuildValidationResult(rule, constants.ValidationTypeTCPConn)
@@ -214,7 +214,7 @@ func (n *NetworkService) ReconcileTCPConnRule(rule v1alpha1.TCPConnRule) *types.
 }
 
 // ReconcileHTTPFileRule reconciles an HTTP file rule from a NetworkValidator config.
-func (n *NetworkService) ReconcileHTTPFileRule(rule v1alpha1.HTTPFileRule) *types.ValidationRuleResult {
+func (n *RuleService) ReconcileHTTPFileRule(rule v1alpha1.HTTPFileRule) *types.ValidationRuleResult {
 
 	// Build the default ValidationResult for this HTTP file rule
 	vr := BuildValidationResult(rule, constants.ValidationTypeHTTPFile)
@@ -246,7 +246,7 @@ func (n *NetworkService) ReconcileHTTPFileRule(rule v1alpha1.HTTPFileRule) *type
 	return vr
 }
 
-func (n *NetworkService) checkFile(path string) (string, error) {
+func (n *RuleService) checkFile(path string) (string, error) {
 	// Create a new HTTP HEAD request for the file.
 	req, err := http.NewRequest("HEAD", path, nil)
 	if err != nil {
@@ -288,7 +288,7 @@ func BuildValidationResult(rule networkRule, validationType string) *types.Valid
 }
 
 // handleRuleExec executes a rule's command and updates the rule's validation result accordingly.
-func (n *NetworkService) handleRuleExec(vr *types.ValidationRuleResult, r networkRule, binary, errMsg string, args ...string) {
+func (n *RuleService) handleRuleExec(vr *types.ValidationRuleResult, r networkRule, binary, errMsg string, args ...string) {
 	n.log.V(0).Info("Executing command: %s %s", binary, args)
 	stdout, stderr, exitCode, err := execCmd(binary, args...)
 	if err != nil || stderr != "" || exitCode != 0 {
@@ -300,7 +300,7 @@ func (n *NetworkService) handleRuleExec(vr *types.ValidationRuleResult, r networ
 }
 
 // failResult updates a validation result with failure details.
-func (n *NetworkService) failResult(vr *types.ValidationRuleResult, err error, binary, errMsg, stdout, stderr, ruleName string, args ...string) {
+func (n *RuleService) failResult(vr *types.ValidationRuleResult, err error, binary, errMsg, stdout, stderr, ruleName string, args ...string) {
 	n.log.V(0).Info(errMsg, "stdout", stdout, "stderr", stderr, "error", err.Error(), "rule", ruleName)
 	failure := fmt.Sprintf("stdout: %s, stderr: %s, error: %v", stdout, stderr, err)
 	vr.State = util.Ptr(vapi.ValidationFailed)

@@ -18,6 +18,8 @@ package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/validator-labs/validator-plugin-network/pkg/constants"
 )
 
 // NetworkValidatorSpec defines the desired state of NetworkValidator
@@ -50,6 +52,16 @@ type NetworkValidatorSpec struct {
 	CACerts CACertificates `json:"caCerts,omitempty" yaml:"caCerts,omitempty"`
 }
 
+// PluginCode returns the network validator's plugin code.
+func (s NetworkValidatorSpec) PluginCode() string {
+	return constants.PluginCode
+}
+
+// ResultCount returns the number of validation results expected for a NetworkValidatorSpec.
+func (s NetworkValidatorSpec) ResultCount() int {
+	return len(s.DNSRules) + len(s.ICMPRules) + len(s.IPRangeRules) + len(s.MTURules) + len(s.TCPConnRules) + len(s.HTTPFileRules)
+}
+
 // CACertificates contains configuration for additional CA certificates to use for TLS. Can be certs
 // provided inline or secret references. Secrets are assumed to be in the same namespace as the
 // NetworkValidator.
@@ -60,6 +72,16 @@ type CACertificates struct {
 	// SecretRefs is a list of CA secret references to use.
 	// +kubebuilder:validation:MaxItems=500
 	SecretRefs []CASecretReference `json:"secretRefs,omitempty" yaml:"secretRefs,omitempty"`
+}
+
+// RawCerts returns the raw certificates included in a CACertificates.
+// SecretRefs are not included.
+func (c CACertificates) RawCerts() [][]byte {
+	certs := make([][]byte, 0, len(c.Certs))
+	for _, cert := range c.Certs {
+		certs = append(certs, []byte(cert))
+	}
+	return certs
 }
 
 // Certificate is a certificate specified inline.
@@ -79,11 +101,6 @@ type CASecretReference struct {
 // Keys returns the keys in a CASecretReference.
 func (r CASecretReference) Keys() []string {
 	return []string{r.Key}
-}
-
-// ResultCount returns the number of validation results expected for a NetworkValidatorSpec.
-func (s NetworkValidatorSpec) ResultCount() int {
-	return len(s.DNSRules) + len(s.ICMPRules) + len(s.IPRangeRules) + len(s.MTURules) + len(s.TCPConnRules) + len(s.HTTPFileRules)
 }
 
 // DNSRule defines a DNS validation rule.
@@ -216,6 +233,16 @@ type NetworkValidator struct {
 
 	Spec   NetworkValidatorSpec   `json:"spec,omitempty"`
 	Status NetworkValidatorStatus `json:"status,omitempty"`
+}
+
+// PluginCode returns the network validator's plugin code.
+func (v NetworkValidator) PluginCode() string {
+	return v.Spec.PluginCode()
+}
+
+// ResultCount returns the number of validation results expected for a NetworkValidator.
+func (v NetworkValidator) ResultCount() int {
+	return v.Spec.ResultCount()
 }
 
 //+kubebuilder:object:root=true

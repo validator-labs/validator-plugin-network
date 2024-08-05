@@ -1,4 +1,4 @@
-package validators
+package network
 
 import (
 	"net/http"
@@ -156,7 +156,7 @@ func TestReconcileHTTPFileRule(t *testing.T) {
 			}
 
 			// Create the network service with the default HTTP client
-			svc := NewNetworkService(logr.Logger{})
+			svc := NewRuleService(logr.Logger{})
 
 			// Test
 			result := svc.ReconcileHTTPFileRule(tc.rule)
