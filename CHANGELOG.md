@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.22](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.21...v0.0.22) (2024-08-05)
+
+
+### Other
+
+* downgrade validator ([c280e89](https://github.com/validator-labs/validator-plugin-network/commit/c280e896939b3d4020a369dc83a364dc4f736135))
+
+
+### Refactoring
+
+* support direct rule evaluation ([#239](https://github.com/validator-labs/validator-plugin-network/issues/239)) ([c195bba](https://github.com/validator-labs/validator-plugin-network/commit/c195bba931e26f98eac032006e15d85b0f04da14))
+
 ## [0.0.21](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.20...v0.0.21) (2024-07-31)
 
 
