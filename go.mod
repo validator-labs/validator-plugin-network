@@ -6,7 +6,7 @@ require (
 	github.com/go-logr/logr v1.4.2
 	github.com/onsi/ginkgo/v2 v2.19.1
 	github.com/onsi/gomega v1.34.1
-	github.com/validator-labs/validator v0.0.50
+	github.com/validator-labs/validator v0.1.1-0.20240805132302-06c7fc819ed2
 	k8s.io/api v0.30.3
 	k8s.io/apimachinery v0.30.3
 	k8s.io/client-go v0.30.3
@@ -73,4 +73,4 @@ require (
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
 
-replace github.com/validator-labs/validator => ../validator
+// replace github.com/validator-labs/validator => ../validator
