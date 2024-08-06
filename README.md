@@ -17,7 +17,7 @@ The Network validator plugin reconciles `NetworkValidator` custom resources to p
 3. Validate TCP connections to arbitrary host + port(s), optionally through an HTTP proxy
 4. Check each IP in a given range (starting IP + next N IPs) to ensure that they're all unallocated
 5. Check that the default NIC has an MTU of at least X, where X is the provided MTU
-6. Check that each file in a list of URLs is available and publicly accessible by any HTTP client, unless the client were behind a firewall that would prevent it from connecting to the host in the URL.
+6. Check that each file in a list of URLs is available via an HTTP HEAD request, optionally with HTTP basic authentication.
 
 Each `NetworkValidator` CR is (re)-processed every two minutes to continuously ensure that your network matches the expected state.
 
