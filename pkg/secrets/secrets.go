@@ -23,7 +23,7 @@ func ReadKeys(name, namespace string, keys []string, reader client.Reader) ([][]
 	for i, k := range keys {
 		data, ok := secret.Data[k]
 		if !ok {
-			return nil, fmt.Errorf("secret %s/%s does not contain key '%s'", name, namespace, k)
+			return nil, fmt.Errorf("secret %s/%s does not contain key %s", name, namespace, k)
 		}
 		values[i] = data
 	}

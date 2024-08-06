@@ -218,23 +218,23 @@ func (n *RuleService) ReconcileHTTPFileRule(rule v1alpha1.HTTPFileRule) *types.V
 
 	// Build the default ValidationResult for this HTTP file rule
 	vr := BuildValidationResult(rule, constants.ValidationTypeHTTPFile)
-	vr.Condition.Message = "All files are publicly accessible."
+	vr.Condition.Message = "All files are accessible."
 	vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf(
-		"Ensuring that files %v are publicly accessible.",
+		"Ensuring that files %v are accessible.",
 		rule.Paths,
 	))
 
 	for _, path := range rule.Paths {
 		checkFileErrMsg, err := n.checkFile(path)
 		if err != nil {
-			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("failed to check file '%s': %s", path, err))
+			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("failed to check file %s: %s", path, err))
 			continue
 		}
 		if checkFileErrMsg != "" {
-			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("file '%s' is not publicly accessible; %s", path, checkFileErrMsg))
+			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("file %s is not accessible; %s", path, checkFileErrMsg))
 			continue
 		}
-		vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("File '%s' is publicly accessible.", path))
+		vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("File %s is accessible.", path))
 	}
 
 	if len(vr.Condition.Failures) > 0 {

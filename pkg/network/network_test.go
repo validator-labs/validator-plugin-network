@@ -37,10 +37,10 @@ func TestReconcileHTTPFileRule(t *testing.T) {
 				Condition: &vapi.ValidationCondition{
 					ValidationType: "http-file",
 					ValidationRule: "rule-1",
-					Message:        "All files are publicly accessible.",
+					Message:        "All files are accessible.",
 					Details: []string{
-						"Ensuring that files [{{serverUrl}}/file1] are publicly accessible.",
-						"File '{{serverUrl}}/file1' is publicly accessible.",
+						"Ensuring that files [{{serverUrl}}/file1] are accessible.",
+						"File {{serverUrl}}/file1 is accessible.",
 					},
 					Failures: []string{},
 					Status:   corev1.ConditionTrue,
@@ -61,11 +61,11 @@ func TestReconcileHTTPFileRule(t *testing.T) {
 				Condition: &vapi.ValidationCondition{
 					ValidationType: "http-file",
 					ValidationRule: "rule-1",
-					Message:        "All files are publicly accessible.",
+					Message:        "All files are accessible.",
 					Details: []string{
-						"Ensuring that files [{{serverUrl}}/file1 {{serverUrl}}/file2] are publicly accessible.",
-						"File '{{serverUrl}}/file1' is publicly accessible.",
-						"File '{{serverUrl}}/file2' is publicly accessible.",
+						"Ensuring that files [{{serverUrl}}/file1 {{serverUrl}}/file2] are accessible.",
+						"File {{serverUrl}}/file1 is accessible.",
+						"File {{serverUrl}}/file2 is accessible.",
 					},
 					Failures: []string{},
 					Status:   corev1.ConditionTrue,
@@ -99,10 +99,10 @@ func TestReconcileHTTPFileRule(t *testing.T) {
 					ValidationRule: "rule-1",
 					Message:        "HTTPFile check(s) failed. See failures for details.",
 					Details: []string{
-						"Ensuring that files [{{serverUrl}}/file1] are publicly accessible.",
+						"Ensuring that files [{{serverUrl}}/file1] are accessible.",
 					},
 					Failures: []string{
-						`failed to check file '{{serverUrl}}/file1': failed to send HTTP request: Head "{{serverUrl}}/file1": EOF`,
+						`failed to check file {{serverUrl}}/file1: failed to send HTTP request: Head "{{serverUrl}}/file1": EOF`,
 					},
 					Status: corev1.ConditionFalse,
 				},
@@ -124,10 +124,10 @@ func TestReconcileHTTPFileRule(t *testing.T) {
 					ValidationRule: "rule-1",
 					Message:        "HTTPFile check(s) failed. See failures for details.",
 					Details: []string{
-						"Ensuring that files [{{serverUrl}}/file1] are publicly accessible.",
+						"Ensuring that files [{{serverUrl}}/file1] are accessible.",
 					},
 					Failures: []string{
-						"file '{{serverUrl}}/file1' is not publicly accessible; '404' status code in response to HEAD request",
+						"file {{serverUrl}}/file1 is not accessible; '404' status code in response to HEAD request",
 					},
 					Status: corev1.ConditionFalse,
 				},

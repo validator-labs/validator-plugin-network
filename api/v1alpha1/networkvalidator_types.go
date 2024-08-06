@@ -44,7 +44,7 @@ type NetworkValidatorSpec struct {
 	// +kubebuilder:validation:MaxItems=5
 	// +kubebuilder:validation:XValidation:message="TCPConnRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	TCPConnRules []TCPConnRule `json:"tcpConnRules,omitempty" yaml:"tcpConnRules,omitempty"`
-	// HTTPFileRules validate that files are publicly available via HTTP
+	// HTTPFileRules validate that files are available via HTTP HEAD requests
 	// +kubebuilder:validation:MaxItems=5
 	// +kubebuilder:validation:XValidation:message="HTTPFileRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	HTTPFileRules []HTTPFileRule `json:"httpFileRules,omitempty" yaml:"httpFileRules,omitempty"`
