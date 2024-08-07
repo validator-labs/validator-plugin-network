@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.23](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.22...v0.0.23) (2024-08-07)
+
+
+### Other
+
+* fix 'publicly accessible' wording ([#242](https://github.com/validator-labs/validator-plugin-network/issues/242)) ([9dbb6a7](https://github.com/validator-labs/validator-plugin-network/commit/9dbb6a791f7e3839a84b580e7f6e08c4470b7ab6))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.20.0 ([#245](https://github.com/validator-labs/validator-plugin-network/issues/245)) ([679cf0c](https://github.com/validator-labs/validator-plugin-network/commit/679cf0c91ce1a14faaaa29e61b0bee05c8af58ff))
+
 ## [0.0.22](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.21...v0.0.22) (2024-08-05)
 
 
