@@ -17,6 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"reflect"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/validator-labs/validator-plugin-network/pkg/constants"
@@ -235,7 +237,12 @@ type NetworkValidator struct {
 	Status NetworkValidatorStatus `json:"status,omitempty"`
 }
 
-// PluginCode returns the network validator's plugin code.
+// GetKind returns the Network validator's kind.
+func (v NetworkValidator) GetKind() string {
+	return reflect.TypeOf(v).Name()
+}
+
+// PluginCode returns the Network validator's plugin code.
 func (v NetworkValidator) PluginCode() string {
 	return v.Spec.PluginCode()
 }
