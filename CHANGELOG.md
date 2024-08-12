@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.0.23](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.22...v0.0.23) (2024-08-12)
+
+
+### Other
+
+* fix 'publicly accessible' wording ([#242](https://github.com/validator-labs/validator-plugin-network/issues/242)) ([9dbb6a7](https://github.com/validator-labs/validator-plugin-network/commit/9dbb6a791f7e3839a84b580e7f6e08c4470b7ab6))
+* satisfy ValidationRule ([#246](https://github.com/validator-labs/validator-plugin-network/issues/246)) ([18ffc3b](https://github.com/validator-labs/validator-plugin-network/commit/18ffc3b792c48af341cc295d7c343b6b340bbb8f))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.20.0 ([#245](https://github.com/validator-labs/validator-plugin-network/issues/245)) ([679cf0c](https://github.com/validator-labs/validator-plugin-network/commit/679cf0c91ce1a14faaaa29e61b0bee05c8af58ff))
+* **deps:** update module github.com/validator-labs/validator to v0.1.3 ([#238](https://github.com/validator-labs/validator-plugin-network/issues/238)) ([1724a4e](https://github.com/validator-labs/validator-plugin-network/commit/1724a4ec726e5ffe2e43d674236942e585c11d82))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.8.0 ([#247](https://github.com/validator-labs/validator-plugin-network/issues/247)) ([7885320](https://github.com/validator-labs/validator-plugin-network/commit/7885320252dae6fb15b99fa85b7fee4eb7eba3f2))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.18.5 ([#248](https://github.com/validator-labs/validator-plugin-network/issues/248)) ([66f3e36](https://github.com/validator-labs/validator-plugin-network/commit/66f3e3657a7ddad7f211e5777f7102c5016e8faa))
+
 ## [0.0.22](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.21...v0.0.22) (2024-08-05)
 
 
