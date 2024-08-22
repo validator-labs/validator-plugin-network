@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.0.24](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.23...v0.0.24) (2024-08-22)
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.20.1 ([#256](https://github.com/validator-labs/validator-plugin-network/issues/256)) ([7cb12a2](https://github.com/validator-labs/validator-plugin-network/commit/7cb12a2d187656509b22dd87d720688b77253db4))
+* **deps:** update module github.com/validator-labs/validator to v0.1.5 ([#249](https://github.com/validator-labs/validator-plugin-network/issues/249)) ([a9b9420](https://github.com/validator-labs/validator-plugin-network/commit/a9b9420d252706a05058397d265dbd5cb16a0ae6))
+* **deps:** update module github.com/validator-labs/validator to v0.1.6 ([#255](https://github.com/validator-labs/validator-plugin-network/issues/255)) ([122fa38](https://github.com/validator-labs/validator-plugin-network/commit/122fa38206b1915b2f8a86c62be008a37432f11d))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.8.1 ([#252](https://github.com/validator-labs/validator-plugin-network/issues/252)) ([d90b384](https://github.com/validator-labs/validator-plugin-network/commit/d90b384f4f2e9e122137d9797cc81698a484540e))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.19.0 ([#254](https://github.com/validator-labs/validator-plugin-network/issues/254)) ([0454f95](https://github.com/validator-labs/validator-plugin-network/commit/0454f959facdb16137e447323fe6639648f8be87))
+
+
+### Refactoring
+
+* make each rule implement `validationrule.Interface` ([#258](https://github.com/validator-labs/validator-plugin-network/issues/258)) ([1515714](https://github.com/validator-labs/validator-plugin-network/commit/151571498dc8bbaeada957fbc97f9d34d47c5611))
+
 ## [0.0.23](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.22...v0.0.23) (2024-08-12)
 
 
