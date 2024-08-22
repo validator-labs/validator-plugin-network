@@ -81,7 +81,7 @@ func (n *RuleService) ReconcileDNSRule(rule v1alpha1.DNSRule) *types.ValidationR
 	}
 	n.handleRuleExec(vr, rule, nslookup, "DNS check failed", args...)
 
-	n.log.V(0).Info("DNS check complete", "message", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
+	n.log.V(0).Info("DNS check complete", "message", vr.Condition.Message, "rule", rule.Name(), "host", rule.Host)
 	return vr
 }
 
@@ -94,7 +94,7 @@ func (n *RuleService) ReconcileICMPRule(rule v1alpha1.ICMPRule) *types.Validatio
 	args := []string{"-c", "3", "-W", "3", rule.Host}
 	n.handleRuleExec(vr, rule, ping, "ICMP check failed", args...)
 
-	n.log.V(0).Info("ICMP check complete", "message", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
+	n.log.V(0).Info("ICMP check complete", "message", vr.Condition.Message, "rule", rule.Name(), "host", rule.Host)
 	return vr
 }
 
@@ -109,7 +109,7 @@ func (n *RuleService) ReconcileIPRangeRule(rule v1alpha1.IPRangeRule) *types.Val
 	))
 
 	defer func() {
-		n.log.V(0).Info("IP range check complete", "message", vr.Condition.Message, "rule", rule.RuleName)
+		n.log.V(0).Info("IP range check complete", "message", vr.Condition.Message, "rule", rule.Name())
 	}()
 
 	// parse the starting IP
@@ -133,7 +133,7 @@ func (n *RuleService) ReconcileIPRangeRule(rule v1alpha1.IPRangeRule) *types.Val
 				fmt.Sprintf("%s %s failed, IP is available; err: %v, stderr: %s", ping, args, err, stderr),
 			)
 		} else {
-			n.log.V(0).Info("IP allocated", "stdout", stdout, "rule", rule.RuleName)
+			n.log.V(0).Info("IP allocated", "stdout", stdout, "rule", rule.Name())
 			anySucceeded = true
 			vr.Condition.Details = append(vr.Condition.Details, fmt.Sprintf("%s %s succeeded", ping, args))
 			vr.Condition.Failures = append(vr.Condition.Failures, fmt.Sprintf("stdout: %s", stdout))
@@ -169,7 +169,7 @@ func (n *RuleService) ReconcileMTURule(rule v1alpha1.MTURule) *types.ValidationR
 	args := []string{"-c", "3", "-W", "3", "-M", "do", "-s", size, rule.Host}
 	n.handleRuleExec(vr, rule, ping, "MTU check failed", args...)
 
-	n.log.V(0).Info("MTU check complete", "message", vr.Condition.Message, "rule", rule.RuleName, "host", rule.Host)
+	n.log.V(0).Info("MTU check complete", "message", vr.Condition.Message, "rule", rule.Name(), "host", rule.Host)
 	return vr
 }
 

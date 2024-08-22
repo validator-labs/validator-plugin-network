@@ -21,6 +21,8 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+	"github.com/validator-labs/validator/pkg/validationrule"
+
 	"github.com/validator-labs/validator-plugin-network/pkg/constants"
 )
 
@@ -107,6 +109,8 @@ func (r CASecretReference) Keys() []string {
 
 // DNSRule defines a DNS validation rule.
 type DNSRule struct {
+	validationrule.ManuallyNamed `json:"-"`
+
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
@@ -114,26 +118,44 @@ type DNSRule struct {
 	Server   string `json:"server,omitempty" yaml:"server,omitempty"`
 }
 
-// Name returns the name of a DNSRule.
+var _ validationrule.Interface = (*DNSRule)(nil)
+
+// Name returns the name of the DNSRule.
 func (r DNSRule) Name() string {
 	return r.RuleName
 }
 
+// SetName sets the name of the DNSRule.
+func (r *DNSRule) SetName(name string) {
+	r.RuleName = name
+}
+
 // ICMPRule defines an ICMP validation rule.
 type ICMPRule struct {
+	validationrule.ManuallyNamed `json:"-"`
+
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 }
 
-// Name returns the name of an ICMPRule.
+var _ validationrule.Interface = (*ICMPRule)(nil)
+
+// Name returns the name of the ICMPRule.
 func (r ICMPRule) Name() string {
 	return r.RuleName
 }
 
+// SetName sets the name of the ICMPRule.
+func (r *ICMPRule) SetName(name string) {
+	r.RuleName = name
+}
+
 // IPRangeRule defines an IP range validation rule.
 type IPRangeRule struct {
+	validationrule.ManuallyNamed `json:"-"`
+
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
@@ -141,13 +163,22 @@ type IPRangeRule struct {
 	Length   int    `json:"length" yaml:"length"`
 }
 
-// Name returns the name of an IPRangeRule.
+var _ validationrule.Interface = (*IPRangeRule)(nil)
+
+// Name returns the name of the IPRangeRule.
 func (r IPRangeRule) Name() string {
 	return r.RuleName
 }
 
+// SetName sets the name of the IPRangeRule.
+func (r *IPRangeRule) SetName(name string) {
+	r.RuleName = name
+}
+
 // MTURule defines an MTU validation rule.
 type MTURule struct {
+	validationrule.ManuallyNamed `json:"-"`
+
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
@@ -159,13 +190,22 @@ type MTURule struct {
 	PacketHeadersSize int `json:"packetHeadersSize,omitempty" yaml:"packetHeadersSize,omitempty"`
 }
 
-// Name returns the name of an MTURule.
+var _ validationrule.Interface = (*MTURule)(nil)
+
+// Name returns the name of the MTURule.
 func (r MTURule) Name() string {
 	return r.RuleName
 }
 
+// SetName sets the name of the MTURule.
+func (r *MTURule) SetName(name string) {
+	r.RuleName = name
+}
+
 // TCPConnRule defines a TCP connection validation rule.
 type TCPConnRule struct {
+	validationrule.ManuallyNamed `json:"-"`
+
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
@@ -179,13 +219,22 @@ type TCPConnRule struct {
 	Timeout int `json:"timeout,omitempty" yaml:"timeout,omitempty"`
 }
 
-// Name returns the name of a TCPConnRule.
+var _ validationrule.Interface = (*TCPConnRule)(nil)
+
+// Name returns the name of the TCPConnRule.
 func (r TCPConnRule) Name() string {
 	return r.RuleName
 }
 
+// SetName sets the name of the TCPConnRule.
+func (r *TCPConnRule) SetName(name string) {
+	r.RuleName = name
+}
+
 // HTTPFileRule defines an HTTP file rule. A unique rule must be created for each host requiring HTTP basic authentication.
 type HTTPFileRule struct {
+	validationrule.ManuallyNamed `json:"-"`
+
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
@@ -199,9 +248,16 @@ type HTTPFileRule struct {
 	InsecureSkipTLSVerify bool `json:"insecureSkipTlsVerify,omitempty" yaml:"insecureSkipTlsVerify,omitempty"`
 }
 
-// Name returns the name of a HTTPFileRule.
+var _ validationrule.Interface = (*HTTPFileRule)(nil)
+
+// Name returns the name of the HTTPFileRule.
 func (r HTTPFileRule) Name() string {
 	return r.RuleName
+}
+
+// SetName sets the name of the HTTPFileRule.
+func (r *HTTPFileRule) SetName(name string) {
+	r.RuleName = name
 }
 
 // BasicAuthSecretReference is a reference to a secret containing HTTP basic authentication credentials.

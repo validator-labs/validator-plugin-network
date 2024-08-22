@@ -105,7 +105,7 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		if rule.AuthSecretRef != nil {
 			auth, err = secrets.ReadKeys(rule.AuthSecretRef.Name, req.Namespace, rule.AuthSecretRef.Keys(), r.Client)
 			if err != nil {
-				r.Log.Error(err, "failed to parse HTTP basic auth", "rule", rule.RuleName)
+				r.Log.Error(err, "failed to parse HTTP basic auth", "rule", rule.Name())
 				return ctrl.Result{}, err
 			}
 		}
