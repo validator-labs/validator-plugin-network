@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.25](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.24...v0.0.25) (2024-08-23)
+
+
+### Bug Fixes
+
+* embedding structs related to `validationrule.Interface` ([#261](https://github.com/validator-labs/validator-plugin-network/issues/261)) ([cfbcca0](https://github.com/validator-labs/validator-plugin-network/commit/cfbcca0cced658fde8be8e54fa477ac313b37baf))
+
+
+### Other
+
+* assert that PluginSpec is implemented ([#259](https://github.com/validator-labs/validator-plugin-network/issues/259)) ([f0ad07e](https://github.com/validator-labs/validator-plugin-network/commit/f0ad07e7da32d345fdbaf0c399455a05a0172261))
+
 ## [0.0.24](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.23...v0.0.24) (2024-08-22)
 
 
