@@ -21,6 +21,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+	"github.com/validator-labs/validator/pkg/plugins"
 	"github.com/validator-labs/validator/pkg/validationrule"
 
 	"github.com/validator-labs/validator-plugin-network/pkg/constants"
@@ -55,6 +56,8 @@ type NetworkValidatorSpec struct {
 	// CACerts allow additional CA certificates to be used for TLS. Applies to TCPConnRules and HTTPFileRules.
 	CACerts CACertificates `json:"caCerts,omitempty" yaml:"caCerts,omitempty"`
 }
+
+var _ plugins.PluginSpec = (*NetworkValidatorSpec)(nil)
 
 // PluginCode returns the network validator's plugin code.
 func (s NetworkValidatorSpec) PluginCode() string {
