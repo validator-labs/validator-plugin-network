@@ -112,7 +112,7 @@ func (r CASecretReference) Keys() []string {
 
 // DNSRule defines a DNS validation rule.
 type DNSRule struct {
-	validationrule.ManuallyNamed `json:",inline"`
+	validationrule.ManuallyNamed `json:",inline" yaml:",omitempty"`
 
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
@@ -135,7 +135,7 @@ func (r *DNSRule) SetName(name string) {
 
 // ICMPRule defines an ICMP validation rule.
 type ICMPRule struct {
-	validationrule.ManuallyNamed `json:",inline"`
+	validationrule.ManuallyNamed `json:",inline" yaml:",omitempty"`
 
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
@@ -157,7 +157,7 @@ func (r *ICMPRule) SetName(name string) {
 
 // IPRangeRule defines an IP range validation rule.
 type IPRangeRule struct {
-	validationrule.ManuallyNamed `json:",inline"`
+	validationrule.ManuallyNamed `json:",inline" yaml:",omitempty"`
 
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
@@ -180,7 +180,7 @@ func (r *IPRangeRule) SetName(name string) {
 
 // MTURule defines an MTU validation rule.
 type MTURule struct {
-	validationrule.ManuallyNamed `json:",inline"`
+	validationrule.ManuallyNamed `json:",inline" yaml:",omitempty"`
 
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
@@ -207,7 +207,7 @@ func (r *MTURule) SetName(name string) {
 
 // TCPConnRule defines a TCP connection validation rule.
 type TCPConnRule struct {
-	validationrule.ManuallyNamed `json:",inline"`
+	validationrule.ManuallyNamed `json:",inline" yaml:",omitempty"`
 
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
@@ -236,7 +236,7 @@ func (r *TCPConnRule) SetName(name string) {
 
 // HTTPFileRule defines an HTTP file rule. A unique rule must be created for each host requiring HTTP basic authentication.
 type HTTPFileRule struct {
-	validationrule.ManuallyNamed `json:",inline"`
+	validationrule.ManuallyNamed `json:",inline" yaml:",omitempty"`
 
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
