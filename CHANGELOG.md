@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.26](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.25...v0.0.26) (2024-08-24)
+
+
+### Bug Fixes
+
+* YAML rendering of structs embedded in rules ([#265](https://github.com/validator-labs/validator-plugin-network/issues/265)) ([3b89e14](https://github.com/validator-labs/validator-plugin-network/commit/3b89e141cf1edd98833ff5b353d6b60fe5339a22))
+
 ## [0.0.25](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.24...v0.0.25) (2024-08-23)
 
 
