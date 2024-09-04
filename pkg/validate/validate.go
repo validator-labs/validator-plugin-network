@@ -11,7 +11,7 @@ import (
 )
 
 // Validate validates the NetworkValidatorSpec and returns a ValidationResponse.
-func Validate(spec v1alpha1.NetworkValidatorSpec, caPems [][]byte, auths map[string][][]byte, log logr.Logger) types.ValidationResponse {
+func Validate(spec v1alpha1.NetworkValidatorSpec, caPems [][]byte, auths map[string][]string, log logr.Logger) types.ValidationResponse {
 	resp := types.ValidationResponse{
 		ValidationRuleResults: make([]*types.ValidationRuleResult, 0, spec.ResultCount()),
 		ValidationRuleErrors:  make([]error, 0, spec.ResultCount()),

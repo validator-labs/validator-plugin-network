@@ -360,23 +360,19 @@ func init() {
 	SchemeBuilder.Register(&NetworkValidator{}, &NetworkValidatorList{})
 }
 
-// HTTPFileAuthBytesDirect converts a slice of basic authentication details from
-// a [][]string to a [][][]byte. The former is required for YAML marshalling,
-// encryption, and decryption, while the latter is required by the plugin's
-// Validate method.
-// TODO: refactor Network plugin to use [][]string.
-func (s *NetworkValidatorSpec) HTTPFileAuthBytesDirect() [][][]byte {
-	auths := make([][][]byte, 0)
-	// TODO: re-implement this properly for the plugin
-
-	/*
-		auths := make([][][]byte, len(c.HTTPFileAuths))
-		for i, auth := range c.HTTPFileAuths {
-			auths[i] = [][]byte{
-				[]byte(auth[0]),
-				[]byte(auth[1]),
-			}
+// HTTPFileAuthBytesDirect converts all of the inline basic authentication details in a NetworkValidatorSpec
+// to a map of rule names to basic auth details.
+func (s *NetworkValidatorSpec) HTTPFileAuthBytesDirect() map[string][]string {
+	auths := make(map[string][]string)
+	for _, rule := range s.HTTPFileRules {
+		if rule.Auth.Basic == nil {
+			continue
 		}
-	*/
+
+		auths[rule.Name()] = []string{
+			rule.Auth.Basic.Username,
+			rule.Auth.Basic.Password,
+		}
+	}
 	return auths
 }

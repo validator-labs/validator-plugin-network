@@ -30,7 +30,7 @@ func (t *basicAuthTransport) RoundTrip(req *http.Request) (*http.Response, error
 
 // Transport creates a new http.RoundTripper with insecureSkipVerify and optionally, additional CA certificates
 // and/or HTTP basic authentication configured.
-func Transport(caPems, auth [][]byte, insecureSkipVerify bool, log logr.Logger) http.RoundTripper {
+func Transport(caPems [][]byte, auth []string, insecureSkipVerify bool, log logr.Logger) http.RoundTripper {
 	var transport http.RoundTripper
 
 	transport = &http.Transport{
@@ -39,8 +39,8 @@ func Transport(caPems, auth [][]byte, insecureSkipVerify bool, log logr.Logger) 
 	}
 	if len(auth) > 0 {
 		transport = &basicAuthTransport{
-			Username:  string(auth[0]),
-			Password:  string(auth[1]),
+			Username:  auth[0],
+			Password:  auth[1],
 			Transport: transport,
 		}
 	}
