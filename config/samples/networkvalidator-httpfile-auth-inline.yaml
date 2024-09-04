@@ -1,7 +1,7 @@
 apiVersion: validation.spectrocloud.labs/v1alpha1
 kind: NetworkValidator
 metadata:
-  name: network-validator-http-file-basic-auth-secret
+  name: network-validator-http-file-auth-inline
 spec:
   httpFileRules:
   - name: protected-files
