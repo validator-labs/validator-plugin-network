@@ -104,7 +104,10 @@ spec:
                     must be created for each host requiring HTTP basic authentication.
                   properties:
                     auth:
-                      description: Auth contains optional basic authentication details.
+                      description: |-
+                        Auth contains optional basic authentication details.
+                        If a SecretRef is provided, the secret is used to retrieve the credentials and the inline auth is ignored.
+                        If a SecretRef is not provided but Basic is, the inline credentials within Basic are used directly.
                       properties:
                         basic:
                           description: Basic provides optional basic auth credentials

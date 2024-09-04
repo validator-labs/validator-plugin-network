@@ -258,6 +258,8 @@ type HTTPFileRule struct {
 	Paths []string `json:"paths" yaml:"paths"`
 
 	// Auth contains optional basic authentication details.
+	// If a SecretRef is provided, the secret is used to retrieve the credentials and the inline auth is ignored.
+	// If a SecretRef is not provided but Basic is, the inline credentials within Basic are used directly.
 	Auth Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
 
 	// InsecureSkipTLSVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
@@ -277,7 +279,7 @@ func (r *HTTPFileRule) SetName(name string) {
 	r.RuleName = name
 }
 
-// Auth contains basic authentication details.
+// Auth contains optional basic authentication details.
 type Auth struct {
 	// SecretRef is an optional basic auth secret reference.
 	SecretRef *BasicAuthSecretReference `json:"secretRef,omitempty" yaml:"secretRef,omitempty"`
