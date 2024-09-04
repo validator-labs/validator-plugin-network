@@ -1,13 +1,13 @@
 apiVersion: validation.spectrocloud.labs/v1alpha1
 kind: NetworkValidator
 metadata:
-  name: network-validator-http-file-basic-auth-secret
+  name: network-validator-http-file-auth-inline
 spec:
   httpFileRules:
   - name: protected-files
-    authSecretRef:
-      name: http-creds
-      usernameKey: myCustomUsername
-      passwordKey: password
+    auth:
+      basic:
+        username: demo-user
+        password: demo-pass
     paths:
     - https://software-private.demo.com/release/1.0.0/charts.zip

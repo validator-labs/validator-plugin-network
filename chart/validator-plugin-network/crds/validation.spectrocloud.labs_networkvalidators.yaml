@@ -103,28 +103,53 @@ spec:
                   description: HTTPFileRule defines an HTTP file rule. A unique rule
                     must be created for each host requiring HTTP basic authentication.
                   properties:
-                    authSecretRef:
-                      description: AuthSecretRef is an optional basic auth secret
-                        reference.
+                    auth:
+                      description: |-
+                        Auth contains optional basic authentication details.
+                        If a SecretRef is provided, the secret is used to retrieve the credentials and the inline auth is ignored.
+                        If a SecretRef is not provided but Basic is, the inline credentials within Basic are used directly.
                       properties:
-                        name:
-                          description: Name is the name of the secret.
-                          minLength: 1
-                          type: string
-                        passwordKey:
-                          description: PasswordKey is the password key in the secret
-                            data.
-                          minLength: 1
-                          type: string
-                        usernameKey:
-                          description: UsernameKey is the username key in the secret
-                            data.
-                          minLength: 1
-                          type: string
-                      required:
-                      - name
-                      - passwordKey
-                      - usernameKey
+                        basic:
+                          description: Basic provides optional basic auth credentials
+                            inline.
+                          properties:
+                            password:
+                              description: Password is the password used to authenticate
+                                to the OCI Registry.
+                              minLength: 1
+                              type: string
+                            username:
+                              description: Username is the username used to authenticate
+                                to the OCI Registry.
+                              minLength: 1
+                              type: string
+                          required:
+                          - password
+                          - username
+                          type: object
+                        secretRef:
+                          description: SecretRef is an optional basic auth secret
+                            reference.
+                          properties:
+                            name:
+                              description: Name is the name of the secret.
+                              minLength: 1
+                              type: string
+                            passwordKey:
+                              description: PasswordKey is the password key in the
+                                secret data.
+                              minLength: 1
+                              type: string
+                            usernameKey:
+                              description: UsernameKey is the username key in the
+                                secret data.
+                              minLength: 1
+                              type: string
+                          required:
+                          - name
+                          - passwordKey
+                          - usernameKey
+                          type: object
                       type: object
                     insecureSkipTlsVerify:
                       description: |-

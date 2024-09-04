@@ -30,7 +30,7 @@ func TestTransport(t *testing.T) {
 	tests := []struct {
 		name                   string
 		caPems                 [][]byte
-		auth                   [][]byte
+		auth                   []string
 		insecureSkipVerify     bool
 		wantBasicAuthTransport bool
 	}{
@@ -44,7 +44,7 @@ func TestTransport(t *testing.T) {
 		{
 			name:                   "Pass: with auth",
 			caPems:                 nil,
-			auth:                   [][]byte{[]byte("user"), []byte("pass")},
+			auth:                   []string{"user", "pass"},
 			insecureSkipVerify:     false,
 			wantBasicAuthTransport: true,
 		},
