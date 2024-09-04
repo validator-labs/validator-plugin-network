@@ -99,17 +99,17 @@ func (r *NetworkValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	}
 
 	// Fetch HTTP basic auth credentials
-	auths := make([][][]byte, len(validator.Spec.HTTPFileRules))
+	auths := make(map[string][][]byte)
 	for _, rule := range validator.Spec.HTTPFileRules {
 		var auth [][]byte
-		if rule.AuthSecretRef != nil {
-			auth, err = secrets.ReadKeys(rule.AuthSecretRef.Name, req.Namespace, rule.AuthSecretRef.Keys(), r.Client)
+		if rule.Auth.SecretRef != nil {
+			auth, err = secrets.ReadKeys(rule.Auth.SecretRef.Name, req.Namespace, rule.Auth.SecretRef.Keys(), r.Client)
 			if err != nil {
 				r.Log.Error(err, "failed to parse HTTP basic auth", "rule", rule.Name())
 				return ctrl.Result{}, err
 			}
 		}
-		auths = append(auths, auth)
+		auths[rule.Name()] = auth
 	}
 
 	// Validate the rules

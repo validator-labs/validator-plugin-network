@@ -11,7 +11,7 @@ import (
 )
 
 // Validate validates the NetworkValidatorSpec and returns a ValidationResponse.
-func Validate(spec v1alpha1.NetworkValidatorSpec, caPems [][]byte, auths [][][]byte, log logr.Logger) types.ValidationResponse {
+func Validate(spec v1alpha1.NetworkValidatorSpec, caPems [][]byte, auths map[string][][]byte, log logr.Logger) types.ValidationResponse {
 	resp := types.ValidationResponse{
 		ValidationRuleResults: make([]*types.ValidationRuleResult, 0, spec.ResultCount()),
 		ValidationRuleErrors:  make([]error, 0, spec.ResultCount()),
@@ -52,8 +52,8 @@ func Validate(spec v1alpha1.NetworkValidatorSpec, caPems [][]byte, auths [][][]b
 	}
 
 	// HTTP file rules
-	for i, rule := range spec.HTTPFileRules {
-		auth := auths[i]
+	for _, rule := range spec.HTTPFileRules {
+		auth := auths[rule.Name()]
 		transport := http.Transport(caPems, auth, rule.InsecureSkipTLSVerify, log)
 		ruleSvc := network.NewRuleService(log, network.WithTransport(transport))
 		vrr := ruleSvc.ReconcileHTTPFileRule(rule)

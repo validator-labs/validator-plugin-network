@@ -33,26 +33,32 @@ type NetworkValidatorSpec struct {
 	// +kubebuilder:validation:MaxItems=5
 	// +kubebuilder:validation:XValidation:message="DNSRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	DNSRules []DNSRule `json:"dnsRules,omitempty" yaml:"dnsRules,omitempty"`
+
 	// ICMPRules validate ICMP pings to network hosts
 	// +kubebuilder:validation:MaxItems=5
 	// +kubebuilder:validation:XValidation:message="ICMPRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	ICMPRules []ICMPRule `json:"icmpRules,omitempty" yaml:"icmpRules,omitempty"`
+
 	// IPRangeRules validate that all IPs in a given CIDR range are free (unallocated)
 	// +kubebuilder:validation:MaxItems=5
 	// +kubebuilder:validation:XValidation:message="IPRangeRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	IPRangeRules []IPRangeRule `json:"ipRangeRules,omitempty" yaml:"ipRangeRules,omitempty"`
+
 	// MTURules validate that the default NIC has an MTU of at least X, where X is the provided MTU
 	// +kubebuilder:validation:MaxItems=5
 	// +kubebuilder:validation:XValidation:message="MTURules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	MTURules []MTURule `json:"mtuRules,omitempty" yaml:"mtuRules,omitempty"`
+
 	// TCPConnRules validate arbitrary TCP connections, including proxied connections
 	// +kubebuilder:validation:MaxItems=5
 	// +kubebuilder:validation:XValidation:message="TCPConnRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	TCPConnRules []TCPConnRule `json:"tcpConnRules,omitempty" yaml:"tcpConnRules,omitempty"`
+
 	// HTTPFileRules validate that files are available via HTTP HEAD requests
 	// +kubebuilder:validation:MaxItems=5
 	// +kubebuilder:validation:XValidation:message="HTTPFileRules must have unique names",rule="self.all(e, size(self.filter(x, x.name == e.name)) == 1)"
 	HTTPFileRules []HTTPFileRule `json:"httpFileRules,omitempty" yaml:"httpFileRules,omitempty"`
+
 	// CACerts allow additional CA certificates to be used for TLS. Applies to TCPConnRules and HTTPFileRules.
 	CACerts CACertificates `json:"caCerts,omitempty" yaml:"caCerts,omitempty"`
 }
@@ -76,6 +82,7 @@ type CACertificates struct {
 	// Certs is a list of certificates to use.
 	// +kubebuilder:validation:MaxItems=500
 	Certs []Certificate `json:"certs,omitempty" yaml:"certs,omitempty"`
+
 	// SecretRefs is a list of CA secret references to use.
 	// +kubebuilder:validation:MaxItems=500
 	SecretRefs []CASecretReference `json:"secretRefs,omitempty" yaml:"secretRefs,omitempty"`
@@ -100,6 +107,7 @@ type CASecretReference struct {
 	// Name is the name of the secret.
 	// +kubebuilder:validation:MinLength=1
 	Name string `json:"name" yaml:"name"`
+
 	// Key is the key in the secret data.
 	// +kubebuilder:validation:MinLength=1
 	Key string `json:"key" yaml:"key"`
@@ -187,6 +195,7 @@ type MTURule struct {
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 	MTU      int    `json:"mtu" yaml:"mtu"`
+
 	// Optionally specify the size in bytes of the packet headers for the MTU ping packet.
 	// This varies by medium, e.g. Ethernet, WiFi, etc.) and defaults to 28 bytes
 	// (20 bytes IP header + 8 bytes ICMP header)
@@ -214,9 +223,11 @@ type TCPConnRule struct {
 	RuleName string `json:"name" yaml:"name"`
 	Host     string `json:"host" yaml:"host"`
 	Ports    []int  `json:"ports" yaml:"ports"`
+
 	// InsecureSkipTLSVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
 	// Defaults to false.
 	InsecureSkipTLSVerify bool `json:"insecureSkipTlsVerify,omitempty" yaml:"insecureSkipTlsVerify,omitempty"`
+
 	// Timeout is the duration to wait, in seconds, for a connection to be established. Defaults to 5 seconds.
 	// +kubebuilder:default=5
 	Timeout int `json:"timeout,omitempty" yaml:"timeout,omitempty"`
@@ -241,11 +252,14 @@ type HTTPFileRule struct {
 	// RuleName is a unique identifier for the rule in the validator. Used to ensure conditions do not overwrite each other.
 	// +kubebuilder:validation:MaxLength=500
 	RuleName string `json:"name" yaml:"name"`
+
 	// Paths is a list of file paths to check. When performing HTTP requests, if any of the paths result in a non-200 OK response code, the rule fails validation.
 	// +kubebuilder:validation:MaxItems=1000
 	Paths []string `json:"paths" yaml:"paths"`
-	// AuthSecretRef is an optional basic auth secret reference.
-	AuthSecretRef *BasicAuthSecretReference `json:"authSecretRef,omitempty" yaml:"authSecretRef,omitempty"`
+
+	// Auth contains optional basic authentication details.
+	Auth Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
+
 	// InsecureSkipTLSVerify controls whether the HTTP client used validate the rule skips TLS certificate verification.
 	// Defaults to false.
 	InsecureSkipTLSVerify bool `json:"insecureSkipTlsVerify,omitempty" yaml:"insecureSkipTlsVerify,omitempty"`
@@ -263,17 +277,39 @@ func (r *HTTPFileRule) SetName(name string) {
 	r.RuleName = name
 }
 
+// Auth contains basic authentication details.
+type Auth struct {
+	// SecretRef is an optional basic auth secret reference.
+	SecretRef *BasicAuthSecretReference `json:"secretRef,omitempty" yaml:"secretRef,omitempty"`
+
+	// Basic provides optional basic auth credentials inline.
+	Basic *BasicAuth `json:"basic,omitempty" yaml:"basic,omitempty"`
+}
+
 // BasicAuthSecretReference is a reference to a secret containing HTTP basic authentication credentials.
 type BasicAuthSecretReference struct {
 	// Name is the name of the secret.
 	// +kubebuilder:validation:MinLength=1
 	Name string `json:"name" yaml:"name"`
+
 	// UsernameKey is the username key in the secret data.
 	// +kubebuilder:validation:MinLength=1
 	UsernameKey string `json:"usernameKey" yaml:"usernameKey"`
+
 	// PasswordKey is the password key in the secret data.
 	// +kubebuilder:validation:MinLength=1
 	PasswordKey string `json:"passwordKey" yaml:"passwordKey"`
+}
+
+// BasicAuth contains basic authentication credentials.
+type BasicAuth struct {
+	// Username is the username used to authenticate to the OCI Registry.
+	// +kubebuilder:validation:MinLength=1
+	Username string `json:"username" yaml:"username"`
+
+	// Password is the password used to authenticate to the OCI Registry.
+	// +kubebuilder:validation:MinLength=1
+	Password string `json:"password" yaml:"password"`
 }
 
 // Keys returns the keys in a BasicAuthSecretReference.
@@ -322,4 +358,25 @@ type NetworkValidatorList struct {
 
 func init() {
 	SchemeBuilder.Register(&NetworkValidator{}, &NetworkValidatorList{})
+}
+
+// HTTPFileAuthBytesDirect converts a slice of basic authentication details from
+// a [][]string to a [][][]byte. The former is required for YAML marshalling,
+// encryption, and decryption, while the latter is required by the plugin's
+// Validate method.
+// TODO: refactor Network plugin to use [][]string.
+func (s *NetworkValidatorSpec) HTTPFileAuthBytesDirect() [][][]byte {
+	auths := make([][][]byte, 0)
+	// TODO: re-implement this properly for the plugin
+
+	/*
+		auths := make([][][]byte, len(c.HTTPFileAuths))
+		for i, auth := range c.HTTPFileAuths {
+			auths[i] = [][]byte{
+				[]byte(auth[0]),
+				[]byte(auth[1]),
+			}
+		}
+	*/
+	return auths
 }
