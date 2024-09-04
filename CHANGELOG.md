@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.0](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.26...v0.1.0) (2024-09-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Support both inline and secret-ref based auth for http file rules ([#270](https://github.com/validator-labs/validator-plugin-network/issues/270))
+
+### Features
+
+* Support both inline and secret-ref based auth for http file rules ([#270](https://github.com/validator-labs/validator-plugin-network/issues/270)) ([9f23cae](https://github.com/validator-labs/validator-plugin-network/commit/9f23caec9901416a0fa710fa68f8b01a49f4aaba))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.20.2 ([#268](https://github.com/validator-labs/validator-plugin-network/issues/268)) ([0e7a032](https://github.com/validator-labs/validator-plugin-network/commit/0e7a0326c503154eed42accaf2d6057f17979dc8))
+* **deps:** update module github.com/onsi/gomega to v1.34.2 ([#269](https://github.com/validator-labs/validator-plugin-network/issues/269)) ([4b8314e](https://github.com/validator-labs/validator-plugin-network/commit/4b8314e4e4e8c94cc23137ae3b4af54528ca8917))
+* **deps:** update module github.com/validator-labs/validator to v0.1.9 ([#260](https://github.com/validator-labs/validator-plugin-network/issues/260)) ([5ff8f03](https://github.com/validator-labs/validator-plugin-network/commit/5ff8f0303620ee1d0ef2dbc4400c5bd38de9527e))
+
 ## [0.0.26](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.25...v0.0.26) (2024-08-24)
 
 
