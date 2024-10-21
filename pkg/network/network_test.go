@@ -9,6 +9,7 @@ import (
 	"github.com/go-logr/logr"
 	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
 	vapi "github.com/validator-labs/validator/api/v1alpha1"
+	"github.com/validator-labs/validator/pkg/test"
 	vapitypes "github.com/validator-labs/validator/pkg/types"
 	"github.com/validator-labs/validator/pkg/util"
 	corev1 "k8s.io/api/core/v1"
@@ -160,7 +161,7 @@ func TestReconcileHTTPFileRule(t *testing.T) {
 
 			// Test
 			result := svc.ReconcileHTTPFileRule(tc.rule)
-			util.CheckTestCase(t, result, tc.expectedResult, nil, nil)
+			test.CheckTestCase(t, result, tc.expectedResult, nil, nil)
 		})
 	}
 }
