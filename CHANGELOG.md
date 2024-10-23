@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.1](https://github.com/validator-labs/validator-plugin-network/compare/v0.1.0...v0.1.1) (2024-10-23)
+
+
+### Other
+
+* make reviewable ([#277](https://github.com/validator-labs/validator-plugin-network/issues/277)) ([a5b7c21](https://github.com/validator-labs/validator-plugin-network/commit/a5b7c215e13701188ea63f4114a98513e011b7b1))
+
+
+### Dependency Updates
+
+* **deps:** update golang docker tag to v1.23 ([#251](https://github.com/validator-labs/validator-plugin-network/issues/251)) ([729b5e0](https://github.com/validator-labs/validator-plugin-network/commit/729b5e066433b40388ae45d86588a52bd4483e22))
+* **deps:** update kubernetes packages to v0.31.1 ([#276](https://github.com/validator-labs/validator-plugin-network/issues/276)) ([5134164](https://github.com/validator-labs/validator-plugin-network/commit/5134164eeea74bc04d97a9c06cce08832e723374))
+* **deps:** update kubernetes packages to v0.31.2 ([#278](https://github.com/validator-labs/validator-plugin-network/issues/278)) ([946f0c1](https://github.com/validator-labs/validator-plugin-network/commit/946f0c194dd7f7863d4be2c3202eb5805ea0c705))
+* **deps:** update module github.com/validator-labs/validator to v0.1.10 ([#271](https://github.com/validator-labs/validator-plugin-network/issues/271)) ([0d7b185](https://github.com/validator-labs/validator-plugin-network/commit/0d7b18517486aa55a7724a2a6ab0442801e4e960))
+* **deps:** update module github.com/validator-labs/validator to v0.1.12 ([#274](https://github.com/validator-labs/validator-plugin-network/issues/274)) ([3fc50bf](https://github.com/validator-labs/validator-plugin-network/commit/3fc50bfabcfe081ba652c361ab47341d9a6856f0))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.8.2 ([#273](https://github.com/validator-labs/validator-plugin-network/issues/273)) ([3cda3f3](https://github.com/validator-labs/validator-plugin-network/commit/3cda3f3dd7bd461785d585041378a5a70fd3ba19))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.8.4 ([#275](https://github.com/validator-labs/validator-plugin-network/issues/275)) ([b8edc07](https://github.com/validator-labs/validator-plugin-network/commit/b8edc07ef9376b5ca0f360d1ca40ad2d990e8fae))
+
 ## [0.1.0](https://github.com/validator-labs/validator-plugin-network/compare/v0.0.26...v0.1.0) (2024-09-04)
 
 
