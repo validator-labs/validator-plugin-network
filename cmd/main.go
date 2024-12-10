@@ -35,8 +35,9 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	validationv1alpha1 "github.com/validator-labs/validator-plugin-network/api/v1alpha1"
+	"github.com/validator-labs/validator-plugin-network/api/v1alpha1"
 	"github.com/validator-labs/validator-plugin-network/internal/controller"
+	validatorv1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -47,8 +48,8 @@ var (
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
-
-	utilruntime.Must(validationv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(validatorv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(v1alpha1.AddToScheme(scheme))
 	// +kubebuilder:scaffold:scheme
 }
 
