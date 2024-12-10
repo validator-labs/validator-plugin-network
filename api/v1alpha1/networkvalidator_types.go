@@ -322,8 +322,8 @@ func (r BasicAuthSecretReference) Keys() []string {
 // NetworkValidatorStatus defines the observed state of NetworkValidator
 type NetworkValidatorStatus struct{}
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // NetworkValidator is the Schema for the networkvalidators API
 type NetworkValidator struct {
@@ -349,7 +349,7 @@ func (v NetworkValidator) ResultCount() int {
 	return v.Spec.ResultCount()
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
 // NetworkValidatorList contains a list of NetworkValidator
 type NetworkValidatorList struct {
