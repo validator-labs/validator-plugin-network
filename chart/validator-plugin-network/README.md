@@ -24,7 +24,7 @@ The following table lists the configurable parameters of the Validator-plugin-ne
 | `controllerManager.replicas` |  | `1` |
 | `controllerManager.serviceAccount.annotations` |  | `{}` |
 | `kubernetesClusterDomain` |  | `"cluster.local"` |
-| `metricsService.ports` |  | `[{"name": "https", "port": 8443, "protocol": "TCP", "targetPort": "https"}]` |
+| `metricsService.ports` |  | `[{"name": "https", "port": 8443, "protocol": "TCP", "targetPort": 8443}]` |
 | `metricsService.type` |  | `"ClusterIP"` |
 | `env` |  | `[]` |
 | `proxy.enabled` |  | `false` |
