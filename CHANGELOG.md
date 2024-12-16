@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.2](https://github.com/validator-labs/validator-plugin-network/compare/v0.1.1...v0.1.2) (2024-12-16)
+
+
+### Bug Fixes
+
+* metrics targetPort https -&gt; 8443 ([#308](https://github.com/validator-labs/validator-plugin-network/issues/308)) ([52c5488](https://github.com/validator-labs/validator-plugin-network/commit/52c54887fd9c8bbb633d9c154a53e10824023092))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies to v0.31.4 ([#304](https://github.com/validator-labs/validator-plugin-network/issues/304)) ([1d5fc26](https://github.com/validator-labs/validator-plugin-network/commit/1d5fc2650ba58eb972c312d02fd4621583968851))
+* **deps:** update build digest to 5e4aaa9 ([#306](https://github.com/validator-labs/validator-plugin-network/issues/306)) ([abb837c](https://github.com/validator-labs/validator-plugin-network/commit/abb837c5ba9d53aa74c3298e08f150acd28a26f1))
+* **deps:** update build digest to 9734871 ([#309](https://github.com/validator-labs/validator-plugin-network/issues/309)) ([4624306](https://github.com/validator-labs/validator-plugin-network/commit/462430603fe90885170e684b15e6006cd4840ef2))
+
 ## [0.1.1](https://github.com/validator-labs/validator-plugin-network/compare/v0.1.0...v0.1.1) (2024-12-10)
 
 
