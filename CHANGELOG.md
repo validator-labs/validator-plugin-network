@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/validator-labs/validator-plugin-network/compare/v0.1.2...v0.1.3) (2024-12-19)
+
+
+### Dependency Updates
+
+* **deps:** update build digest to aa32dd3 ([#310](https://github.com/validator-labs/validator-plugin-network/issues/310)) ([d12d7a3](https://github.com/validator-labs/validator-plugin-network/commit/d12d7a3f87ba6a93cd3a55510451ec1bfdf4dfff))
+
 ## [0.1.2](https://github.com/validator-labs/validator-plugin-network/compare/v0.1.1...v0.1.2) (2024-12-16)
 
 
