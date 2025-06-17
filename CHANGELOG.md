@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.1.3](https://github.com/validator-labs/validator-plugin-network/compare/v0.1.2...v0.1.3) (2025-06-17)
+
+
+### Other
+
+* bump to go1.23.6 ([#320](https://github.com/validator-labs/validator-plugin-network/issues/320)) ([1b55fdf](https://github.com/validator-labs/validator-plugin-network/commit/1b55fdff818dd908264c6217c9c8663865d51216))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#307](https://github.com/validator-labs/validator-plugin-network/issues/307)) ([c542b16](https://github.com/validator-labs/validator-plugin-network/commit/c542b166cdd5d56dc2042fc77bf5f5e036ae2d41))
+* **deps:** update all non-major dependencies to v0.32.2 ([#323](https://github.com/validator-labs/validator-plugin-network/issues/323)) ([5c98ead](https://github.com/validator-labs/validator-plugin-network/commit/5c98ead863bf7838c2bb0cd313377494071baeac))
+* **deps:** update build digest to 1af2678 ([#312](https://github.com/validator-labs/validator-plugin-network/issues/312)) ([b0fa64f](https://github.com/validator-labs/validator-plugin-network/commit/b0fa64faa7588e9dbbf6efd2050ffee88be67c53))
+* **deps:** update build digest to 1b51737 ([#313](https://github.com/validator-labs/validator-plugin-network/issues/313)) ([0fd25aa](https://github.com/validator-labs/validator-plugin-network/commit/0fd25aac225824ffd522eaf5476700a77078ee01))
+* **deps:** update build digest to 2f5dbc3 ([#327](https://github.com/validator-labs/validator-plugin-network/issues/327)) ([c6f2a67](https://github.com/validator-labs/validator-plugin-network/commit/c6f2a67a75a516b219a56797d8ab234d22318358))
+* **deps:** update build digest to 3236c04 ([#316](https://github.com/validator-labs/validator-plugin-network/issues/316)) ([52fcfee](https://github.com/validator-labs/validator-plugin-network/commit/52fcfee76f500aa1095bc62051c6da0866e5e974))
+* **deps:** update build digest to 454e459 ([#315](https://github.com/validator-labs/validator-plugin-network/issues/315)) ([52e5bd5](https://github.com/validator-labs/validator-plugin-network/commit/52e5bd5c90b6348fcf06c3df1c2ae714146705a1))
+* **deps:** update build digest to 533081a ([#330](https://github.com/validator-labs/validator-plugin-network/issues/330)) ([d0d7da4](https://github.com/validator-labs/validator-plugin-network/commit/d0d7da48a9013dd248797de0bba77479272f8bf8))
+* **deps:** update build digest to 6a4c752 ([#318](https://github.com/validator-labs/validator-plugin-network/issues/318)) ([fd4ee1c](https://github.com/validator-labs/validator-plugin-network/commit/fd4ee1cf4d034d759435449878890cb6c22ac4fe))
+* **deps:** update build digest to 95a81bf ([#325](https://github.com/validator-labs/validator-plugin-network/issues/325)) ([697dd96](https://github.com/validator-labs/validator-plugin-network/commit/697dd967a1000c9485db802f9ff3c82212b12c5b))
+* **deps:** update build digest to aa32dd3 ([#310](https://github.com/validator-labs/validator-plugin-network/issues/310)) ([d12d7a3](https://github.com/validator-labs/validator-plugin-network/commit/d12d7a3f87ba6a93cd3a55510451ec1bfdf4dfff))
+* **deps:** update build digest to b554bf5 ([#314](https://github.com/validator-labs/validator-plugin-network/issues/314)) ([dcce06c](https://github.com/validator-labs/validator-plugin-network/commit/dcce06cc1b4db5dac6f1c19d39d9bfe6f01b9c82))
+* **deps:** update build digest to d789840 ([#328](https://github.com/validator-labs/validator-plugin-network/issues/328)) ([006fb73](https://github.com/validator-labs/validator-plugin-network/commit/006fb73e7b1f5d2c53229146a25a5e6204971e34))
+* **deps:** update build digest to d7fbb38 ([#317](https://github.com/validator-labs/validator-plugin-network/issues/317)) ([e7a926b](https://github.com/validator-labs/validator-plugin-network/commit/e7a926bf06a6cb2ef5d834147e2ca01fd086232c))
+* **deps:** update golang docker tag to v1.24 ([#322](https://github.com/validator-labs/validator-plugin-network/issues/322)) ([9410793](https://github.com/validator-labs/validator-plugin-network/commit/94107931b2a7211161f88f16d32a09c862eb020b))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.9.5 ([#326](https://github.com/validator-labs/validator-plugin-network/issues/326)) ([8099a76](https://github.com/validator-labs/validator-plugin-network/commit/8099a763e940b6d0889b9abca2ad1a4722eb2cee))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.20.2 ([#324](https://github.com/validator-labs/validator-plugin-network/issues/324)) ([bdef0fd](https://github.com/validator-labs/validator-plugin-network/commit/bdef0fd863d1d4a10c1c361cb87776bda4597738))
+
 ## [0.1.2](https://github.com/validator-labs/validator-plugin-network/compare/v0.1.1...v0.1.2) (2024-12-16)
 
 
